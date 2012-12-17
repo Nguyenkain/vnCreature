@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">vnCreatures</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">vnCreatures</string>
+    <string name="search">Tìm Kiếm</string>
+    <string name="vietnamese_name">Tên Tiếng Việt</string>
+    <string name="latin_name">Tên Latin</string>
+
+</resources>

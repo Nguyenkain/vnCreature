@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/topbar_relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true" >
+
+        <LinearLayout
+            android:id="@+id/searchPlace_linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/searchBox_editText"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/separate_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/topbar_relativeLayout"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:background="#FFAADC" />
+
+    <LinearLayout
+        android:id="@+id/listCreature_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/separate_line" >
+
+        <ListView
+            android:id="@+id/creatures_lisview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </ListView>
+    </LinearLayout>
+
+</RelativeLayout>
