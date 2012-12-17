@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
+import com.example.vncreatures.common.Common;
 import com.example.vncreatures.common.ServerConfig;
 import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureModel;
@@ -15,6 +16,7 @@ public class HrmService {
 
 	public interface Callback {
 		public void onGetAllCreaturesDone(final CreatureModel creatureModel);
+
 		public void onError();
 	}
 
@@ -22,21 +24,28 @@ public class HrmService {
 		mCallback = callback;
 	}
 
-	public boolean requestAllCreature(String page, String perPage) {
+	public boolean requestAllCreature(String page) {
 		GetAllCreatureTask task = new GetAllCreatureTask();
-		task.execute(page,perPage);
+		task.execute(page);
 
 		return true;
 	}
 
-	protected String getAllCreatures(String page, String perPage) {
+	public boolean requestCreaturesByName(String name, String page) {
+		GetCreaturesByNameTask task = new GetCreaturesByNameTask();
+		task.execute(page, name);
+
+		return true;
+	}
+
+	protected String getAllCreatures(String page) {
 		String result = "";
 		String request = String.format(ServerConfig.GET_ALL_CREATURE);
 		RestClient client = new RestClient(request);
 		client.addParam("getAllNameCreature", "");
 		client.addParam("format", "json");
 		client.addParam("page", page);
-		client.addParam("record_per_page", perPage);
+		client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
 
 		try {
 			client.execute(RestClient.RequestMethod.GET);
@@ -44,7 +53,28 @@ public class HrmService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		} 
+		}
+
+		return result;
+	}
+
+	protected String getCreaturesByName(String page, String name) {
+		String result = "";
+		String request = String.format(ServerConfig.GET_ALL_CREATURE_BY_NAME);
+		RestClient client = new RestClient(request);
+		client.addParam("getCreatureByName", "");
+		client.addParam("format", "json");
+		client.addParam("creatureName", name);
+		client.addParam("page", page);
+		client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
+
+		try {
+			client.execute(RestClient.RequestMethod.GET);
+			result = client.getResponse();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 
 		return result;
 	}
@@ -58,7 +88,7 @@ public class HrmService {
 		if (data.indexOf('{') > -1)
 			data = data.substring(data.indexOf('{'));
 		if (data.lastIndexOf('}') > -1)
-			data = data.substring(0, data.lastIndexOf('}')+1);
+			data = data.substring(0, data.lastIndexOf('}') + 1);
 
 		try {
 			JSONObject creaturesObj = new JSONObject(data);
@@ -77,16 +107,20 @@ public class HrmService {
 				creatureObj = creatureObj.getJSONObject(key);
 
 				key = "id";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key) : "";
+				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
+						: "";
 				creature.setId(stringVal);
 				key = "Viet";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key) : "";
+				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
+						: "";
 				creature.setvName(stringVal);
 				key = "Latin";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key) : "";
+				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
+						: "";
 				creature.setLatin(stringVal);
 				key = "Img";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key) : "";
+				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
+						: "";
 				creature.setImageId(stringVal);
 
 				// Add to the model
@@ -104,8 +138,30 @@ public class HrmService {
 		@Override
 		protected String doInBackground(String... params) {
 			String page = params[0];
-			String perPage = params[1];
-			String result = getAllCreatures(page, perPage);
+			String result = getAllCreatures(page);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (mCallback != null) {
+				if (result == null) {
+					mCallback.onError();
+				} else {
+					CreatureModel creatureModel = parseCreatureModelFromJSON(result);
+					mCallback.onGetAllCreaturesDone(creatureModel);
+				}
+			}
+		}
+	}
+
+	private class GetCreaturesByNameTask extends
+			AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... params) {
+			String page = params[0];
+			String name = params[1];
+			String result = getCreaturesByName(page, name);
 			return result;
 		}
 
