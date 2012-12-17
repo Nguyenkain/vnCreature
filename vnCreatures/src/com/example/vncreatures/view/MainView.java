@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import com.example.vncreatures.R;
 import com.example.vncreatures.model.MainViewModel;
 
-public class MainView extends RelativeLayout {
+public class MainView extends AbstractView {
 	
 	private MainViewModel mMainViewModel = null;
 

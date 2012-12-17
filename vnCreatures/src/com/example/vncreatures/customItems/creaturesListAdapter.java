@@ -12,12 +12,12 @@ import com.example.vncreatures.R;
 import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureModel;
 
-public class creaturesListAdapter extends BaseAdapter {
+public class CreaturesListAdapter extends BaseAdapter {
 	private Context mContext = null;
 	private LayoutInflater mLayoutInflater = null;
 	private CreatureModel mCreatureModel;
 	
-	public creaturesListAdapter(Context context, CreatureModel creatureModel) {
+	public CreaturesListAdapter(Context context, CreatureModel creatureModel) {
 		super();
 		this.mContext = context;
 		this.mCreatureModel = creatureModel;

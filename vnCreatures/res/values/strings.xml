@@ -7,5 +7,6 @@
     <string name="search">Tìm Kiếm</string>
     <string name="vietnamese_name">Tên Tiếng Việt</string>
     <string name="latin_name">Tên Latin</string>
+    <string name="loading">Đang load .. Xin đợi 1 lúc</string>
 
 </resources>
