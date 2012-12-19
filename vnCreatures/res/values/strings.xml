@@ -8,5 +8,5 @@
     <string name="vietnamese_name">Tên Tiếng Việt</string>
     <string name="latin_name">Tên Latin</string>
     <string name="loading">Đang load .. Xin đợi 1 lúc</string>
-
+	<string name="creature_description">Description</string>
 </resources>
