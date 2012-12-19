@@ -36,6 +36,8 @@
         </activity>
         <activity android:name=".controller.AbstracActivity" >
         </activity>
+        <activity android:name=".controller.CreatureActivity" >
+        </activity>
     </application>
 
 </manifest>

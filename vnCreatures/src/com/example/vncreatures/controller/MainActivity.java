@@ -1,15 +1,20 @@
 package com.example.vncreatures.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.vncreatures.R;
+import com.example.vncreatures.common.Common;
 import com.example.vncreatures.customItems.CreaturesListAdapter;
 import com.example.vncreatures.customItems.EndlessScrollListener;
+import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.MainViewModel;
 import com.example.vncreatures.rest.HrmService;
@@ -38,11 +43,23 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 	}
 
 	public void initList(CreatureModel creatureModel) {
-
+		this.mCreatureModel = creatureModel;
 		ListView creatureListView = mMainViewModel.mCreature_listview;
 		mCreatureAdapter = new CreaturesListAdapter(this, creatureModel);
 		creatureListView.setAdapter(mCreatureAdapter);
 		mCreatureAdapter.notifyDataSetChanged();
+		
+		creatureListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+					long id) {
+				Creature creature = mCreatureModel.get(pos);
+				Intent intent = new Intent(MainActivity.this, CreatureActivity.class);
+				intent.putExtra(Common.CREATURE_EXTRA, creature.getId());
+				startActivityForResult(intent, Common.CREATURE_ACTIVITY_REQUEST_CODE);
+			}
+		});
 	}
 
 	public void getAllCreatures() {

@@ -38,6 +38,13 @@ public class HrmService {
 		return true;
 	}
 
+	public boolean requestCreaturesById(String id) {
+		GetCreaturesByIdTask task = new GetCreaturesByIdTask();
+		task.execute(id);
+
+		return true;
+	}
+
 	protected String getAllCreatures(String page) {
 		String result = "";
 		String request = String.format(ServerConfig.GET_ALL_CREATURE);
@@ -79,6 +86,25 @@ public class HrmService {
 		return result;
 	}
 
+	protected String getCreaturesById(String id) {
+		String result = "";
+		String request = String.format(ServerConfig.GET_CREATURE_BY_ID);
+		RestClient client = new RestClient(request);
+		client.addParam("getCreatureById", "");
+		client.addParam("format", "json");
+		client.addParam("id", id);
+
+		try {
+			client.execute(RestClient.RequestMethod.GET);
+			result = client.getResponse();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return result;
+	}
+
 	public CreatureModel parseCreatureModelFromJSON(String data) {
 		if (data == null || data == "")
 			return null;
@@ -106,7 +132,7 @@ public class HrmService {
 					continue;
 				creatureObj = creatureObj.getJSONObject(key);
 
-				key = "id";
+				key = "ID";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
 				creature.setId(stringVal);
@@ -122,6 +148,14 @@ public class HrmService {
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
 				creature.setImageId(stringVal);
+				key = "Description";
+				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
+						: "";
+				creature.setDescription(stringVal);
+				key = "AuthorName";
+				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
+						: "";
+				creature.setAuthor(stringVal);
 
 				// Add to the model
 				creatureModel.add(creature);
@@ -162,6 +196,28 @@ public class HrmService {
 			String page = params[0];
 			String name = params[1];
 			String result = getCreaturesByName(page, name);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (mCallback != null) {
+				if (result == null) {
+					mCallback.onError();
+				} else {
+					CreatureModel creatureModel = parseCreatureModelFromJSON(result);
+					mCallback.onGetAllCreaturesDone(creatureModel);
+				}
+			}
+		}
+	}
+
+	private class GetCreaturesByIdTask extends AsyncTask<String, Void, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			String creatureId = params[0];
+			String result = getCreaturesById(creatureId);
 			return result;
 		}
 
