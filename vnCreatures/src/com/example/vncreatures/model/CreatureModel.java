@@ -32,5 +32,10 @@ public class CreatureModel {
 	public void clear() {
 		mCreatureList.clear();
 	}
+	
+	public void addAll(CreatureModel model) {
+		ArrayList<Creature> creatures = model.getCreatureList();
+		mCreatureList.addAll(creatures);
+	}
 
 }

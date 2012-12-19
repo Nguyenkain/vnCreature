@@ -37,6 +37,16 @@ public class CreaturesListAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return 0;
 	}
+	
+	
+
+	public CreatureModel getCreatureModel() {
+		return mCreatureModel;
+	}
+
+	public void setCreatureModel(CreatureModel creatureModel) {
+		this.mCreatureModel = creatureModel;
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

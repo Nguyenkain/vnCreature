@@ -1,7 +1,7 @@
 package com.example.vncreatures.common;
 
 public class ServerConfig {
-	public static final String ROOT = "http://192.168.137.66";
+	public static final String ROOT = "http://192.168.137.120";
 	public static final String GET_ALL_CREATURE = ROOT + "/webservice/webservice.php?getAllNameCreature&format=json";
 	public static final String GET_ALL_CREATURE_BY_NAME = ROOT + "/webservice/webservice.php?getCreatureByName&format=json";
 	

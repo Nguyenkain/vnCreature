@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import com.example.vncreatures.R;
 import com.example.vncreatures.customItems.CreaturesListAdapter;
+import com.example.vncreatures.customItems.EndlessScrollListener;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.MainViewModel;
 import com.example.vncreatures.rest.HrmService;
@@ -30,8 +31,8 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 		// Get All list
 		getAllCreatures();
-		
-		//Search By Name
+
+		// Search By Name
 		Button btn = mMainViewModel.mSearch_button;
 		btn.setOnClickListener(this);
 	}
@@ -52,6 +53,9 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			public void onGetAllCreaturesDone(CreatureModel creatureModel) {
 				initList(creatureModel);
 				showActivityIndicator(false);
+				mMainViewModel.mCreature_listview
+						.setOnScrollListener(new EndlessScrollListener(
+								mCreatureAdapter));
 			}
 
 			@Override
@@ -81,7 +85,8 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 	}
 
 	private void searchByName() {
-		String name = mMainViewModel.mSearchBox_editText.getText().toString();
+		final String name = mMainViewModel.mSearchBox_editText.getText()
+				.toString();
 		HrmService service = new HrmService();
 		service.setCallback(new Callback() {
 
@@ -89,6 +94,10 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			public void onGetAllCreaturesDone(CreatureModel creatureModel) {
 				showActivityIndicator(false);
 				initList(creatureModel);
+
+				mMainViewModel.mCreature_listview
+						.setOnScrollListener(new EndlessScrollListener(
+								mCreatureAdapter, name));
 			}
 
 			@Override
