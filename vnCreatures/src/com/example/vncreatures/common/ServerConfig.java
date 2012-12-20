@@ -3,7 +3,7 @@ package com.example.vncreatures.common;
 public class ServerConfig {
 	public static final String ROOT = "http://192.168.137.120";
 	public static final String IMAGE_PATH = ROOT
-			+ "/webData/pictures/insect/%s.jpg";
+			+ "/webData/pictures/%s/%s.jpg";
 
 	public static final String GET_ALL_CREATURE = ROOT
 			+ "/webservice/webservice.php?getAllNameCreature&format=json";

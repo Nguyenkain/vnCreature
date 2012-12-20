@@ -71,7 +71,7 @@ public class CreaturesListAdapter extends BaseAdapter {
 		// Set Image
 		HrmService service = new HrmService();
 		service.downloadImages(creatureItem.getId(),
-				creatureItem.getLoaiName(), imageView);
+				creatureItem.getLoai(), imageView);
 
 		return convertView;
 	}
