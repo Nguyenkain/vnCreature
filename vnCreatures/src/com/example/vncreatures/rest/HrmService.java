@@ -1,13 +1,17 @@
 package com.example.vncreatures.rest;
 
+import java.lang.ref.WeakReference;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.widget.ImageView;
 
-import com.example.vncreatures.common.Common;
 import com.example.vncreatures.common.ServerConfig;
+import com.example.vncreatures.common.Utils;
 import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureModel;
 
@@ -44,6 +48,12 @@ public class HrmService {
 
 		return true;
 	}
+	
+	public void downloadImages(String imgId, String loai, ImageView imageView) {
+        BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
+        task.execute(String.format(ServerConfig.IMAGE_PATH, imgId));
+    }
+
 
 	protected String getAllCreatures(String page) {
 		String result = "";
@@ -148,6 +158,10 @@ public class HrmService {
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
 				creature.setImageId(stringVal);
+				key = "Loai";
+				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
+						: "";
+				creature.setLoaiName(stringVal);
 				key = "Description";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
@@ -232,5 +246,36 @@ public class HrmService {
 				}
 			}
 		}
+	}
+	
+	private class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+	    private String url;
+	    private final WeakReference<ImageView> imageViewReference;
+
+	    public BitmapDownloaderTask(ImageView imageView) {
+	        imageViewReference = new WeakReference<ImageView>(imageView);
+	    }
+
+	    @Override
+	    // Actual download method, run in the task thread
+	    protected Bitmap doInBackground(String... params) {
+	         // params comes from the execute() call: params[0] is the url.
+	         return Utils.downloadBitmap(params[0]);
+	    }
+
+	    @Override
+	    // Once the image is downloaded, associates it to the imageView
+	    protected void onPostExecute(Bitmap bitmap) {
+	        if (isCancelled()) {
+	            bitmap = null;
+	        }
+
+	        if (imageViewReference != null) {
+	            ImageView imageView = imageViewReference.get();
+	            if (imageView != null) {
+	                imageView.setImageBitmap(bitmap);
+	            }
+	        }
+	    }
 	}
 }

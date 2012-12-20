@@ -10,9 +10,18 @@ public class Creature {
 	private String mBo = null;
 	private String mDescription = null;
 	private String mAuthor = null;
+	private String mLoaiName = null;
 
 	public String getImageId() {
 		return mImageId;
+	}
+
+	public String getLoaiName() {
+		return mLoaiName;
+	}
+
+	public void setLoaiName(String loaiName) {
+		this.mLoaiName = loaiName;
 	}
 
 	public void setImageId(String imageId) {
