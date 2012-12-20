@@ -1,6 +1,7 @@
 package com.example.vncreatures.view;
 
 import com.example.vncreatures.R;
+import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureDescriptionViewModel;
 
 import android.content.Context;
@@ -24,9 +25,14 @@ public class CreatureDescriptionView extends AbstractView {
 	}
 
 	private void iniUI() {
-		mCreatureDescriptionViewModel.mVietName = (TextView) findViewById(R.id.vietName_textview);
-		mCreatureDescriptionViewModel.mCreatureImageView = (ImageView) findViewById(R.id.creatureList_imageView);
-		mCreatureDescriptionViewModel.mLatinName = (TextView) findViewById(R.id.latinName_textview);
-		mCreatureDescriptionViewModel.mCreatureDesWebview = (WebView) findViewById(R.id.creatureDes_webview);
+		mCreatureDescriptionViewModel.setVietName((TextView) findViewById(R.id.vietName_textview));
+		mCreatureDescriptionViewModel.setLatinName((TextView) findViewById(R.id.latinName_textview));
+		mCreatureDescriptionViewModel.setCreatureDesWebview((WebView) findViewById(R.id.creatureDes_webview));
+	}
+	
+	public void setContent(Creature creature) {
+		mCreatureDescriptionViewModel.getVietName().setText(creature.getvName());
+		mCreatureDescriptionViewModel.getLatinName().setText(creature.getLatin());
+		mCreatureDescriptionViewModel.getCreatureDesWebview().loadData(creature.getDescription(), "text/html", "");
 	}
 }
