@@ -148,26 +148,33 @@ public class HrmService {
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
 				creature.setId(stringVal);
+				
 				key = "Viet";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
 				creature.setvName(stringVal);
+				
 				key = "Latin";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
 				creature.setLatin(stringVal);
+				
 				key = "Img";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
 				creature.setImageId(stringVal);
+				
 				key = "Loai";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
 				creature.setLoai(stringVal);
+				
 				key = "Description";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
+				stringVal = stringVal.replace("charset=windows-1252", " ");
 				creature.setDescription(stringVal);
+				
 				key = "AuthorName";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
