@@ -34,4 +34,12 @@ public class CreatureDescriptionViewModel extends AbstractModel {
 		this.mLatinName = latinName;
 	}
 
+	public ImageView getCreatureImageView() {
+		return mCreatureImageView;
+	}
+
+	public void setCreatureImageView(ImageView creatureImageView) {
+		this.mCreatureImageView = creatureImageView;
+	}
+
 }

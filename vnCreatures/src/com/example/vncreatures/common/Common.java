@@ -6,7 +6,7 @@ public class Common {
 	public static int CREATURE_ACTIVITY_REQUEST_CODE = 0;
 
 	public enum CREATURE {
-		Anime("1"), Plant("2"), Insect("3");
+		Animal("1"), Plant("2"), Insect("3");
 
 		private final String identifier;
 
