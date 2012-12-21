@@ -1,10 +1,10 @@
 package com.example.vncreatures.controller;
 
-import com.example.vncreatures.R;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+
+import com.example.vncreatures.R;
 
 public class AbstracActivity extends Activity {
 	private ProgressDialog mIndicatorBar = null;
