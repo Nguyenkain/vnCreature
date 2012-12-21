@@ -9,9 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vncreatures.R;
+import com.example.vncreatures.common.ServerConfig;
+import com.example.vncreatures.common.Common.CREATURE;
 import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.rest.HrmService;
+import com.raptureinvenice.webimageview.image.WebImageView;
 
 public class CreaturesListAdapter extends BaseAdapter {
 	private Context mContext = null;
@@ -50,8 +53,8 @@ public class CreaturesListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = new ViewHolder();
-		ImageView imageView = null;
-		
+		WebImageView imageView = null;
+
 		mLayoutInflater = LayoutInflater.from(mContext);
 		convertView = mLayoutInflater
 				.inflate(R.layout.creature_list_item, null);
@@ -59,7 +62,7 @@ public class CreaturesListAdapter extends BaseAdapter {
 				.findViewById(R.id.vietName_textview);
 		holder.mLatinName = (TextView) convertView
 				.findViewById(R.id.latinName_textview);
-		imageView = (ImageView) convertView
+		imageView = (WebImageView) convertView
 				.findViewById(R.id.creatureList_imageView);
 
 		convertView.setTag(holder);
@@ -68,16 +71,24 @@ public class CreaturesListAdapter extends BaseAdapter {
 		holder.mVietName.setText(creatureItem.getvName());
 		holder.mLatinName.setText(creatureItem.getLatin());
 
+		String name = CREATURE.getEnumNameForValue(creatureItem.getLoai());
+		imageView.setImageWithURL(
+				this.mContext,
+				String.format(ServerConfig.IMAGE_PATH, name,
+						creatureItem.getImageId()));
+
 		// Set Image
-		HrmService service = new HrmService();
-		service.downloadImages(creatureItem.getId(),
-				creatureItem.getLoai(), imageView);
+		/*
+		 * HrmService service = new HrmService();
+		 * service.downloadImages(creatureItem.getId(), creatureItem.getLoai(),
+		 * imageView);
+		 */
 
 		return convertView;
 	}
 
 	static class ViewHolder {
-		ImageView mImageView;
+		WebImageView mImageView;
 		TextView mVietName;
 		TextView mLatinName;
 	}
