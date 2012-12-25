@@ -55,27 +55,37 @@ public class CreaturesListAdapter extends BaseAdapter {
 		ViewHolder holder = new ViewHolder();
 		WebImageView imageView = null;
 
-		mLayoutInflater = LayoutInflater.from(mContext);
-		convertView = mLayoutInflater
-				.inflate(R.layout.creature_list_item, null);
-		holder.mVietName = (TextView) convertView
-				.findViewById(R.id.vietName_textview);
-		holder.mLatinName = (TextView) convertView
-				.findViewById(R.id.latinName_textview);
-		imageView = (WebImageView) convertView
-				.findViewById(R.id.creatureList_imageView);
+		if (convertView == null) {
+			mLayoutInflater = LayoutInflater.from(mContext);
+			convertView = mLayoutInflater.inflate(R.layout.creature_list_item,
+					null);
+			holder.mVietName = (TextView) convertView
+					.findViewById(R.id.vietName_textview);
+			holder.mLatinName = (TextView) convertView
+					.findViewById(R.id.latinName_textview);
+			holder.mImageView = (WebImageView) convertView
+					.findViewById(R.id.creatureList_imageView);
 
-		convertView.setTag(holder);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
 
 		Creature creatureItem = mCreatureModel.get(position);
 		holder.mVietName.setText(creatureItem.getvName());
 		holder.mLatinName.setText(creatureItem.getLatin());
 
 		String name = CREATURE.getEnumNameForValue(creatureItem.getLoai());
-		imageView.setImageWithURL(
-				this.mContext,
-				String.format(ServerConfig.IMAGE_PATH, name,
-						creatureItem.getImageId()));
+		String url = String.format(ServerConfig.IMAGE_PATH, name,
+				creatureItem.getImageId());
+		/*
+		 * holder.mImageView.setImageWithURL( this.mContext,
+		 * String.format(ServerConfig.IMAGE_PATH, name,
+		 * creatureItem.getImageId()));
+		 */
+
+		holder.mImageView.setTag(url);
+		BitmapManager.INSTANCE.loadBitmap(url, holder.mImageView, 120, 80);
 
 		// Set Image
 		/*
