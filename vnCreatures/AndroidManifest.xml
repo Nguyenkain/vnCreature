@@ -25,6 +25,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <activity android:name=".controller.SplashScreen" >
+        </activity>
         <activity
             android:name=".controller.MainActivity"
             android:label="@string/title_activity_main" >
@@ -37,6 +39,8 @@
         <activity android:name=".controller.AbstracActivity" >
         </activity>
         <activity android:name=".controller.CreatureActivity" >
+        </activity>
+        <activity android:name=".controller.GroupChooseActivity" >
         </activity>
     </application>
 

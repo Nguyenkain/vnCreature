@@ -19,7 +19,9 @@
             <EditText
                 android:id="@+id/searchBox_editText"
                 android:layout_width="150dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
 
             <Button
                 android:id="@+id/search_button"
@@ -28,7 +30,7 @@
                 android:text="@string/search" />
 
             <Button
-                android:id="@+id/search_button"
+                android:id="@+id/advance_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/advance" />
@@ -49,67 +51,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/separate_line"
-        android:background="@android:color/background_light"
+        android:background="@android:color/transparent"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:visibility="gone" >
 
-        <LinearLayout
-            android:id="@+id/ho_layout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/layout" >
-
-            <TextView
-                android:id="@+id/hoName_textview"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="@string/ho" />
-
-            <TextView
-                android:id="@+id/hoChoose_textview"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/touch_to_select"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            android:background="#FFAADC" />
-
-        <LinearLayout
-            android:id="@+id/bo_layout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical" >
-
-            <TextView
-                android:id="@+id/boName_textview"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="@string/bo" />
-
-            <TextView
-                android:id="@+id/boChoose_textview"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/touch_to_select"
-                android:textStyle="bold" />
-        </LinearLayout>
-        
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            android:background="#FFAADC" />
-
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/lop_layout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -119,16 +66,107 @@
                 android:id="@+id/lopName_textview"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:text="@string/lop" />
 
             <TextView
                 android:id="@+id/lopChoose_textview"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/lopName_textview"
                 android:text="@string/touch_to_select"
                 android:textStyle="bold" />
-        </LinearLayout>
-        
+
+            <ImageButton
+                android:id="@+id/lopClear_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/close_icon" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:background="#FFAADC" />
+
+        <RelativeLayout
+            android:id="@+id/bo_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/boName_textview"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/bo" />
+
+            <TextView
+                android:id="@+id/boChoose_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/boName_textview"
+                android:text="@string/touch_to_select"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/boClear_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/close_icon" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:background="#FFAADC" />
+
+        <RelativeLayout
+            android:id="@+id/ho_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/layout"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/hoName_textview"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/ho" />
+
+            <TextView
+                android:id="@+id/hoChoose_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/hoName_textview"
+                android:text="@string/touch_to_select"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/hoClear_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/close_icon" />
+        </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"

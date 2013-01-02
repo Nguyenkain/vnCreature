@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
+import android.view.View;
 
 public class Utils {
 	public static Bitmap downloadBitmap(String url) {
@@ -54,5 +55,14 @@ public class Utils {
 			}
 		}
 		return null;
+	}
+	
+	public static void toogleLayout(View v) {
+		if (v.getVisibility() == View.VISIBLE) {
+			v.setVisibility(View.GONE);
+		}
+		else {
+			v.setVisibility(View.VISIBLE);
+		}
 	}
 }

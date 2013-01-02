@@ -14,6 +14,9 @@ public class EndlessScrollListener implements OnScrollListener {
 	private int previousTotal = 0;
 	private boolean loading = true;
 	private String name = null;
+	private String familyId = null;
+	private String orderId = null;
+	private String classId = null;
 	private CreaturesListAdapter adapter = null;
 
 	public EndlessScrollListener() {
@@ -23,8 +26,12 @@ public class EndlessScrollListener implements OnScrollListener {
 		this.adapter = adapter;
 	}
 
-	public EndlessScrollListener(CreaturesListAdapter adapter, String name) {
+	public EndlessScrollListener(CreaturesListAdapter adapter, String name,
+			String familyid, String orderId, String classId) {
 		this.adapter = adapter;
+		this.orderId = orderId;
+		this.familyId = familyid;
+		this.classId = classId;
 		this.name = name;
 	}
 
@@ -60,7 +67,8 @@ public class EndlessScrollListener implements OnScrollListener {
 			});
 			if (this.name != null) {
 				service.requestCreaturesByName(this.name,
-						String.valueOf(currentPage + 1));
+						String.valueOf(currentPage + 1), this.familyId,
+						this.orderId, this.classId);
 			} else
 				service.requestAllCreature(String.valueOf(currentPage + 1));
 			loading = true;

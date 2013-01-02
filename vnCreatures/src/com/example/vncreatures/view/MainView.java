@@ -4,8 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.vncreatures.R;
 import com.example.vncreatures.model.MainViewModel;
@@ -24,9 +27,20 @@ public class MainView extends AbstractView {
 	}
 	
 	private void initUI() {
-		mMainViewModel.mSearch_button = (Button) findViewById(R.id.search_button);
-		mMainViewModel.mSearchBox_editText = (EditText) findViewById(R.id.searchBox_editText);
-		mMainViewModel.mCreature_listview = (ListView) findViewById(R.id.creatures_lisview);
+		mMainViewModel.search_button = (Button) findViewById(R.id.search_button);
+		mMainViewModel.searchBox_editText = (EditText) findViewById(R.id.searchBox_editText);
+		mMainViewModel.creature_listview = (ListView) findViewById(R.id.creatures_lisview);
+		mMainViewModel.advanceButton = (Button) findViewById(R.id.advance_button);
+		mMainViewModel.advanceLayout = (LinearLayout) findViewById(R.id.advanced_layout);
+		mMainViewModel.familyLayout = (RelativeLayout) findViewById(R.id.ho_layout);
+		mMainViewModel.classLayout = (RelativeLayout) findViewById(R.id.lop_layout);
+		mMainViewModel.orderLayout = (RelativeLayout) findViewById(R.id.bo_layout);
+		mMainViewModel.familyTextview = (TextView) findViewById(R.id.hoChoose_textview);
+		mMainViewModel.orderTextView = (TextView) findViewById(R.id.boChoose_textview);
+		mMainViewModel.classTextView = (TextView) findViewById(R.id.lopChoose_textview);
+		mMainViewModel.familyClearButton = (ImageButton) findViewById(R.id.hoClear_button);
+		mMainViewModel.orderClearButton = (ImageButton) findViewById(R.id.boClear_button);
+		mMainViewModel.classClearButton = (ImageButton) findViewById(R.id.lopClear_button);
 	}
 
 }

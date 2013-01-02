@@ -14,5 +14,5 @@
 	<string name="bo">Bộ</string>
 	<string name="lop">Lớp</string>
 	<string name="touch_to_select">Ấn để chọn</string>
-	<string name="hint_filter_text">Nhập tên</string>
+	<string name="hint_filter_text">Nhập để lọc</string>
 </resources>

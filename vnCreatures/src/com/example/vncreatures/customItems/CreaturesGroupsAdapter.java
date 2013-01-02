@@ -3,27 +3,32 @@ package com.example.vncreatures.customItems;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vncreatures.R;
-import com.example.vncreatures.common.ServerConfig;
-import com.example.vncreatures.common.Common.CREATURE;
-import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureGroup;
-import com.example.vncreatures.model.CreatureModel;
-import com.example.vncreatures.rest.HrmService;
+import com.example.vncreatures.model.CreatureGroupListModel;
 import com.raptureinvenice.webimageview.image.WebImageView;
 
-public class CreaturesListAdapter extends BaseAdapter {
+public class CreaturesGroupsAdapter extends BaseAdapter {
 	private Context mContext = null;
 	private LayoutInflater mLayoutInflater = null;
-	private CreatureModel mCreatureModel;
-	
+	private CreatureGroupListModel mCreatureModel;
+	private Callback mCallback = null;
 
-	public CreaturesListAdapter(Context context, CreatureModel creatureModel) {
+	public interface Callback {
+		public void onClick(CreatureGroup creatureGroup);
+	}
+
+	public void setCallback(Callback callback) {
+		mCallback = callback;
+	}
+
+	public CreaturesGroupsAdapter(Context context,
+			CreatureGroupListModel creatureModel) {
 		super();
 		this.mContext = context;
 		this.mCreatureModel = creatureModel;
@@ -44,11 +49,11 @@ public class CreaturesListAdapter extends BaseAdapter {
 		return 0;
 	}
 
-	public CreatureModel getCreatureModel() {
+	public CreatureGroupListModel getCreatureModel() {
 		return mCreatureModel;
 	}
 
-	public void setCreatureModel(CreatureModel creatureModel) {
+	public void setCreatureModel(CreatureGroupListModel creatureModel) {
 		this.mCreatureModel = creatureModel;
 	}
 
@@ -59,7 +64,7 @@ public class CreaturesListAdapter extends BaseAdapter {
 
 		if (convertView == null) {
 			mLayoutInflater = LayoutInflater.from(mContext);
-			convertView = mLayoutInflater.inflate(R.layout.creature_list_item,
+			convertView = mLayoutInflater.inflate(R.layout.group_list_item,
 					null);
 			holder.mVietName = (TextView) convertView
 					.findViewById(R.id.vietName_textview);
@@ -73,28 +78,16 @@ public class CreaturesListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Creature creatureItem = mCreatureModel.get(position);
-		holder.mVietName.setText(creatureItem.getvName());
+		final CreatureGroup creatureItem = mCreatureModel.get(position);
+		holder.mVietName.setText(creatureItem.getViet());
 		holder.mLatinName.setText(creatureItem.getLatin());
-
-		String name = CREATURE.getEnumNameForValue(creatureItem.getLoai());
-		String url = String.format(ServerConfig.IMAGE_PATH, name,
-				creatureItem.getImageId());
-		/*
-		 * holder.mImageView.setImageWithURL( this.mContext,
-		 * String.format(ServerConfig.IMAGE_PATH, name,
-		 * creatureItem.getImageId()));
-		 */
-
-		holder.mImageView.setTag(url);
-		BitmapManager.INSTANCE.loadBitmap(url, holder.mImageView, 120, 80);
-
-		// Set Image
-		/*
-		 * HrmService service = new HrmService();
-		 * service.downloadImages(creatureItem.getId(), creatureItem.getLoai(),
-		 * imageView);
-		 */
+		convertView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mCallback.onClick(creatureItem);
+			}
+		});
 
 		return convertView;
 	}
