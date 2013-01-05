@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,7 @@ public enum BitmapManager {
 	private Map<ImageView, String> imageViews = Collections
 			.synchronizedMap(new WeakHashMap<ImageView, String>());
 	private Bitmap placeholder;
+	private ArrayList<Bitmap> creatureArrayBitmap = new ArrayList<Bitmap>();
 
 	BitmapManager() {
 		cache = new HashMap<String, SoftReference<Bitmap>>();
@@ -105,5 +107,13 @@ public enum BitmapManager {
 		}
 
 		return null;
+	}
+
+	public void setCreatureArrayBitmap(ArrayList<Bitmap> creatureArrayBitmap) {
+		this.creatureArrayBitmap = creatureArrayBitmap;
+	}
+
+	public ArrayList<Bitmap> getCreatureArrayBitmap() {
+		return creatureArrayBitmap;
 	}
 }

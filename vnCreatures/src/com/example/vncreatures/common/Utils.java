@@ -56,12 +56,11 @@ public class Utils {
 		}
 		return null;
 	}
-	
+
 	public static void toogleLayout(View v) {
 		if (v.getVisibility() == View.VISIBLE) {
 			v.setVisibility(View.GONE);
-		}
-		else {
+		} else {
 			v.setVisibility(View.VISIBLE);
 		}
 	}

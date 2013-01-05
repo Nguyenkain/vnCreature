@@ -1,5 +1,9 @@
 package com.example.vncreatures.model;
 
+import java.util.ArrayList;
+
+import android.graphics.Bitmap;
+
 public class Creature {
 	private String mId = null;
 	private String mVName = null;
@@ -11,6 +15,7 @@ public class Creature {
 	private String mDescription = null;
 	private String mAuthor = null;
 	private String mLoaiName = null;
+	private ArrayList<Bitmap> mCreatureImage = null;
 
 	public String getImageId() {
 		return mImageId;
@@ -90,6 +95,34 @@ public class Creature {
 
 	public String getAuthor() {
 		return mAuthor;
+	}
+
+	public void setCreatureImage(ArrayList<Bitmap> creatureImage) {
+		this.mCreatureImage = creatureImage;
+	}
+
+	public ArrayList<Bitmap> getCreatureImage() {
+		return mCreatureImage;
+	}
+	
+	public void addImage(final Bitmap image) {
+		mCreatureImage.add(image);
+	}
+	
+	public Bitmap getImage(int index) {
+		return mCreatureImage.get(index);
+	}
+	
+	public void removeImage(int index) {
+		mCreatureImage.remove(index);
+	}
+	
+	public int countImage() {
+		return mCreatureImage.size();
+	}
+	
+	public void clearImage() {
+		mCreatureImage.clear();
 	}
 
 }

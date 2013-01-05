@@ -1,25 +1,16 @@
 package com.example.vncreatures.controller;
 
-import java.io.UTFDataFormatException;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 import com.example.vncreatures.common.Common;
 import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureDescriptionViewModel;
 import com.example.vncreatures.model.CreatureModel;
-import com.example.vncreatures.rest.HrmService.Callback;
-
-import com.example.vncreatures.R;
 import com.example.vncreatures.rest.HrmService;
+import com.example.vncreatures.rest.HrmService.Callback;
 import com.example.vncreatures.view.CreatureDescriptionView;
-
-import android.R.string;
-import android.app.Service;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class CreatureActivity extends AbstracActivity implements
 		OnClickListener {

@@ -9,10 +9,12 @@
     <string name="vietnamese_name">Tên Tiếng Việt</string>
     <string name="latin_name">Tên Latin</string>
     <string name="loading">Đang load .. Xin đợi 1 lúc</string>
-	<string name="creature_description">Description</string>
-	<string name="ho">Họ</string>
-	<string name="bo">Bộ</string>
-	<string name="lop">Lớp</string>
-	<string name="touch_to_select">Ấn để chọn</string>
-	<string name="hint_filter_text">Nhập để lọc</string>
+    <string name="creature_description">Description</string>
+    <string name="ho">Họ</string>
+    <string name="bo">Bộ</string>
+    <string name="lop">Lớp</string>
+    <string name="touch_to_select">Ấn để chọn</string>
+    <string name="hint_filter_text">Nhập tên</string>
+    <string name="hint_filter_text">Nhập để lọc</string>
+
 </resources>

@@ -95,8 +95,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 				Intent intent = new Intent(Common.ACTION_EXTRA, null,
 						MainActivity.this, CreatureActivity.class);
 				intent.putExtra(Common.CREATURE_EXTRA, creature.getId());
-				startActivityForResult(intent,
-						Common.CREATURE_ACTIVITY_REQUEST_CODE);
+				startActivity(intent);
 			}
 		});
 	}
