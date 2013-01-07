@@ -1,10 +1,8 @@
 <resources>
 
-<<<<<<< HEAD
     <style name="AppTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen" />
-=======
+
     <style name="AppTheme" parent="android:Theme.Light" />
->>>>>>> f3c59c4378c6f296c0ac411ccda4ffafaa9a92c6
 
     <style name="Transparent" parent="@android:style/Theme.Translucent" />
 
@@ -12,12 +10,12 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
-    
+
     <style name="Fill">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
     </style>
-    
+
     <style name="Normal_Match">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>

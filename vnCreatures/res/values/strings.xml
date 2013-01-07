@@ -9,7 +9,6 @@
     <string name="vietnamese_name">Tên Tiếng Việt</string>
     <string name="latin_name">Tên Latin</string>
     <string name="loading">Đang load .. Xin đợi 1 lúc</string>
-<<<<<<< HEAD
 	<string name="creature_description">Description</string>
 	<string name="ho">Họ</string>
 	<string name="bo">Bộ</string>
@@ -20,7 +19,6 @@
 	<string name="detail">Chi tiết</string>
 	<string name="filter_group">Lựa chọn</string>
 	<string name="share_social">Chia sẻ từ vnCreatures</string>
-=======
     <string name="creature_description">Description</string>
     <string name="ho">Họ</string>
     <string name="bo">Bộ</string>
@@ -28,6 +26,4 @@
     <string name="touch_to_select">Ấn để chọn</string>
     <string name="hint_filter_text">Nhập tên</string>
     <string name="hint_filter_text">Nhập để lọc</string>
-
->>>>>>> f3c59c4378c6f296c0ac411ccda4ffafaa9a92c6
 </resources>

@@ -54,9 +54,9 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		mMainView = new MainView(this, mMainViewModel);
 		setContentView(mMainView);
 
-		//Transition
+		// Transition
 		overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
-		
+
 		// Get All list
 		getAllCreatures();
 

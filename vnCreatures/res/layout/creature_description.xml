@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/com.example.vncreatures"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/layout_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ExpandoLayout="http://schemas.android.com/apk/res/com.example.vncreatures"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <com.markupartist.android.widget.ActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-        app:title="@string/detail" />
     <View
         android:layout_width="fill_parent"
         android:layout_height="5dp"
@@ -18,9 +14,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        ExpandoLayout:compactText="H?nh ?nh"
+        ExpandoLayout:compactText="Hình Ảnh"
         ExpandoLayout:expanded="true"
-        ExpandoLayout:expandedText="Thu G?n"
+        ExpandoLayout:expandedText="Thu Gọn"
         ExpandoLayout:moreBar="true"
         ExpandoLayout:moreBarDefaultViewHeight="40"
         ExpandoLayout:moreBarFadeColor="#808080"

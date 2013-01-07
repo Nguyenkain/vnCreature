@@ -11,7 +11,7 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_launcher" 
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"/>
     -->
 
     <com.raptureinvenice.webimageview.image.WebImageView
@@ -46,14 +46,14 @@
             android:layout_height="wrap_content"
             android:text="@string/latin_name" />
     </LinearLayout>
-    
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@+id/creatureList_imageView"
         android:layout_marginBottom="1dp"
         android:layout_marginTop="1dp"
-        android:background="@drawable/line_shape" 
-        android:layout_below="@+id/creatureList_imageView"/>
-
+        android:background="@drawable/line_shape" >
+    </View>
 
 </RelativeLayout>
