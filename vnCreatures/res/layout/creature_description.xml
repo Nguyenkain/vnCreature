@@ -5,6 +5,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:background="#808080" />
+
     <com.djpsoft.moreDroid.ExpandoLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -15,8 +20,7 @@
         ExpandoLayout:moreBar="true"
         ExpandoLayout:moreBarDefaultViewHeight="40"
         ExpandoLayout:moreBarFadeColor="#808080"
-        ExpandoLayout:moreBarOnRight="true"
-        android:background="#808080" >
+        ExpandoLayout:moreBarOnRight="true" >
 
         <LinearLayout
             android:id="@+id/nameDescriptionPlace"
@@ -46,8 +50,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:gravity="center"
                 android:contentDescription="@string/app_name"
+                android:gravity="center"
                 android:src="@drawable/ic_launcher" />
         </LinearLayout>
     </com.djpsoft.moreDroid.ExpandoLayout>
