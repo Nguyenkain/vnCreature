@@ -6,7 +6,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
-    
+
     <supports-screens android:anyDensity="true" />
     <supports-screens android:smallScreens="true" />
     <supports-screens android:normalScreens="true" />
@@ -38,6 +38,8 @@
         <activity android:name=".controller.AbstracActivity" >
         </activity>
         <activity android:name=".controller.CreatureActivity" >
+        </activity>
+        <activity android:name=".controller.ImageViewFlipperActivity" >
         </activity>
         <activity android:name=".controller.GroupChooseActivity" >
         </activity>

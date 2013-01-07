@@ -3,6 +3,7 @@ package com.example.vncreatures.model;
 import com.markupartist.android.widget.ActionBar;
 
 import android.webkit.WebView;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ public class CreatureDescriptionViewModel extends AbstractModel {
 	private TextView mLatinName = null;
 	private WebView mCreatureDesWebview = null;
 	public ActionBar actionbar = null;
+	private Gallery mGalleryImage = null;
 
 	public WebView getCreatureDesWebview() {
 		return mCreatureDesWebview;
@@ -43,6 +45,14 @@ public class CreatureDescriptionViewModel extends AbstractModel {
 
 	public void setCreatureImageView(ImageView creatureImageView) {
 		this.mCreatureImageView = creatureImageView;
+	}
+
+	public void setGalleryImage(Gallery galleryImage) {
+		this.mGalleryImage = galleryImage;
+	}
+
+	public Gallery getGalleryImage() {
+		return mGalleryImage;
 	}
 
 }

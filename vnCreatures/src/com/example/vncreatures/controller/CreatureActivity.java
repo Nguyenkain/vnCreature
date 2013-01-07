@@ -12,6 +12,7 @@ import com.example.vncreatures.model.CreatureDescriptionViewModel;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.Callback;
+import com.example.vncreatures.rest.HrmService.Callback;
 import com.example.vncreatures.view.CreatureDescriptionView;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;

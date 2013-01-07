@@ -9,66 +9,62 @@
         android:id="@+id/actionbar"
         style="@style/ActionBar"
         app:title="@string/detail" />
-
-    <LinearLayout
-        android:id="@+id/nameDescriptionPlace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/actionbar"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/vietNameDetail_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/vietnamese_name"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/latinNameDetail_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/latin_name"
-            android:textStyle="italic" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/creatureList_imageView"
+    <View
         android:layout_width="fill_parent"
-        android:layout_height="180dp"
-        android:layout_below="@+id/nameDescriptionPlace"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="false"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_launcher" />
+        android:layout_height="5dp"
+        android:background="#808080" />
+
+    <com.djpsoft.moreDroid.ExpandoLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        ExpandoLayout:compactText="H?nh ?nh"
+        ExpandoLayout:expanded="true"
+        ExpandoLayout:expandedText="Thu G?n"
+        ExpandoLayout:moreBar="true"
+        ExpandoLayout:moreBarDefaultViewHeight="40"
+        ExpandoLayout:moreBarFadeColor="#808080"
+        ExpandoLayout:moreBarOnRight="true" >
+
+        <LinearLayout
+            android:id="@+id/nameDescriptionPlace"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/vietNameDetail_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/vietnamese_name"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/latinNameDetail_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/latin_name"
+                android:textStyle="italic" />
+
+            <Gallery
+                android:id="@+id/creatureImage_gallery"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_name"
+                android:gravity="center"
+                android:src="@drawable/ic_launcher" />
+        </LinearLayout>
+    </com.djpsoft.moreDroid.ExpandoLayout>
 
     <LinearLayout
         android:id="@+id/listDescriptionPlace"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/creatureList_imageView"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="false"
         android:orientation="vertical" >
-
-        <!--
-        <TextView 
-            android:id="@+id/vietName_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/vietnamese_name"/>
-        
-        <TextView 
-            android:id="@+id/latinName_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/latin_name"/>
-        -->
 
         <WebView
             android:id="@+id/creatureDes_webview"
@@ -78,4 +74,4 @@
             android:text="@string/creature_description" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

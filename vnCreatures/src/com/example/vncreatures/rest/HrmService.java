@@ -1,22 +1,32 @@
 package com.example.vncreatures.rest;
 
-import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.widget.ImageView;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Gallery;
 
+import com.example.vncreatures.common.Common;
 import com.example.vncreatures.common.Common.CREATURE;
 import com.example.vncreatures.common.ServerConfig;
 import com.example.vncreatures.common.Utils;
+import com.example.vncreatures.controller.ImageViewFlipperActivity;
+import com.example.vncreatures.customItems.BitmapManager;
+import com.example.vncreatures.customItems.GalleryImageAdapter;
 import com.example.vncreatures.model.Creature;
+import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.CreatureGroup;
 import com.example.vncreatures.model.CreatureGroupListModel;
-import com.example.vncreatures.model.CreatureModel;
 
 public class HrmService {
 	private Callback mCallback = null;
@@ -49,7 +59,8 @@ public class HrmService {
 		return true;
 	}
 
-	public boolean requestCreaturesByName(String name, String page, String familyId, String orderId, String classId) {
+	public boolean requestCreaturesByName(String name, String page,
+			String familyId, String orderId, String classId) {
 		GetCreaturesByNameTask task = new GetCreaturesByNameTask();
 		task.execute(page, name, familyId, orderId, classId);
 
@@ -69,14 +80,14 @@ public class HrmService {
 		task.execute(orderId, classId, kingdomId);
 		return true;
 	}
-	
+
 	public boolean requestGetOrder(String kingdomId, String familyId,
 			String classId) {
 		GetOrderTask task = new GetOrderTask();
 		task.execute(familyId, classId, kingdomId);
 		return true;
 	}
-	
+
 	public boolean requestGetClass(String kingdomId, String orderId,
 			String familyId) {
 		GetClassTask task = new GetClassTask();
@@ -84,10 +95,16 @@ public class HrmService {
 		return true;
 	}
 
-	public void downloadImages(String imgId, String loai, ImageView imageView) {
-		BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
+	/* download all image of a creature */
+	public void downloadImages(Context context, String imgId, String loai,
+			Gallery gallery) {
+		BitmapDownloaderTask task = new BitmapDownloaderTask(context, gallery);
 		String name = CREATURE.getEnumNameForValue(loai);
-		task.execute(String.format(ServerConfig.IMAGE_PATH, name, imgId));
+		task.execute(String.format(ServerConfig.IMAGE_PATH, name, imgId + "s"),
+				String.format(ServerConfig.IMAGE_PATH, name, imgId + "_1s"),
+				String.format(ServerConfig.IMAGE_PATH, name, imgId + "_2s"),
+				String.format(ServerConfig.IMAGE_PATH, name, imgId + "_3s"),
+				String.format(ServerConfig.IMAGE_PATH, name, imgId));
 	}
 
 	protected String getAllCreatures(String page) {
@@ -110,7 +127,8 @@ public class HrmService {
 		return result;
 	}
 
-	protected String getCreaturesByName(String page, String name, String familyId, String orderId, String classId) {
+	protected String getCreaturesByName(String page, String name,
+			String familyId, String orderId, String classId) {
 		String result = "";
 		String request = String.format(ServerConfig.GET_ALL_CREATURE_BY_NAME2);
 		RestClient client = new RestClient(request);
@@ -374,7 +392,8 @@ public class HrmService {
 			String familyId = params[2];
 			String orderId = params[3];
 			String classId = params[4];
-			String result = getCreaturesByName(page, name, familyId, orderId, classId);
+			String result = getCreaturesByName(page, name, familyId, orderId,
+					classId);
 			return result;
 		}
 
@@ -413,37 +432,67 @@ public class HrmService {
 		}
 	}
 
-	private class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
-		private String url;
-		private final WeakReference<ImageView> imageViewReference;
+	// download all image of a creature
+	private class BitmapDownloaderTask extends
+			AsyncTask<String, Void, ArrayList<Bitmap>> {
+		private Gallery mGallery;
+		private Context mContext;
+		private Bitmap mBitmap = null;
+		private ArrayList<String> mUrl = new ArrayList<String>();
+		private ArrayList<Bitmap> mCreatureImage = new ArrayList<Bitmap>();
 
-		public BitmapDownloaderTask(ImageView imageView) {
-			imageViewReference = new WeakReference<ImageView>(imageView);
+		public BitmapDownloaderTask(Context context, Gallery gallery) {
+			mGallery = gallery;
+			mContext = context;
 		}
 
 		@Override
 		// Actual download method, run in the task thread
-		protected Bitmap doInBackground(String... params) {
-			// params comes from the execute() call: params[0] is the url.
-			return Utils.downloadBitmap(params[0]);
+		protected ArrayList<Bitmap> doInBackground(String... params) {
+			// params comes from the execute() call: params is the url.
+			for (int i = 0; i < params.length; i++) {
+				mBitmap = Utils.downloadBitmap(params[i]);
+				if (mBitmap != null) {
+					// mUrl.add(params[i]);
+					mCreatureImage.add(mBitmap);
+				}
+			}
+			BitmapManager.INSTANCE.setCreatureArrayBitmap(mCreatureImage);
+			return mCreatureImage;
 		}
 
 		@Override
 		// Once the image is downloaded, associates it to the imageView
-		protected void onPostExecute(Bitmap bitmap) {
+		protected void onPostExecute(final ArrayList<Bitmap> arrayBitmap) {
 			if (isCancelled()) {
-				bitmap = null;
+				mGallery = null;
 			}
+			if (mGallery != null) {
+				mGallery.setAdapter(new GalleryImageAdapter(mContext,
+						arrayBitmap));
+				mGallery.setOnItemClickListener(new OnItemClickListener() {
 
-			if (imageViewReference != null) {
-				ImageView imageView = imageViewReference.get();
-				if (imageView != null) {
-					imageView.setImageBitmap(bitmap);
-				}
+					@Override
+					public void onItemClick(AdapterView<?> view, View v,
+							int pos, long id) {
+						Intent intent = new Intent();
+						intent.setClass(mContext,
+								ImageViewFlipperActivity.class);
+						Bundle bundle = new Bundle();
+						// bundle.putStringArrayList(
+						// Common.CREATURE_URL_IMAGES_EXTRA,
+						// (ArrayList<String>) mUrl);
+						bundle.putInt(
+								Common.CREATURE_URL_IMAGES_POSITION_EXTRA, pos);
+						intent.putExtras(bundle);
+
+						mContext.startActivity(intent);
+					}
+				});
 			}
 		}
 	}
-
+	
 	// Get Family Task
 	private class GetFamilyTask extends AsyncTask<String, Void, String> {
 

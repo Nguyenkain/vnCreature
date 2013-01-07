@@ -1,6 +1,10 @@
 <resources>
 
+<<<<<<< HEAD
     <style name="AppTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen" />
+=======
+    <style name="AppTheme" parent="android:Theme.Light" />
+>>>>>>> f3c59c4378c6f296c0ac411ccda4ffafaa9a92c6
 
     <style name="Transparent" parent="@android:style/Theme.Translucent" />
 
