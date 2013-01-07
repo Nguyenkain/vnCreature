@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.example.vncreatures"
+    android:id="@+id/layout_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp" >
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true" >
 
-    <EditText
-        android:id="@+id/filter_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_filter_text"
-        android:inputType="text" 
-        android:maxLines="1"/>
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar"
+        app:title="@string/filter_group" />
 
-    <ListView
-        android:id="@+id/groupChoose_listview"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent" 
-        android:layout_below="@id/filter_editText">
-    </ListView>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/actionbar"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+
+        <EditText
+            android:id="@+id/filter_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_filter_text"
+            android:inputType="text"
+            android:maxLines="1" />
+
+        <ListView
+            android:id="@+id/groupChoose_listview"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/filter_editText" >
+        </ListView>
+    </RelativeLayout>
 
 </RelativeLayout>

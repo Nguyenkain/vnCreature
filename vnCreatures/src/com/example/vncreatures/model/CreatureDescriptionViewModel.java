@@ -1,5 +1,7 @@
 package com.example.vncreatures.model;
 
+import com.markupartist.android.widget.ActionBar;
+
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,6 +11,7 @@ public class CreatureDescriptionViewModel extends AbstractModel {
 	private TextView mVietName = null;
 	private TextView mLatinName = null;
 	private WebView mCreatureDesWebview = null;
+	public ActionBar actionbar = null;
 
 	public WebView getCreatureDesWebview() {
 		return mCreatureDesWebview;

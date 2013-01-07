@@ -12,6 +12,14 @@ import android.graphics.BitmapFactory;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
+
+import com.example.vncreatures.R;
 
 public class Utils {
 	public static Bitmap downloadBitmap(String url) {
@@ -56,13 +64,61 @@ public class Utils {
 		}
 		return null;
 	}
-	
+
 	public static void toogleLayout(View v) {
 		if (v.getVisibility() == View.VISIBLE) {
-			v.setVisibility(View.GONE);
+			Utils.hideView(v);
+		} else {
+			Utils.displayView(v);
 		}
-		else {
-			v.setVisibility(View.VISIBLE);
-		}
+
+	}
+
+	public static void displayView(final View activateView) {
+
+		final Animation fadeInFromTopAnimation = AnimationUtils.loadAnimation(
+				activateView.getContext(), R.anim.fade_in_from_top);
+		fadeInFromTopAnimation.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+				activateView.setVisibility(View.VISIBLE);
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+
+			}
+		});
+		activateView.startAnimation(fadeInFromTopAnimation);
+	}
+
+	public static void hideView(final View activateView) {
+		// fade in from top
+		final Animation fadeOutFromTopAnimation = AnimationUtils.loadAnimation(
+				activateView.getContext(), R.anim.fade_out_from_bottom);
+		fadeOutFromTopAnimation.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				activateView.setVisibility(View.GONE);
+			}
+		});
+		activateView.startAnimation(fadeOutFromTopAnimation);
 	}
 }

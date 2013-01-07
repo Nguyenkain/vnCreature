@@ -1,13 +1,20 @@
 package com.example.vncreatures.controller;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -26,6 +33,8 @@ import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.Callback;
 import com.example.vncreatures.rest.HrmService.GroupCallback;
 import com.example.vncreatures.view.MainView;
+import com.markupartist.android.widget.ActionBar.Action;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
 public class MainActivity extends AbstracActivity implements OnClickListener {
 
@@ -45,15 +54,14 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		mMainView = new MainView(this, mMainViewModel);
 		setContentView(mMainView);
 
+		//Transition
+		overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+		
 		// Get All list
 		getAllCreatures();
 
 		// Search By Name
 		Button btn = mMainViewModel.search_button;
-		btn.setOnClickListener(this);
-
-		// Advance search
-		btn = mMainViewModel.advanceButton;
 		btn.setOnClickListener(this);
 
 		// Select Family
@@ -77,6 +85,12 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 		iBtn = mMainViewModel.classClearButton;
 		iBtn.setOnClickListener(this);
+
+		// Setup UI
+		setupUI(findViewById(R.id.layout_parent));
+
+		// init actionbar
+		initActionbar();
 	}
 
 	public void initList(CreatureModel creatureModel) {
@@ -112,6 +126,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 				mMainViewModel.creature_listview
 						.setOnScrollListener(new EndlessScrollListener(
 								mCreatureAdapter));
+				mMainViewModel.actionBar.setProgressBarVisibility(View.GONE);
 			}
 
 			@Override
@@ -120,6 +135,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			}
 		});
 		service.requestAllCreature("1");
+		mMainViewModel.actionBar.setProgressBarVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -133,9 +149,6 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.search_button:
 			searchByName();
-			break;
-		case R.id.advance_button:
-			Utils.toogleLayout(mMainViewModel.advanceLayout);
 			break;
 		case R.id.ho_layout:
 			getFamily();
@@ -168,6 +181,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 			@Override
 			public void onGetAllCreaturesDone(CreatureModel creatureModel) {
+				mMainViewModel.actionBar.setProgressBarVisibility(View.GONE);
 				showActivityIndicator(false);
 				initList(creatureModel);
 
@@ -183,6 +197,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			}
 		});
 		service.requestCreaturesByName(name, "1", mFamilyId, mOrderId, mClassId);
+		mMainViewModel.actionBar.setProgressBarVisibility(View.VISIBLE);
 	}
 
 	private void getFamily() {
@@ -259,6 +274,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			mClassId = "";
 			mMainViewModel.classTextView.setText(defaultText);
 		}
+		searchByName();
 	}
 
 	protected void autoFill(boolean classFill, boolean orderFill) {
@@ -280,7 +296,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			});
 			service.requestGetClass(Common.KINGDOM, mOrderId, mFamilyId);
 		}
-		
+
 		if (orderFill) {
 			HrmService service = new HrmService();
 			service.setCallback(new GroupCallback() {
@@ -299,5 +315,54 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			});
 			service.requestGetOrder(Common.KINGDOM, mFamilyId, mClassId);
 		}
+	}
+
+	public static Intent createIntent(Context context) {
+		Intent i = new Intent(context, MainActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		return i;
+	}
+
+	protected void initActionbar() {
+		final Action refreshAction = new Action() {
+
+			@Override
+			public void performAction(View view) {
+				searchByName();
+			}
+
+			@Override
+			public int getDrawable() {
+				return R.drawable.navigation_refresh;
+			}
+		};
+
+		final Action search = new Action() {
+
+			@Override
+			public void performAction(View view) {
+				Utils.toogleLayout(mMainViewModel.searchPlaceLayout);
+			}
+
+			@Override
+			public int getDrawable() {
+				return R.drawable.action_search;
+			}
+		};
+		final Action advanceAction = new Action() {
+
+			@Override
+			public void performAction(View view) {
+				Utils.toogleLayout(mMainViewModel.advanceLayout);
+			}
+
+			@Override
+			public int getDrawable() {
+				return R.drawable.action_settings;
+			}
+		};
+		mMainViewModel.actionBar.addAction(refreshAction);
+		mMainViewModel.actionBar.addAction(search);
+		mMainViewModel.actionBar.addAction(advanceAction);
 	}
 }

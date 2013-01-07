@@ -1,13 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    xmlns:app="http://schemas.android.com/apk/res/com.example.vncreatures"
+    android:id="@+id/layout_parent"
+    style="@style/Match" 
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar"
+        app:title="@string/search_title" />
 
     <RelativeLayout
         android:id="@+id/topbar_relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true" >
+        style="@style/Normal_Match"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/actionbar" >
 
         <LinearLayout
             android:id="@+id/searchPlace_linearLayout"
@@ -28,12 +36,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/search" />
-
-            <Button
-                android:id="@+id/advance_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/advance" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -44,14 +46,13 @@
         android:layout_below="@+id/topbar_relativeLayout"
         android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
-        android:background="#FFAADC" />
+        android:background="@drawable/line_shape" />
 
     <LinearLayout
         android:id="@+id/advanced_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/separate_line"
-        android:background="@android:color/transparent"
+        style="@style/Normal_Match"
+        android:layout_below="@+id/topbar_relativeLayout"
+        android:background="@drawable/advance_layout"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:visibility="gone" >
@@ -67,7 +68,8 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/lop" />
+                android:text="@string/lop" 
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/lopChoose_textview"
@@ -76,7 +78,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/lopName_textview"
                 android:text="@string/touch_to_select"
-                android:textStyle="bold" />
+                android:textStyle="bold" 
+                android:textColor="@color/white"/>
 
             <ImageButton
                 android:id="@+id/lopClear_button"
@@ -90,10 +93,10 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp"
-            android:background="#FFAADC" />
+            android:background="@drawable/line_shape" />
 
         <RelativeLayout
             android:id="@+id/bo_layout"
@@ -106,7 +109,8 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/bo" />
+                android:text="@string/bo" 
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/boChoose_textview"
@@ -115,7 +119,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/boName_textview"
                 android:text="@string/touch_to_select"
-                android:textStyle="bold" />
+                android:textStyle="bold" 
+                android:textColor="@color/white"/>
 
             <ImageButton
                 android:id="@+id/boClear_button"
@@ -132,13 +137,12 @@
             android:layout_height="0.5dp"
             android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp"
-            android:background="#FFAADC" />
+            android:background="@drawable/line_shape" />
 
         <RelativeLayout
             android:id="@+id/ho_layout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/layout"
             android:gravity="center_vertical" >
 
             <TextView
@@ -146,7 +150,8 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/ho" />
+                android:text="@string/ho" 
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/hoChoose_textview"
@@ -155,7 +160,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/hoName_textview"
                 android:text="@string/touch_to_select"
-                android:textStyle="bold" />
+                android:textStyle="bold" 
+                android:textColor="@color/white"/>
 
             <ImageButton
                 android:id="@+id/hoClear_button"
@@ -166,13 +172,6 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/close_icon" />
         </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            android:background="#FFAADC" />
     </LinearLayout>
 
     <LinearLayout
@@ -184,7 +183,8 @@
         <ListView
             android:id="@+id/creatures_lisview"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent"
+            android:layout_marginTop="3dp" >
         </ListView>
     </LinearLayout>
 

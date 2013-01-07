@@ -15,4 +15,8 @@
 	<string name="lop">Lớp</string>
 	<string name="touch_to_select">Ấn để chọn</string>
 	<string name="hint_filter_text">Nhập để lọc</string>
+	<string name="search_title">Tra cứu</string>
+	<string name="detail">Chi tiết</string>
+	<string name="filter_group">Lựa chọn</string>
+	<string name="share_social">Chia sẻ từ vnCreatures</string>
 </resources>

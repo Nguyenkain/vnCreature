@@ -4,6 +4,7 @@ import com.example.vncreatures.R;
 import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureDescriptionViewModel;
 import com.example.vncreatures.rest.HrmService;
+import com.markupartist.android.widget.ActionBar;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ public class CreatureDescriptionView extends AbstractView {
 				.setCreatureImageView((ImageView) findViewById(R.id.creatureList_imageView));
 		mCreatureDescriptionViewModel
 				.setCreatureDesWebview((WebView) findViewById(R.id.creatureDes_webview));
+		mCreatureDescriptionViewModel.actionbar = (ActionBar) findViewById(R.id.actionbar);
 	}
 
 	public void setContent(Creature creature) {
@@ -55,7 +57,7 @@ public class CreatureDescriptionView extends AbstractView {
 		mCreatureDescriptionViewModel.getCreatureDesWebview()
 				.loadDataWithBaseURL(null, creature.getDescription(),
 						"text/html", "utf-8", null);
-//		mCreatureDescriptionViewModel.getCreatureDesWebview().loadData(
-//				creature.getDescription(), "text/html", "utf-8");
+		// mCreatureDescriptionViewModel.getCreatureDesWebview().loadData(
+		// creature.getDescription(), "text/html", "utf-8");
 	}
 }
