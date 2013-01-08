@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 
+import com.actionbarsherlock.view.Menu;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
-import com.example.vncreatures.common.Utils;
 import com.example.vncreatures.customItems.CreaturesGroupsAdapter;
 import com.example.vncreatures.customItems.CreaturesGroupsAdapter.Callback;
 import com.example.vncreatures.model.CreatureGroup;
@@ -18,8 +17,6 @@ import com.example.vncreatures.model.GroupChooseModel;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.GroupCallback;
 import com.example.vncreatures.view.GroupChooseView;
-import com.markupartist.android.widget.ActionBar.Action;
-import com.markupartist.android.widget.ActionBar.IntentAction;
 
 public class GroupChooseActivity extends AbstracActivity {
 
@@ -31,23 +28,28 @@ public class GroupChooseActivity extends AbstracActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		//Transition
+
+		// Transition
 		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-		
+
 		mView = new GroupChooseView(this, mModel);
 		setContentView(mView);
 
-		//Get extras
+		// Get extras
 		getFromExtras();
-		
-		//Init List
+
+		// Init List
 		filterList();
-		
-		//Init actionbar
-		initActionbar();
-		
+
+
 		setupUI(findViewById(R.id.layout_parent));
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		setTitle(R.string.filter_group);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	protected void getFromExtras() {
@@ -77,7 +79,6 @@ public class GroupChooseActivity extends AbstracActivity {
 
 			@Override
 			public void onSuccess(CreatureGroupListModel groupModel) {
-				mModel.actionbar.setProgressBarVisibility(View.GONE);
 				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
 						groupModel);
 				mModel.listView.setAdapter(mAdapter);
@@ -93,6 +94,7 @@ public class GroupChooseActivity extends AbstracActivity {
 						finish();
 					}
 				});
+				setSupportProgressBarIndeterminateVisibility(false);
 			}
 
 			@Override
@@ -101,7 +103,7 @@ public class GroupChooseActivity extends AbstracActivity {
 			}
 		});
 		service.requestGetFamily(Common.KINGDOM, orderId, classId);
-		mModel.actionbar.setProgressBarVisibility(View.VISIBLE);
+		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
 	protected void initOrderList(String familyId, String classId, String orderId) {
@@ -110,7 +112,6 @@ public class GroupChooseActivity extends AbstracActivity {
 
 			@Override
 			public void onSuccess(CreatureGroupListModel groupModel) {
-				mModel.actionbar.setProgressBarVisibility(View.GONE);
 				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
 						groupModel);
 				mModel.listView.setAdapter(mAdapter);
@@ -126,6 +127,7 @@ public class GroupChooseActivity extends AbstracActivity {
 						finish();
 					}
 				});
+				setSupportProgressBarIndeterminateVisibility(false);
 			}
 
 			@Override
@@ -134,7 +136,7 @@ public class GroupChooseActivity extends AbstracActivity {
 			}
 		});
 		service.requestGetOrder(Common.KINGDOM, familyId, classId);
-		mModel.actionbar.setProgressBarVisibility(View.VISIBLE);
+		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
 	protected void initClassList(String familyId, String classId, String orderId) {
@@ -143,7 +145,6 @@ public class GroupChooseActivity extends AbstracActivity {
 
 			@Override
 			public void onSuccess(CreatureGroupListModel groupModel) {
-				mModel.actionbar.setProgressBarVisibility(View.GONE);
 				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
 						groupModel);
 				mModel.listView.setAdapter(mAdapter);
@@ -159,6 +160,7 @@ public class GroupChooseActivity extends AbstracActivity {
 						finish();
 					}
 				});
+				setSupportProgressBarIndeterminateVisibility(false);
 			}
 
 			@Override
@@ -167,7 +169,7 @@ public class GroupChooseActivity extends AbstracActivity {
 			}
 		});
 		service.requestGetClass(Common.KINGDOM, orderId, familyId);
-		mModel.actionbar.setProgressBarVisibility(View.VISIBLE);
+		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
 	protected void filterList() {
@@ -204,37 +206,4 @@ public class GroupChooseActivity extends AbstracActivity {
 		});
 	}
 
-	protected void initActionbar() {
-		// Init actionbar
-		mModel.actionbar.setHomeAction(new IntentAction(this, MainActivity
-				.createIntent(this), R.drawable.ic_title_home_default));
-		mModel.actionbar.setDisplayHomeAsUpEnabled(true);
-
-		Action refreshAction = new Action() {
-
-			@Override
-			public void performAction(View view) {
-				getFromExtras();
-			}
-
-			@Override
-			public int getDrawable() {
-				return R.drawable.navigation_refresh;
-			}
-		};
-		Action searchAction = new Action() {
-
-			@Override
-			public void performAction(View view) {
-				Utils.toogleLayout(mModel.filterEditText);
-			}
-
-			@Override
-			public int getDrawable() {
-				return R.drawable.ic_action_search;
-			}
-		};
-		mModel.actionbar.addAction(refreshAction);
-		mModel.actionbar.addAction(searchAction);
-	}
 }

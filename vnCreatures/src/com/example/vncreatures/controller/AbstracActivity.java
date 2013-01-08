@@ -2,7 +2,9 @@ package com.example.vncreatures.controller;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,9 +14,13 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.example.vncreatures.R;
+import com.example.vncreatures.common.Common;
 
-public class AbstracActivity extends Activity {
+public class AbstracActivity extends SherlockActivity {
 	private ProgressDialog mIndicatorBar = null;
 
 	@Override
@@ -23,19 +29,11 @@ public class AbstracActivity extends Activity {
 		// Create indicator bar
 		getWindow().setFormat(PixelFormat.RGBA_8888);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
-		mIndicatorBar = new ProgressDialog(getApplicationContext());
-		mIndicatorBar.setMessage(String.valueOf(R.string.loading));
-		mIndicatorBar.setCancelable(false);
-		
+
+		// Action bar
+		setTheme(Common.THEME);
 	}
 
-	public void showActivityIndicator(final boolean shown) {
-		if (shown == true)
-			mIndicatorBar.show();
-		else
-			mIndicatorBar.hide();
-	}
-	
 	public final static void hideSoftKeyboard(Activity activity) {
 		InputMethodManager inputMethodManager = (InputMethodManager) activity
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -69,4 +67,12 @@ public class AbstracActivity extends Activity {
 			}
 		}
 	}
+	
+	protected Intent createShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        return shareIntent;
+    }
 }

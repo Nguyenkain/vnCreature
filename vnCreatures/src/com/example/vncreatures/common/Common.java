@@ -1,6 +1,10 @@
 package com.example.vncreatures.common;
 
+import com.example.vncreatures.R;
+
 public class Common {
+	public static int THEME = R.style.Theme_Styled_NoTitleBar_Fullscreen;
+	
 	public static String CREATURE_EXTRA = "creatureId";
 	public static String ACTION_EXTRA = "view detail";
 	public static String ACTION_CHOOSE_FAMILY = "choose family";

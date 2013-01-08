@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -14,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
 import com.example.vncreatures.customItems.BitmapManager;
 import com.example.vncreatures.view.ImageViewTouchViewPager;
 
-public class ImageViewFlipperActivity extends Activity {
+public class ImageViewFlipperActivity extends AbstracActivity {
 	private int mPosition = -1;
 	private int mFlag = 0;
 	private ArrayList<Bitmap> mCreatureImage = new ArrayList<Bitmap>();
@@ -47,12 +50,34 @@ public class ImageViewFlipperActivity extends Activity {
 				// This will create true position image view and add them to
 				// ViewFlipper
 				--mFlag;
-				if (i + 1 > BitmapManager.INSTANCE.getCreatureArrayBitmap().size()) {
+				if (i + 1 > BitmapManager.INSTANCE.getCreatureArrayBitmap()
+						.size()) {
 					i = 0;
 				}
-				mCreatureImage.add(BitmapManager.INSTANCE.getCreatureArrayBitmap().get(i));
+				mCreatureImage.add(BitmapManager.INSTANCE
+						.getCreatureArrayBitmap().get(i));
 			}
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		setTitle(getString(R.string.view_image));
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private class ImagePagerAdapter extends PagerAdapter {

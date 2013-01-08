@@ -1,7 +1,7 @@
 package com.example.vncreatures.common;
 
 public class ServerConfig {
-	public static final String ROOT = "http://192.168.137.120";
+	public static final String ROOT = "http://192.168.137.1";
 	// public static final String ROOT = "http://192.168.1.102";
 	public static final String IMAGE_PATH = ROOT
 			+ "/webData/pictures/%s/%s.jpg";

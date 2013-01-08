@@ -1,8 +1,6 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen" />
-
-    <style name="AppTheme" parent="android:Theme.Light" />
 
     <style name="Transparent" parent="@android:style/Theme.Translucent" />
 
@@ -32,6 +30,17 @@
 
     <style name="MatchWidth" parent="Match">
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Theme.Styled.NoTitleBar.Fullscreen" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/bg_striped</item>
+        <item name="android:background">@drawable/bg_striped</item>
+        <item name="backgroundSplit">@drawable/bg_striped_split</item>
+        <item name="android:backgroundSplit">@drawable/bg_striped_split</item>
     </style>
 
 </resources>

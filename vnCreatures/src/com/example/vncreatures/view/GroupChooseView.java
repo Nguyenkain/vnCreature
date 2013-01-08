@@ -1,13 +1,12 @@
 package com.example.vncreatures.view;
 
-import com.example.vncreatures.R;
-import com.example.vncreatures.model.GroupChooseModel;
-import com.markupartist.android.widget.ActionBar;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.example.vncreatures.R;
+import com.example.vncreatures.model.GroupChooseModel;
 
 public class GroupChooseView extends AbstractView {
 
@@ -29,7 +28,6 @@ public class GroupChooseView extends AbstractView {
 	protected void initUI() {
 		mModel.listView = (ListView) findViewById(R.id.groupChoose_listview);
 		mModel.filterEditText = (EditText) findViewById(R.id.filter_editText);
-		mModel.actionbar = (ActionBar) findViewById(R.id.actionbar);
 	}
 
 }

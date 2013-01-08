@@ -1,19 +1,16 @@
 package com.example.vncreatures.model;
 
-import com.markupartist.android.widget.ActionBar;
-
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.markupartist.android.widget.PullToRefreshListView;
+
 public class MainViewModel extends AbstractModel {
-	public EditText searchBox_editText = null;
-	public Button search_button = null;
-	public ListView creature_listview = null;
+//	public EditText searchBox_editText = null;
+//	public Button search_button = null;
+	public PullToRefreshListView creature_listview = null;
 	public LinearLayout advanceLayout = null;
 	public RelativeLayout classLayout = null;
 	public RelativeLayout familyLayout = null;
@@ -24,6 +21,5 @@ public class MainViewModel extends AbstractModel {
 	public ImageButton familyClearButton = null;
 	public ImageButton orderClearButton = null;
 	public ImageButton classClearButton = null;
-	public ActionBar actionBar = null;
 	public LinearLayout searchPlaceLayout = null;
 }

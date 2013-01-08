@@ -1,24 +1,19 @@
 package com.example.vncreatures.controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
+import com.actionbarsherlock.widget.SearchView;
+import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
 import com.example.vncreatures.common.Utils;
@@ -33,8 +28,8 @@ import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.Callback;
 import com.example.vncreatures.rest.HrmService.GroupCallback;
 import com.example.vncreatures.view.MainView;
-import com.markupartist.android.widget.ActionBar.Action;
-import com.markupartist.android.widget.ActionBar.IntentAction;
+import com.markupartist.android.widget.PullToRefreshListView;
+import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 
 public class MainActivity extends AbstracActivity implements OnClickListener {
 
@@ -47,11 +42,16 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 	private String mOrderId = "";
 	private String mKingdomId = "";
 	private String mClassId = "";
+	private String mName = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mMainView = new MainView(this, mMainViewModel);
+
+		// Request progress
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
 		setContentView(mMainView);
 
 		// Transition
@@ -61,8 +61,8 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		getAllCreatures();
 
 		// Search By Name
-		Button btn = mMainViewModel.search_button;
-		btn.setOnClickListener(this);
+		// Button btn = mMainViewModel.search_button;
+		// btn.setOnClickListener(this);
 
 		// Select Family
 		RelativeLayout layout = mMainViewModel.familyLayout;
@@ -89,13 +89,72 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		// Setup UI
 		setupUI(findViewById(R.id.layout_parent));
 
-		// init actionbar
-		initActionbar();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+
+		// //Inflate customview
+		// View refreshAction =
+		// LayoutInflater.from(this).inflate(R.layout.refresh_action_provider,
+		// null);
+		// ImageButton refreshButton = (ImageButton)
+		// refreshAction.findViewById(R.id.refresh_button);
+		// refreshButton.setOnClickListener(this);
+		//
+		// //Show
+		// getSupportActionBar().setCustomView(refreshAction, new
+		// LayoutParams(Gravity.RIGHT));
+		// getSupportActionBar().setDisplayShowCustomEnabled(true);
+
+		// Inflate menu
+		getSupportMenuInflater().inflate(R.menu.home_menu, menu);
+
+		// Create the search view
+		SearchView searchView = new SearchView(getSupportActionBar()
+				.getThemedContext());
+		searchView.setQueryHint(getString(R.string.search));
+
+		menu.getItem(1).setActionView(searchView);
+
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				mName = query;
+				searchByName(false);
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				return false;
+			}
+		});
+
+		return super.onCreateOptionsMenu(menu);
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_refresh:
+			searchByName(false);
+			break;
+		case R.id.menu_item_advance:
+			Utils.toogleLayout(mMainViewModel.advanceLayout);
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void initList(CreatureModel creatureModel) {
 		this.mCreatureModel = creatureModel;
-		ListView creatureListView = mMainViewModel.creature_listview;
+		PullToRefreshListView creatureListView = mMainViewModel.creature_listview;
 		mCreatureAdapter = new CreaturesListAdapter(this, creatureModel);
 		creatureListView.setAdapter(mCreatureAdapter);
 		mCreatureAdapter.notifyDataSetChanged();
@@ -113,6 +172,14 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 						Common.CREATURE_ACTIVITY_REQUEST_CODE);
 			}
 		});
+
+		creatureListView.setOnRefreshListener(new OnRefreshListener() {
+			
+			@Override
+			public void onRefresh() {
+				searchByName(true);
+			}
+		});
 	}
 
 	public void getAllCreatures() {
@@ -122,11 +189,10 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			@Override
 			public void onGetAllCreaturesDone(CreatureModel creatureModel) {
 				initList(creatureModel);
-				showActivityIndicator(false);
 				mMainViewModel.creature_listview
 						.setOnScrollListener(new EndlessScrollListener(
 								mCreatureAdapter));
-				mMainViewModel.actionBar.setProgressBarVisibility(View.GONE);
+				setSupportProgressBarIndeterminateVisibility(false);
 			}
 
 			@Override
@@ -135,21 +201,15 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			}
 		});
 		service.requestAllCreature("1");
-		mMainViewModel.actionBar.setProgressBarVisibility(View.VISIBLE);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main_view, menu);
-		return true;
+		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.search_button:
-			searchByName();
-			break;
+		/*
+		 * case R.id.search_button: searchByName(); break;
+		 */
 		case R.id.ho_layout:
 			getFamily();
 			break;
@@ -173,22 +233,22 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		}
 	}
 
-	private void searchByName() {
-		final String name = mMainViewModel.searchBox_editText.getText()
-				.toString();
+	private void searchByName(final boolean pull) {
 		HrmService service = new HrmService();
 		service.setCallback(new Callback() {
 
 			@Override
 			public void onGetAllCreaturesDone(CreatureModel creatureModel) {
-				mMainViewModel.actionBar.setProgressBarVisibility(View.GONE);
-				showActivityIndicator(false);
 				initList(creatureModel);
 
 				mMainViewModel.creature_listview
 						.setOnScrollListener(new EndlessScrollListener(
-								mCreatureAdapter, name, mFamilyId, mOrderId,
+								mCreatureAdapter, mName, mFamilyId, mOrderId,
 								mClassId));
+				// Set some status done
+				setSupportProgressBarIndeterminateVisibility(false);
+				if(pull)
+					mMainViewModel.creature_listview.onRefreshComplete();
 			}
 
 			@Override
@@ -196,8 +256,9 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 			}
 		});
-		service.requestCreaturesByName(name, "1", mFamilyId, mOrderId, mClassId);
-		mMainViewModel.actionBar.setProgressBarVisibility(View.VISIBLE);
+		service.requestCreaturesByName(mName, "1", mFamilyId, mOrderId,
+				mClassId);
+		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
 	private void getFamily() {
@@ -239,7 +300,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 							.getViet());
 					mFamilyId = creatureGroup.getId();
 					autoFill(true, true);
-					searchByName();
+					searchByName(false);
 				} else if (action.equalsIgnoreCase(Common.ACTION_CHOOSE_ORDER)) {
 					CreatureGroup creatureGroup = data.getExtras()
 							.getParcelable(Common.ORDER_EXTRA);
@@ -247,14 +308,14 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 							.getViet());
 					mOrderId = creatureGroup.getId();
 					autoFill(true, false);
-					searchByName();
+					searchByName(false);
 				} else if (action.equalsIgnoreCase(Common.ACTION_CHOOSE_CLASS)) {
 					CreatureGroup creatureGroup = data.getExtras()
 							.getParcelable(Common.CLASS_EXTRA);
 					mMainViewModel.classTextView.setText(creatureGroup
 							.getViet());
 					mClassId = creatureGroup.getId();
-					searchByName();
+					searchByName(false);
 				}
 			}
 		}
@@ -274,7 +335,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			mClassId = "";
 			mMainViewModel.classTextView.setText(defaultText);
 		}
-		searchByName();
+		searchByName(false);
 	}
 
 	protected void autoFill(boolean classFill, boolean orderFill) {
@@ -287,6 +348,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 					mMainViewModel.classTextView.setText(groupModel.get(0)
 							.getViet());
 					mClassId = groupModel.get(0).getId();
+					setSupportProgressBarIndeterminateVisibility(false);
 				}
 
 				@Override
@@ -295,6 +357,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 				}
 			});
 			service.requestGetClass(Common.KINGDOM, mOrderId, mFamilyId);
+			setSupportProgressBarIndeterminateVisibility(true);
 		}
 
 		if (orderFill) {
@@ -306,6 +369,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 					mMainViewModel.orderTextView.setText(groupModel.get(0)
 							.getViet());
 					mOrderId = groupModel.get(0).getId();
+					setSupportProgressBarIndeterminateVisibility(false);
 				}
 
 				@Override
@@ -314,6 +378,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 				}
 			});
 			service.requestGetOrder(Common.KINGDOM, mFamilyId, mClassId);
+			setSupportProgressBarIndeterminateVisibility(true);
 		}
 	}
 
@@ -323,46 +388,4 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		return i;
 	}
 
-	protected void initActionbar() {
-		final Action refreshAction = new Action() {
-
-			@Override
-			public void performAction(View view) {
-				searchByName();
-			}
-
-			@Override
-			public int getDrawable() {
-				return R.drawable.navigation_refresh;
-			}
-		};
-
-		final Action search = new Action() {
-
-			@Override
-			public void performAction(View view) {
-				Utils.toogleLayout(mMainViewModel.searchPlaceLayout);
-			}
-
-			@Override
-			public int getDrawable() {
-				return R.drawable.action_search;
-			}
-		};
-		final Action advanceAction = new Action() {
-
-			@Override
-			public void performAction(View view) {
-				Utils.toogleLayout(mMainViewModel.advanceLayout);
-			}
-
-			@Override
-			public int getDrawable() {
-				return R.drawable.action_settings;
-			}
-		};
-		mMainViewModel.actionBar.addAction(refreshAction);
-		mMainViewModel.actionBar.addAction(search);
-		mMainViewModel.actionBar.addAction(advanceAction);
-	}
 }

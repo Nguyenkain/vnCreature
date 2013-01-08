@@ -7,11 +7,6 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true" >
 
-    <com.markupartist.android.widget.ActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-        app:title="@string/filter_group" />
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

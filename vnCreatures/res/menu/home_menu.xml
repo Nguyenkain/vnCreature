@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_item_refresh"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/refresh"
+        android:icon="@drawable/ic_refresh"/>
+    
+    <item
+        android:id="@+id/menu_item_search"
+        android:showAsAction="always|collapseActionView"
+        android:title="@string/search"
+        android:icon="@drawable/abs__ic_search"/>
+        
+    <item
+        android:id="@+id/menu_item_advance"
+        android:showAsAction="always|collapseActionView"
+        android:title="@string/advance"
+        android:icon="@drawable/action_settings"/>
+
+</menu>

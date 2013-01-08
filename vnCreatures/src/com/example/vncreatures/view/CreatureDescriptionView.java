@@ -1,7 +1,6 @@
 package com.example.vncreatures.view;
 
 import java.util.ArrayList;
-import com.markupartist.android.widget.ActionBar;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -45,7 +44,6 @@ public class CreatureDescriptionView extends AbstractView {
 				.setCreatureImageView((ImageView) findViewById(R.id.creatureList_imageView));
 		mCreatureDescriptionViewModel
 				.setCreatureDesWebview((WebView) findViewById(R.id.creatureDes_webview));
-		mCreatureDescriptionViewModel.actionbar = (ActionBar) findViewById(R.id.actionbar);
 		
 		mCreatureDescriptionViewModel.setGalleryImage((Gallery) findViewById(R.id.creatureImage_gallery));
 	}
