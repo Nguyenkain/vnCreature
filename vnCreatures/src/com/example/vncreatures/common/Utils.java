@@ -78,47 +78,35 @@ public class Utils {
 
 		final Animation fadeInFromTopAnimation = AnimationUtils.loadAnimation(
 				activateView.getContext(), R.anim.fade_in_from_top);
-		fadeInFromTopAnimation.setAnimationListener(new AnimationListener() {
-
-			@Override
-			public void onAnimationStart(Animation animation) {
-				activateView.setVisibility(View.VISIBLE);
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-
-			}
-
-			@Override
-			public void onAnimationEnd(Animation animation) {
-
-			}
-		});
 		activateView.startAnimation(fadeInFromTopAnimation);
+		activateView.setVisibility(View.VISIBLE);
 	}
 
 	public static void hideView(final View activateView) {
 		// fade in from top
-		final Animation fadeOutFromTopAnimation = AnimationUtils.loadAnimation(
-				activateView.getContext(), R.anim.fade_out_from_bottom);
-		fadeOutFromTopAnimation.setAnimationListener(new AnimationListener() {
+		if (activateView.getVisibility() == View.VISIBLE) {
+			final Animation fadeOutFromTopAnimation = AnimationUtils
+					.loadAnimation(activateView.getContext(),
+							R.anim.fade_out_from_bottom);
+			fadeOutFromTopAnimation
+					.setAnimationListener(new AnimationListener() {
 
-			@Override
-			public void onAnimationStart(Animation animation) {
+						@Override
+						public void onAnimationStart(Animation animation) {
 
-			}
+						}
 
-			@Override
-			public void onAnimationRepeat(Animation animation) {
+						@Override
+						public void onAnimationRepeat(Animation animation) {
 
-			}
+						}
 
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				activateView.setVisibility(View.GONE);
-			}
-		});
-		activateView.startAnimation(fadeOutFromTopAnimation);
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							activateView.setVisibility(View.GONE);
+						}
+					});
+			activateView.startAnimation(fadeOutFromTopAnimation);
+		}
 	}
 }

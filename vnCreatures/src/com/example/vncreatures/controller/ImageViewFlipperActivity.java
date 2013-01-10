@@ -61,6 +61,13 @@ public class ImageViewFlipperActivity extends AbstracActivity {
 	}
 
 	@Override
+	protected void onResume() {
+		// Transition
+		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+		super.onResume();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		setTitle(getString(R.string.view_image));
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);

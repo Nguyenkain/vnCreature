@@ -2,7 +2,9 @@ package com.example.vncreatures.controller;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -44,6 +46,8 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 	private String mClassId = "";
 	private String mName = "";
 
+	private SharedPreferences kingdomPref;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,8 +58,9 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 		setContentView(mMainView);
 
-		// Transition
-		overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+		// Get Preference
+		kingdomPref = PreferenceManager.getDefaultSharedPreferences(this);
+		mKingdomId = kingdomPref.getString(Common.KINGDOM, "");
 
 		// Get All list
 		getAllCreatures();
@@ -92,6 +97,13 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 	}
 
 	@Override
+	protected void onResume() {
+		// Transition
+		overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+		super.onResume();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 
 		// //Inflate customview
@@ -122,6 +134,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
 				mName = query;
+				Utils.hideView(mMainViewModel.advanceLayout);
 				searchByName(false);
 				return true;
 			}
@@ -131,6 +144,9 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 				return false;
 			}
 		});
+
+		// init back button
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		return super.onCreateOptionsMenu(menu);
 
@@ -144,6 +160,11 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			break;
 		case R.id.menu_item_advance:
 			Utils.toogleLayout(mMainViewModel.advanceLayout);
+			break;
+		case R.id.preferences:
+			startActivity(new Intent(this, EditPreferences.class));
+		case android.R.id.home:
+			finish();
 			break;
 
 		default:
@@ -164,7 +185,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long id) {
-				Creature creature = mCreatureModel.get(pos);
+				Creature creature = mCreatureModel.get(pos - 1);
 				Intent intent = new Intent(Common.ACTION_EXTRA, null,
 						MainActivity.this, CreatureActivity.class);
 				intent.putExtra(Common.CREATURE_EXTRA, creature.getId());
@@ -174,7 +195,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		});
 
 		creatureListView.setOnRefreshListener(new OnRefreshListener() {
-			
+
 			@Override
 			public void onRefresh() {
 				searchByName(true);
@@ -191,7 +212,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 				initList(creatureModel);
 				mMainViewModel.creature_listview
 						.setOnScrollListener(new EndlessScrollListener(
-								mCreatureAdapter));
+								mCreatureAdapter, mKingdomId));
 				setSupportProgressBarIndeterminateVisibility(false);
 			}
 
@@ -200,7 +221,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 			}
 		});
-		service.requestAllCreature("1");
+		service.requestAllCreature("1", mKingdomId);
 		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
@@ -243,11 +264,11 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 				mMainViewModel.creature_listview
 						.setOnScrollListener(new EndlessScrollListener(
-								mCreatureAdapter, mName, mFamilyId, mOrderId,
-								mClassId));
+								mCreatureAdapter, mName, mKingdomId, mFamilyId,
+								mOrderId, mClassId));
 				// Set some status done
 				setSupportProgressBarIndeterminateVisibility(false);
-				if(pull)
+				if (pull)
 					mMainViewModel.creature_listview.onRefreshComplete();
 			}
 
@@ -256,8 +277,8 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 			}
 		});
-		service.requestCreaturesByName(mName, "1", mFamilyId, mOrderId,
-				mClassId);
+		service.requestCreaturesByName(mName, mKingdomId, "1", mFamilyId,
+				mOrderId, mClassId);
 		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
@@ -356,7 +377,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 				}
 			});
-			service.requestGetClass(Common.KINGDOM, mOrderId, mFamilyId);
+			service.requestGetClass(mKingdomId, mOrderId, mFamilyId);
 			setSupportProgressBarIndeterminateVisibility(true);
 		}
 
@@ -377,7 +398,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 				}
 			});
-			service.requestGetOrder(Common.KINGDOM, mFamilyId, mClassId);
+			service.requestGetOrder(mKingdomId, mFamilyId, mClassId);
 			setSupportProgressBarIndeterminateVisibility(true);
 		}
 	}

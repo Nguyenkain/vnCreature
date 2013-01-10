@@ -52,17 +52,17 @@ public class HrmService {
 		mGroupCallback = callback;
 	}
 
-	public boolean requestAllCreature(String page) {
+	public boolean requestAllCreature(String page, String kingdom) {
 		GetAllCreatureTask task = new GetAllCreatureTask();
-		task.execute(page);
+		task.execute(page, kingdom);
 
 		return true;
 	}
 
-	public boolean requestCreaturesByName(String name, String page,
-			String familyId, String orderId, String classId) {
+	public boolean requestCreaturesByName(String name, String kingdom,
+			String page, String familyId, String orderId, String classId) {
 		GetCreaturesByNameTask task = new GetCreaturesByNameTask();
-		task.execute(page, name, familyId, orderId, classId);
+		task.execute(page, kingdom, name, familyId, orderId, classId);
 
 		return true;
 	}
@@ -107,7 +107,7 @@ public class HrmService {
 				String.format(ServerConfig.IMAGE_PATH, name, imgId));
 	}
 
-	protected String getAllCreatures(String page) {
+	protected String getAllCreatures(String page, String kingdom) {
 		String result = "";
 		String request = String.format(ServerConfig.GET_ALL_CREATURE);
 		RestClient client = new RestClient(request);
@@ -115,6 +115,7 @@ public class HrmService {
 		client.addParam("format", "json");
 		client.addParam("page", page);
 		client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
+		client.addParam("kingdom", kingdom);
 
 		try {
 			client.execute(RestClient.RequestMethod.GET);
@@ -127,7 +128,7 @@ public class HrmService {
 		return result;
 	}
 
-	protected String getCreaturesByName(String page, String name,
+	protected String getCreaturesByName(String page, String kingdom, String name,
 			String familyId, String orderId, String classId) {
 		String result = "";
 		String request = String.format(ServerConfig.GET_ALL_CREATURE_BY_NAME2);
@@ -139,6 +140,7 @@ public class HrmService {
 		client.addParam("family", familyId);
 		client.addParam("order", orderId);
 		client.addParam("class", classId);
+		client.addParam("kingdom", kingdom);
 
 		try {
 			client.execute(RestClient.RequestMethod.GET);
@@ -366,7 +368,8 @@ public class HrmService {
 		@Override
 		protected String doInBackground(String... params) {
 			String page = params[0];
-			String result = getAllCreatures(page);
+			String kingdom = params[1];
+			String result = getAllCreatures(page, kingdom);
 			return result;
 		}
 
@@ -388,11 +391,12 @@ public class HrmService {
 		@Override
 		protected String doInBackground(String... params) {
 			String page = params[0];
-			String name = params[1];
-			String familyId = params[2];
-			String orderId = params[3];
-			String classId = params[4];
-			String result = getCreaturesByName(page, name, familyId, orderId,
+			String kingdom = params[1];
+			String name = params[2];
+			String familyId = params[3];
+			String orderId = params[4];
+			String classId = params[5];
+			String result = getCreaturesByName(page, kingdom, name, familyId, orderId,
 					classId);
 			return result;
 		}
@@ -492,7 +496,7 @@ public class HrmService {
 			}
 		}
 	}
-	
+
 	// Get Family Task
 	private class GetFamilyTask extends AsyncTask<String, Void, String> {
 

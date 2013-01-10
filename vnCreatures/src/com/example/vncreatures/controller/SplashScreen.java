@@ -2,52 +2,53 @@ package com.example.vncreatures.controller;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 
 import com.example.vncreatures.R;
 
 public class SplashScreen extends Activity {
-	protected boolean _active = true;
-    protected int _splashTime = 5000;
-    
-    /** Called when the activity is first created. */
+	// Set the display time, in milliseconds (or extract it out as a configurable parameter)
+    private final int SPLASH_DISPLAY_LENGTH = 3000;
+ 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splashscreen);
-        
-        // thread for displaying the SplashScreen
-        Thread splashTread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    int waited = 0;
-                    while(_active && (waited < _splashTime)) {
-                        sleep(100);
-                        if(_active) {
-                            waited += 100;
-                        }
-                    }
-                } catch(InterruptedException e) {
-                    // do nothing
-                } finally {
-                    finish();
-                    Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class); 
-                    SplashScreen.this.startActivity(mainIntent); 
-                    SplashScreen.this.finish(); 
-                    stop();
-                }
-            }
-        };
-        splashTread.start();
     }
-    
+ 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            _active = false;
+    protected void onResume()
+    {
+        super.onResume();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        // Obtain the sharedPreference, default to true if not available
+        boolean isSplashEnabled = sp.getBoolean("isSplashEnabled", true);
+ 
+        if (isSplashEnabled)
+        {
+            new Handler().postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    //Finish the splash activity so it can't be returned to.
+                	SplashScreen.this.finish();
+                    // Create an Intent that will start the main activity.
+                    Intent mainIntent = new Intent(SplashScreen.this, KingdomChooseActivity.class);
+                    SplashScreen.this.startActivity(mainIntent);
+                }
+            }, SPLASH_DISPLAY_LENGTH);
         }
-        return true;
+        else
+        {
+            // if the splash is not enabled, then finish the activity immediately and go to main.
+            finish();
+            Intent mainIntent = new Intent(SplashScreen.this, KingdomChooseActivity.class);
+            SplashScreen.this.startActivity(mainIntent);
+        }
     }
 }

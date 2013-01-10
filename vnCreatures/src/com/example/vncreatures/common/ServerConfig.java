@@ -7,9 +7,7 @@ public class ServerConfig {
 			+ "/webData/pictures/%s/%s.jpg";
 
 	public static final String GET_ALL_CREATURE = ROOT
-			+ "/webservice/webservice.php?getAllNameCreature&format=json";
-	public static final String GET_ALL_CREATURE_BY_NAME = ROOT
-			+ "/webservice/webservice.php?getCreatureByName&format=json";
+			+ "/webservice/webservice.php?getAllNameCreature&format=json&kingdom=";
 	public static final String GET_ALL_CREATURE_BY_NAME2 = ROOT
 			+ "/webservice/webservice.php?getCreatureByName2&format=json&recordperpage=10&page=1&creatureName=&order=&family=&class=";
 	public static final String GET_CREATURE_BY_ID = ROOT

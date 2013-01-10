@@ -7,7 +7,7 @@ public class AbstractView extends LinearLayout {
 	
 	private Context mContext = null;
 
-	public AbstractView(Context context) {
+	protected AbstractView(Context context) {
 		super(context);
 		this.mContext = context;
 	}

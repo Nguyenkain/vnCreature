@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical" >
+    
+    <LinearLayout 
+        style="@style/MatchWidth"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical">
+    
+    <ImageButton android:id="@+id/animal_button"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/animal"
+        android:contentDescription="@string/animal"
+        android:background="@drawable/button_shape"
+        android:layout_gravity="center_horizontal"/>
+    
+    <ImageButton android:id="@+id/plant_button"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/plant"
+        android:contentDescription="@string/plant"
+        android:background="@drawable/button_shape"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"/>
+    
+    <ImageButton android:id="@+id/insect_button"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/insect"
+        android:contentDescription="@string/insect"
+        android:background="@drawable/button_shape"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"/>
+</LinearLayout>
+</LinearLayout>

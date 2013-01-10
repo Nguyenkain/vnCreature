@@ -25,15 +25,15 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme" >
         <activity android:name=".controller.SplashScreen" >
-        </activity>
-        <activity
-            android:name=".controller.MainActivity"
-            android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".controller.MainActivity"
+            android:label="@string/title_activity_main" >
         </activity>
         <activity android:name=".controller.AbstracActivity" >
         </activity>
@@ -42,6 +42,10 @@
         <activity android:name=".controller.ImageViewFlipperActivity" >
         </activity>
         <activity android:name=".controller.GroupChooseActivity" >
+        </activity>
+        <activity android:name=".controller.EditPreferences" >
+        </activity>
+        <activity android:name=".controller.KingdomChooseActivity" >
         </activity>
     </application>
 

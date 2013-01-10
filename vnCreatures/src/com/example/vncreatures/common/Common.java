@@ -15,11 +15,13 @@ public class Common {
 	public static String ORDER_EXTRA = "orderId";
 	public static String CLASS_EXTRA = "classId";
 
-	public static String KINGDOM = "1";
+	public static String KINGDOM = "kingdom";
 
 	public static int CREATURE_ACTIVITY_REQUEST_CODE = 0;
 	public static String CREATURE_URL_IMAGES_EXTRA = "urlImages";
 	public static String CREATURE_URL_IMAGES_POSITION_EXTRA = "urlImagesPosition";
+	
+	public static final String KINGDOM_PREF = "KingdomPrefs";
 
 	public enum CREATURE {
 		Animal("1"), Plant("2"), Insect("3");

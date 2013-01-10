@@ -46,6 +46,13 @@ public class CreatureActivity extends AbstracActivity implements
 	}
 	
 	@Override
+	protected void onResume() {
+		// Transition
+		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+		super.onResume();
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setTitle(getString(R.string.detail));
@@ -79,9 +86,7 @@ public class CreatureActivity extends AbstracActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			Intent intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-			startActivity(intent);
+			finish();
 			break;
 
 		default:

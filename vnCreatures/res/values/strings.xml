@@ -27,4 +27,8 @@
     <string name="touch_to_select">Ấn để chọn</string>
     <string name="hint_filter_text">Nhập để lọc</string>
     <string name="view_image">Ảnh  lớn</string>
+    <string name="animal">Động vật</string>
+    <string name="plant">Thực vật</string>
+    <string name="insect">Côn trùng</string>
+    <string name="kindom_choose">Chọn Loài</string>
 </resources>
