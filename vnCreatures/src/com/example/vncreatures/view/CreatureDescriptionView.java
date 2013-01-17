@@ -20,7 +20,6 @@ import com.example.vncreatures.rest.HrmService;
 public class CreatureDescriptionView extends AbstractView {
 
 	private Context mContext = null;
-	private ArrayList<Bitmap> mCreatureImage = new ArrayList<Bitmap>();
 	private CreatureDescriptionViewModel mCreatureDescriptionViewModel = null;
 
 	public CreatureDescriptionView(Context context,
@@ -35,39 +34,29 @@ public class CreatureDescriptionView extends AbstractView {
 	}
 
 	private void iniUI() {
-		mCreatureDescriptionViewModel
-				.setVietName((TextView) findViewById(R.id.vietNameDetail_textview));
-		mCreatureDescriptionViewModel
-				.setLatinName((TextView) findViewById(R.id.latinNameDetail_textview));
-
-		mCreatureDescriptionViewModel
-				.setCreatureImageView((ImageView) findViewById(R.id.creatureList_imageView));
-		mCreatureDescriptionViewModel
-				.setCreatureDesWebview((WebView) findViewById(R.id.creatureDes_webview));
-		
-		mCreatureDescriptionViewModel.setGalleryImage((Gallery) findViewById(R.id.creatureImage_gallery));
+		mCreatureDescriptionViewModel.vietName = (TextView) findViewById(R.id.vietNameDetail_textview);
+		mCreatureDescriptionViewModel.latinName = (TextView) findViewById(R.id.latinNameDetail_textview);
+		mCreatureDescriptionViewModel.creatureImageView = (ImageView) findViewById(R.id.creatureList_imageView);
+		mCreatureDescriptionViewModel.creatureDesWebview = (WebView) findViewById(R.id.creatureDes_webview);
+		mCreatureDescriptionViewModel.galleryImage = (Gallery) findViewById(R.id.creatureImage_gallery);
 	}
 
 	public void setContent(Creature creature) {
-		mCreatureDescriptionViewModel.getVietName()
-				.setText(creature.getvName());
-		mCreatureDescriptionViewModel.getLatinName().setText(
-				creature.getLatin());
-				
+		mCreatureDescriptionViewModel.vietName.setText(creature.getVName());
+		mCreatureDescriptionViewModel.latinName.setText(creature.getLatin());
 		HrmService service = new HrmService();
 		service.downloadImages(mContext, creature.getId(), creature.getKingdom(),
-				mCreatureDescriptionViewModel.mGalleryImage);
+				mCreatureDescriptionViewModel.galleryImage);
 		
 		
 		//mCreatureDescriptionViewModel.getCreatureDesWebview().setBackgroundColor(0x00000000);
 
-		mCreatureDescriptionViewModel.mCreatureDesWebview.getSettings()
+		mCreatureDescriptionViewModel.creatureDesWebview.getSettings()
 				.setSupportZoom(false);
-		mCreatureDescriptionViewModel.getCreatureDesWebview().getSettings()
+		mCreatureDescriptionViewModel.creatureDesWebview.getSettings()
 				.setDefaultTextEncodingName("utf-8");
-		mCreatureDescriptionViewModel.getCreatureDesWebview()
-				.loadDataWithBaseURL(null, creature.getDescription(),
-						"text/html", "utf-8", null);
+		mCreatureDescriptionViewModel.creatureDesWebview.loadDataWithBaseURL(
+				null, creature.getDescription(), "text/html", "utf-8", null);
 
 	}
 
