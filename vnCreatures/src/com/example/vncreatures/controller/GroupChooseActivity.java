@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -21,27 +22,22 @@ import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.GroupCallback;
 import com.example.vncreatures.view.GroupChooseView;
 
-public class GroupChooseActivity extends AbstracActivity {
+public class GroupChooseActivity extends AbstractActivity {
 
 	private GroupChooseModel mModel = new GroupChooseModel();
 	private GroupChooseView mView;
 	private CreatureGroupListModel mCreatureGroupListModel = null;
 	private CreaturesGroupsAdapter mAdapter;
-	private SharedPreferences kingdomPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 
 		// Transition
-		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-
-		// get Preference
-		kingdomPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
+		overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
 
 		mView = new GroupChooseView(this, mModel);
-		setContentView(mView);
+
+		super.onCreate(savedInstanceState);
 
 		// Get extras
 		getFromExtras();
@@ -54,9 +50,14 @@ public class GroupChooseActivity extends AbstracActivity {
 	}
 
 	@Override
+	protected View createView() {
+		return mView;
+	}
+
+	@Override
 	protected void onResume() {
 		// Transition
-		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+		overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
 		super.onResume();
 	}
 
@@ -78,6 +79,11 @@ public class GroupChooseActivity extends AbstracActivity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onClick(View v) {
+		super.onClick(v);
 	}
 
 	protected void getFromExtras() {
@@ -130,8 +136,7 @@ public class GroupChooseActivity extends AbstracActivity {
 
 			}
 		});
-		service.requestGetFamily(
-				kingdomPreferences.getString(Common.KINGDOM, null), orderId,
+		service.requestGetFamily(pref.getString(Common.KINGDOM, null), orderId,
 				classId);
 		setSupportProgressBarIndeterminateVisibility(true);
 	}
@@ -165,8 +170,7 @@ public class GroupChooseActivity extends AbstracActivity {
 
 			}
 		});
-		service.requestGetOrder(
-				kingdomPreferences.getString(Common.KINGDOM, null), familyId,
+		service.requestGetOrder(pref.getString(Common.KINGDOM, null), familyId,
 				classId);
 		setSupportProgressBarIndeterminateVisibility(true);
 	}
@@ -200,8 +204,7 @@ public class GroupChooseActivity extends AbstracActivity {
 
 			}
 		});
-		service.requestGetClass(
-				kingdomPreferences.getString(Common.KINGDOM, null), orderId,
+		service.requestGetClass(pref.getString(Common.KINGDOM, null), orderId,
 				familyId);
 		setSupportProgressBarIndeterminateVisibility(true);
 	}
@@ -238,6 +241,11 @@ public class GroupChooseActivity extends AbstracActivity {
 
 			}
 		});
+	}
+
+	@Override
+	protected int indentifyTabPosition() {
+		return R.id.tabHome_button;
 	}
 
 }

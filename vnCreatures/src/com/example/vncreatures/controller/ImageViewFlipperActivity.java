@@ -22,16 +22,16 @@ import com.example.vncreatures.common.Common;
 import com.example.vncreatures.customItems.BitmapManager;
 import com.example.vncreatures.view.ImageViewTouchViewPager;
 
-public class ImageViewFlipperActivity extends AbstracActivity {
+public class ImageViewFlipperActivity extends AbstractActivity {
 	private int mPosition = -1;
 	private int mFlag = 0;
 	private ArrayList<Bitmap> mCreatureImage = new ArrayList<Bitmap>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.creature_image_flipper);
-
+		
 		ImageViewTouchViewPager viewPager = (ImageViewTouchViewPager) findViewById(R.id.view_pager);
 		ImagePagerAdapter adapter = new ImagePagerAdapter();
 		viewPager.setAdapter(adapter);
@@ -58,6 +58,11 @@ public class ImageViewFlipperActivity extends AbstracActivity {
 						.getCreatureArrayBitmap().get(i));
 			}
 		}
+	}
+	
+	@Override
+	protected View createView() {
+		return getLayoutInflater().inflate(R.layout.creature_image_flipper, null);
 	}
 
 	@Override
@@ -114,5 +119,10 @@ public class ImageViewFlipperActivity extends AbstracActivity {
 			((ViewPager) container).removeView((ImageView) object);
 		}
 
+	}
+
+	@Override
+	protected int indentifyTabPosition() {
+		return R.id.tabHome_button;
 	}
 }

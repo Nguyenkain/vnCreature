@@ -31,4 +31,6 @@
     <string name="plant">Thực vật</string>
     <string name="insect">Côn trùng</string>
     <string name="kindom_choose">Chọn Loài</string>
+    <string name="news_image">Ảnh đại diện</string>
+    <string name="news">Tin Tức</string>
 </resources>

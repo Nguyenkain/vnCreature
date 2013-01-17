@@ -57,6 +57,9 @@ public class CreatureDescriptionView extends AbstractView {
 		HrmService service = new HrmService();
 		service.downloadImages(mContext, creature.getId(), creature.getLoai(),
 				mCreatureDescriptionViewModel.getGalleryImage());
+		
+		
+		//mCreatureDescriptionViewModel.getCreatureDesWebview().setBackgroundColor(0x00000000);
 
 		mCreatureDescriptionViewModel.getCreatureDesWebview().getSettings()
 				.setSupportZoom(false);

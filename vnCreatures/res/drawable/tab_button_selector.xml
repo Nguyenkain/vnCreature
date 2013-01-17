@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@color/darkorange" android:state_pressed="true"/>
+ <!-- pressed -->
+    <item android:drawable="@drawable/selected_tab_shape" android:state_selected="true"/>
+ <!-- selected/highlighted -->
+    <!--
+    Default should be last since Android goes from top down evaluation
+	http://developer.android.com/resources/tutorials/views/hello-formstuff.html
+    -->
+    <item android:drawable="@drawable/tab_shape"/>
+ <!-- default -->
+
+</selector>

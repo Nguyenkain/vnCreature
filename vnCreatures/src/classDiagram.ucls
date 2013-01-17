@@ -1,0 +1,305 @@
+<class-diagram version="1.0.11" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" 
+    name="com.example.vncreatures.controller.ImageViewFlipperActivity.ImagePagerAdapter" project="vnCreatures" 
+    file="/vnCreatures/src/com/example/vncreatures/controller/ImageViewFlipperActivity.java" binary="false">    
+    <position height="-1" width="-1" x="387" y="730"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.controller.KingdomChooseActivity" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/controller/KingdomChooseActivity.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="164" y="326"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.controller.GroupChooseActivity" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/controller/GroupChooseActivity.java" 
+    binary="false">    
+    <position height="350" width="272" x="547" y="342"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.controller.CreatureActivity" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/controller/CreatureActivity.java" 
+    binary="false">    
+    <position height="265" width="338" x="859" y="342"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.controller.ImageViewFlipperActivity" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/controller/ImageViewFlipperActivity.java" 
+    binary="false">    
+    <position height="231" width="228" x="279" y="342"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.controller.MainActivity" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/controller/MainActivity.java" binary="false">    
+    <position height="-1" width="-1" x="1343" y="384"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.controller.AbstractActivity" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/controller/AbstractActivity.java" 
+    binary="false">    
+    <position height="265" width="178" x="547" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="8" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.customItems.BitmapManager" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/customItems/BitmapManager.java" binary="false">    
+    <position height="-1" width="-1" x="182" y="990"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.customItems.CreaturesListAdapter" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/customItems/CreaturesListAdapter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1459" y="829"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.customItems.CreaturesGroupsAdapter" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/customItems/CreaturesGroupsAdapter.java" 
+    binary="false">    
+    <position height="248" width="312" x="618" y="738"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.customItems.GalleryImageAdapter" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/customItems/GalleryImageAdapter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="469" y="938"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.customItems.EndlessScrollListener" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/customItems/EndlessScrollListener.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1672" y="1147"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="13" corner="BOTTOM_RIGHT" language="java" 
+    name="com.example.vncreatures.customItems.CreaturesListAdapter.ViewHolder" project="vnCreatures" 
+    file="/vnCreatures/src/com/example/vncreatures/customItems/CreaturesListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="1329" y="1061"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="14" corner="BOTTOM_RIGHT" language="java" 
+    name="com.example.vncreatures.customItems.CreaturesGroupsAdapter.Callback" project="vnCreatures" 
+    file="/vnCreatures/src/com/example/vncreatures/customItems/CreaturesGroupsAdapter.java" binary="false">    
+    <position height="78" width="175" x="618" y="1077"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="15" corner="BOTTOM_RIGHT" language="java" 
+    name="com.example.vncreatures.customItems.CreaturesGroupsAdapter.ViewHolder" project="vnCreatures" 
+    file="/vnCreatures/src/com/example/vncreatures/customItems/CreaturesGroupsAdapter.java" binary="false">    
+    <position height="129" width="175" x="833" y="1077"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="16" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.view.CreatureDescriptionView" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/view/CreatureDescriptionView.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1113" y="798"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="17" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.view.GroupChooseView" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/view/GroupChooseView.java" binary="false">    
+    <position height="-1" width="-1" x="920" y="107"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="18" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.view.ImageViewTouchViewPager" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/view/ImageViewTouchViewPager.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1703" y="153"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="19" corner="BOTTOM_RIGHT" language="java" 
+    name="com.example.vncreatures.view.ImageViewTouchViewPager.OnPageSelectedListener" project="vnCreatures" 
+    file="/vnCreatures/src/com/example/vncreatures/view/ImageViewTouchViewPager.java" binary="false">    
+    <position height="-1" width="-1" x="1749" y="331"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="20" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.view.KingdomChooseView" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/view/KingdomChooseView.java" binary="false">    
+    <position height="-1" width="-1" x="201" y="90"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="21" corner="BOTTOM_RIGHT" language="java" name="com.example.vncreatures.view.MainView" 
+    project="vnCreatures" file="/vnCreatures/src/com/example/vncreatures/view/MainView.java" binary="false">    
+    <position height="-1" width="-1" x="1309" y="41"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <nesting id="22">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="14"/>  
+  </nesting>  
+  <association id="23">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="24" name="mMainView"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="26">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="27" name="mCreatureAdapter"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="29">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="30">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="31" name="mCallback"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="33">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="34" name="mCreatureDescriptionView"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="37" name="onPageSelectedListener"/>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="39">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <nesting id="40">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="15"/>  
+  </nesting>  
+  <association id="41">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="42" name="adapter"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="44">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <nesting id="45">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="13"/>  
+  </nesting>  
+  <generalization id="46">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <nesting id="47">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="19"/>  
+  </nesting>  
+  <generalization id="48">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <nesting id="49">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
+  </nesting>  
+  <association id="50">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="51" name="mView"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="54" name="mAdapter"/>      
+      <multiplicity id="55" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="57" name="mView"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

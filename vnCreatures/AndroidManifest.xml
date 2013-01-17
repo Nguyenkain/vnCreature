@@ -35,7 +35,7 @@
             android:name=".controller.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
-        <activity android:name=".controller.AbstracActivity" >
+        <activity android:name=".controller.AbstractActivity" >
         </activity>
         <activity android:name=".controller.CreatureActivity" >
         </activity>
@@ -46,6 +46,12 @@
         <activity android:name=".controller.EditPreferences" >
         </activity>
         <activity android:name=".controller.KingdomChooseActivity" >
+        </activity>
+        <activity android:name=".controller.NewsTabsPagerActivity" >
+        </activity>
+        <activity android:name=".controller.NewsContentActivity" >
+        </activity>
+        <activity android:name=".controller.AbstractFragmentActivity" >
         </activity>
     </application>
 

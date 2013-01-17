@@ -7,6 +7,7 @@ public class Common {
 	
 	public static String CREATURE_EXTRA = "creatureId";
 	public static String ACTION_EXTRA = "view detail";
+	public static String CAT_EXTRA = "categoryId";
 	public static String ACTION_CHOOSE_FAMILY = "choose family";
 	public static String ACTION_CHOOSE_CLASS = "choose class";
 	public static String ACTION_CHOOSE_ORDER = "choose order";
@@ -22,9 +23,10 @@ public class Common {
 	public static String CREATURE_URL_IMAGES_POSITION_EXTRA = "urlImagesPosition";
 	
 	public static final String KINGDOM_PREF = "KingdomPrefs";
+	public static final String TAB_PREF = "tabPrefs";
 
 	public enum CREATURE {
-		Animal("1"), Plant("2"), Insect("3");
+		animal("1"), plant("2"), insect("3");
 
 		private final String identifier;
 

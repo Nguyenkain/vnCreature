@@ -23,14 +23,17 @@ import com.example.vncreatures.common.Utils;
 import com.example.vncreatures.controller.ImageViewFlipperActivity;
 import com.example.vncreatures.customItems.BitmapManager;
 import com.example.vncreatures.customItems.GalleryImageAdapter;
+import com.example.vncreatures.model.CategoryModel;
 import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.CreatureGroup;
 import com.example.vncreatures.model.CreatureGroupListModel;
+import com.example.vncreatures.model.NewsModel;
 
 public class HrmService {
 	private Callback mCallback = null;
 	private GroupCallback mGroupCallback = null;
+	private NewsCallback mNewsCallback = null;
 
 	public interface Callback {
 		public void onGetAllCreaturesDone(final CreatureModel creatureModel);
@@ -50,6 +53,18 @@ public class HrmService {
 
 	public void setCallback(final GroupCallback callback) {
 		mGroupCallback = callback;
+	}
+
+	public interface NewsCallback {
+		public void onGetCatSuccess(final CategoryModel catModel);
+
+		public void onGetNewsSuccess(final NewsModel newsModel);
+
+		public void onError();
+	}
+
+	public void setCallback(final NewsCallback callback) {
+		mNewsCallback = callback;
 	}
 
 	public boolean requestAllCreature(String page, String kingdom) {
@@ -95,6 +110,21 @@ public class HrmService {
 		return true;
 	}
 
+	public boolean requestGetCategory() {
+		GetCategoryTask task = new GetCategoryTask();
+		task.execute();
+		return true;
+	}
+	
+	public boolean requestGetNews(String catId) {
+		GetNewsTask task = new GetNewsTask();
+		task.execute(catId);
+		return true;
+	}
+	
+	
+	//END REQUEST
+
 	/* download all image of a creature */
 	public void downloadImages(Context context, String imgId, String loai,
 			Gallery gallery) {
@@ -107,269 +137,12 @@ public class HrmService {
 				String.format(ServerConfig.IMAGE_PATH, name, imgId));
 	}
 
-	protected String getAllCreatures(String page, String kingdom) {
-		String result = "";
-		String request = String.format(ServerConfig.GET_ALL_CREATURE);
-		RestClient client = new RestClient(request);
-		client.addParam("getAllNameCreature", "");
-		client.addParam("format", "json");
-		client.addParam("page", page);
-		client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
-		client.addParam("kingdom", kingdom);
-
-		try {
-			client.execute(RestClient.RequestMethod.GET);
-			result = client.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return result;
-	}
-
-	protected String getCreaturesByName(String page, String kingdom, String name,
-			String familyId, String orderId, String classId) {
-		String result = "";
-		String request = String.format(ServerConfig.GET_ALL_CREATURE_BY_NAME2);
-		RestClient client = new RestClient(request);
-		client.addParam("format", "json");
-		client.addParam("creatureName", name);
-		client.addParam("page", page);
-		client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
-		client.addParam("family", familyId);
-		client.addParam("order", orderId);
-		client.addParam("class", classId);
-		client.addParam("kingdom", kingdom);
-
-		try {
-			client.execute(RestClient.RequestMethod.GET);
-			result = client.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return result;
-	}
-
-	protected String getCreaturesById(String id) {
-		String result = "";
-		String request = String.format(ServerConfig.GET_CREATURE_BY_ID);
-		RestClient client = new RestClient(request);
-		client.addParam("getCreatureById", "");
-		client.addParam("format", "json");
-		client.addParam("id", id);
-
-		try {
-			client.execute(RestClient.RequestMethod.GET);
-			result = client.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return result;
-	}
-
-	protected String getFamily(String orderId, String classId, String kingdomId) {
-		String result = "";
-
-		String request = String.format(ServerConfig.GET_FAMILY);
-		RestClient client = new RestClient(request);
-		client.addParam("format", "json");
-		client.addParam("kingdom", kingdomId);
-		client.addParam("class", classId);
-		client.addParam("order", orderId);
-
-		try {
-			client.execute(RestClient.RequestMethod.GET);
-			result = client.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return result;
-	}
-
-	protected String getOrder(String familyId, String classId, String kingdomId) {
-		String result = "";
-
-		String request = String.format(ServerConfig.GET_ORDER);
-		RestClient client = new RestClient(request);
-		client.addParam("format", "json");
-		client.addParam("kingdom", kingdomId);
-		client.addParam("class", classId);
-		client.addParam("family", familyId);
-
-		try {
-			client.execute(RestClient.RequestMethod.GET);
-			result = client.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return result;
-	}
-
-	protected String getClassType(String orderId, String familyId,
-			String kingdomId) {
-		String result = "";
-
-		String request = String.format(ServerConfig.GET_CLASS);
-		RestClient client = new RestClient(request);
-		client.addParam("format", "json");
-		client.addParam("kingdom", kingdomId);
-		client.addParam("order", orderId);
-		client.addParam("family", familyId);
-
-		try {
-			client.execute(RestClient.RequestMethod.GET);
-			result = client.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return result;
-	}
-
-	public CreatureModel parseCreatureModelFromJSON(String data) {
-		if (data == null || data == "")
-			return null;
-
-		CreatureModel creatureModel = new CreatureModel();
-
-		if (data.indexOf('{') > -1)
-			data = data.substring(data.indexOf('{'));
-		if (data.lastIndexOf('}') > -1)
-			data = data.substring(0, data.lastIndexOf('}') + 1);
-
-		try {
-			JSONObject creaturesObj = new JSONObject(data);
-			if (!creaturesObj.has("creatures"))
-				return null;
-
-			JSONArray creatureListObj = creaturesObj.getJSONArray("creatures");
-			for (int i = 0; i < creatureListObj.length(); i++) {
-				Creature creature = new Creature();
-				JSONObject creatureObj = creatureListObj.getJSONObject(i);
-				String stringVal = "", key = "";
-				int intVal = -1;
-				key = "creature";
-				if (!creatureObj.has(key))
-					continue;
-				creatureObj = creatureObj.getJSONObject(key);
-
-				key = "ID";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creature.setId(stringVal);
-
-				key = "Viet";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creature.setvName(stringVal);
-
-				key = "Latin";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creature.setLatin(stringVal);
-
-				key = "Img";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creature.setImageId(stringVal);
-
-				key = "Loai";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creature.setLoai(stringVal);
-
-				key = "Description";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				stringVal = stringVal.replace("charset=windows-1252", " ");
-				creature.setDescription(stringVal);
-
-				key = "AuthorName";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creature.setAuthor(stringVal);
-
-				// Add to the model
-				creatureModel.add(creature);
-			}
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		return creatureModel;
-	}
-
-	// Parse GroupModel
-	protected CreatureGroupListModel parseGroupModelFromJSON(String data) {
-		if (data == null || data == "")
-			return null;
-
-		CreatureGroupListModel crGroupListModel = new CreatureGroupListModel();
-
-		if (data.indexOf('{') > -1)
-			data = data.substring(data.indexOf('{'));
-		if (data.lastIndexOf('}') > -1)
-			data = data.substring(0, data.lastIndexOf('}') + 1);
-
-		try {
-			JSONObject creaturesObj = new JSONObject(data);
-			if (!creaturesObj.has("groups"))
-				return null;
-
-			JSONArray creatureListObj = creaturesObj.getJSONArray("groups");
-			for (int i = 0; i < creatureListObj.length(); i++) {
-				CreatureGroup creatureGroup = new CreatureGroup();
-				JSONObject creatureObj = creatureListObj.getJSONObject(i);
-				String stringVal = "", key = "";
-				int intVal = -1;
-				key = "group";
-				if (!creatureObj.has(key))
-					continue;
-				creatureObj = creatureObj.getJSONObject(key);
-
-				key = "ID";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creatureGroup.setId(stringVal);
-
-				key = "Viet";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creatureGroup.setViet(stringVal);
-
-				key = "Latin";
-				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-						: "";
-				creatureGroup.setLatin(stringVal);
-
-				// Add to the model
-				crGroupListModel.add(creatureGroup);
-			}
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		return crGroupListModel;
-	}
-
 	private class GetAllCreatureTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... params) {
 			String page = params[0];
 			String kingdom = params[1];
-			String result = getAllCreatures(page, kingdom);
+			String result = ServiceUtils.getAllCreatures(page, kingdom);
 			return result;
 		}
 
@@ -379,7 +152,8 @@ public class HrmService {
 				if (result == null) {
 					mCallback.onError();
 				} else {
-					CreatureModel creatureModel = parseCreatureModelFromJSON(result);
+					CreatureModel creatureModel = ServiceUtils
+							.parseCreatureModelFromJSON(result);
 					mCallback.onGetAllCreaturesDone(creatureModel);
 				}
 			}
@@ -396,8 +170,8 @@ public class HrmService {
 			String familyId = params[3];
 			String orderId = params[4];
 			String classId = params[5];
-			String result = getCreaturesByName(page, kingdom, name, familyId, orderId,
-					classId);
+			String result = ServiceUtils.getCreaturesByName(page, kingdom,
+					name, familyId, orderId, classId);
 			return result;
 		}
 
@@ -407,7 +181,8 @@ public class HrmService {
 				if (result == null) {
 					mCallback.onError();
 				} else {
-					CreatureModel creatureModel = parseCreatureModelFromJSON(result);
+					CreatureModel creatureModel = ServiceUtils
+							.parseCreatureModelFromJSON(result);
 					mCallback.onGetAllCreaturesDone(creatureModel);
 				}
 			}
@@ -419,7 +194,7 @@ public class HrmService {
 		@Override
 		protected String doInBackground(String... params) {
 			String creatureId = params[0];
-			String result = getCreaturesById(creatureId);
+			String result = ServiceUtils.getCreaturesById(creatureId);
 			return result;
 		}
 
@@ -429,7 +204,8 @@ public class HrmService {
 				if (result == null) {
 					mCallback.onError();
 				} else {
-					CreatureModel creatureModel = parseCreatureModelFromJSON(result);
+					CreatureModel creatureModel = ServiceUtils
+							.parseCreatureModelFromJSON(result);
 					mCallback.onGetAllCreaturesDone(creatureModel);
 				}
 			}
@@ -505,7 +281,7 @@ public class HrmService {
 			String orderId = params[0];
 			String classId = params[1];
 			String kingdomId = params[2];
-			String result = getFamily(orderId, classId, kingdomId);
+			String result = ServiceUtils.getFamily(orderId, classId, kingdomId);
 			return result;
 		}
 
@@ -515,7 +291,8 @@ public class HrmService {
 				if (result == "") {
 					mGroupCallback.onError();
 				} else {
-					CreatureGroupListModel crGroupListModel = parseGroupModelFromJSON(result);
+					CreatureGroupListModel crGroupListModel = ServiceUtils
+							.parseGroupModelFromJSON(result);
 					mGroupCallback.onSuccess(crGroupListModel);
 				}
 			}
@@ -530,7 +307,7 @@ public class HrmService {
 			String familyId = params[0];
 			String classId = params[1];
 			String kingdomId = params[2];
-			String result = getOrder(familyId, classId, kingdomId);
+			String result = ServiceUtils.getOrder(familyId, classId, kingdomId);
 			return result;
 		}
 
@@ -540,7 +317,8 @@ public class HrmService {
 				if (result == "") {
 					mGroupCallback.onError();
 				} else {
-					CreatureGroupListModel crGroupListModel = parseGroupModelFromJSON(result);
+					CreatureGroupListModel crGroupListModel = ServiceUtils
+							.parseGroupModelFromJSON(result);
 					mGroupCallback.onSuccess(crGroupListModel);
 				}
 			}
@@ -555,7 +333,8 @@ public class HrmService {
 			String orderId = params[0];
 			String familyId = params[1];
 			String kingdomId = params[2];
-			String result = getClassType(orderId, familyId, kingdomId);
+			String result = ServiceUtils.getClassType(orderId, familyId,
+					kingdomId);
 			return result;
 		}
 
@@ -565,8 +344,56 @@ public class HrmService {
 				if (result == "") {
 					mGroupCallback.onError();
 				} else {
-					CreatureGroupListModel crGroupListModel = parseGroupModelFromJSON(result);
+					CreatureGroupListModel crGroupListModel = ServiceUtils
+							.parseGroupModelFromJSON(result);
 					mGroupCallback.onSuccess(crGroupListModel);
+				}
+			}
+		}
+	}
+
+	// Get Category Task
+	private class GetCategoryTask extends AsyncTask<String, Void, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			String result = ServiceUtils.getCategory();
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (mNewsCallback != null) {
+				if (result == "") {
+					mNewsCallback.onError();
+				} else {
+					CategoryModel catModel = ServiceUtils
+							.parseCategoryModelFromJSON(result);
+					mNewsCallback.onGetCatSuccess(catModel);
+				}
+			}
+		}
+	}
+
+	// Get News Task
+	private class GetNewsTask extends AsyncTask<String, Void, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			String catId = params[0];
+			String result = ServiceUtils.getNews(catId);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (mNewsCallback != null) {
+				if (result == "" || result == null) {
+					mNewsCallback.onError();
+				} else {
+					NewsModel newsModel = ServiceUtils
+							.parseNewsModelFromJSON(result);
+					mNewsCallback.onGetNewsSuccess(newsModel);
 				}
 			}
 		}

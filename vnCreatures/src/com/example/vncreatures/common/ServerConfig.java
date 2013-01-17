@@ -1,7 +1,7 @@
 package com.example.vncreatures.common;
 
 public class ServerConfig {
-	public static final String ROOT = "http://192.168.137.1";
+	public static final String ROOT = "http://113.164.1.45";
 	// public static final String ROOT = "http://192.168.1.102";
 	public static final String IMAGE_PATH = ROOT
 			+ "/webData/pictures/%s/%s.jpg";
@@ -26,6 +26,14 @@ public class ServerConfig {
 			+ "/webservice/webservice.php?getClassById&format=json&id=";
 	public static final String GET_ORDER_BY_ID = ROOT
 			+ "/webservice/webservice.php?getOrderById&format=json&id=";
+	
+	//NEWS
+	public static final String GET_ALL_CAREGORY = ROOT
+			+ "/webservice/webservice.php?getCategories&format=json";
+	public static final String GET_ALL_NEWS = ROOT
+			+ "/webservice/webservice.php?getNews&format=json";
+	public static final String NEWS_IMAGE_PATH = ROOT
+			+ "/webData/forumpic/%s.jpg";
 
 	public static final String NUM_PER_PAGE = "10";
 	public static final int TIMEOUT = 30000; // 30 seconds

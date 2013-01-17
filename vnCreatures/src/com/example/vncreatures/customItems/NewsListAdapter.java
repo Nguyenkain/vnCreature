@@ -6,18 +6,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.vncreatures.R;
+import com.example.vncreatures.common.ServerConfig;
 import com.example.vncreatures.model.CreatureGroup;
 import com.example.vncreatures.model.CreatureGroupListModel;
+import com.example.vncreatures.model.NewsItem;
+import com.example.vncreatures.model.NewsModel;
 import com.raptureinvenice.webimageview.image.WebImageView;
 
-public class CreaturesGroupsAdapter extends BaseAdapter {
+public class NewsListAdapter extends BaseAdapter {
 	private Context mContext = null;
 	private LayoutInflater mLayoutInflater = null;
-	private CreatureGroupListModel mCreatureModel;
+	private NewsModel mNewsModel;
 	private Callback mCallback = null;
 
 	public interface Callback {
@@ -28,21 +32,21 @@ public class CreaturesGroupsAdapter extends BaseAdapter {
 		mCallback = callback;
 	}
 
-	public CreaturesGroupsAdapter(Context context,
-			CreatureGroupListModel creatureModel) {
+	public NewsListAdapter(Context context,
+			NewsModel newsModel) {
 		super();
 		this.mContext = context;
-		this.mCreatureModel = creatureModel;
+		this.mNewsModel = newsModel;
 	}
 
 	@Override
 	public int getCount() {
-		return mCreatureModel.count();
+		return mNewsModel.count();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return mCreatureModel.get(position);
+		return mNewsModel.get(position);
 	}
 
 	@Override
@@ -50,29 +54,29 @@ public class CreaturesGroupsAdapter extends BaseAdapter {
 		return 0;
 	}
 
-	public CreatureGroupListModel getCreatureModel() {
-		return mCreatureModel;
+	public NewsModel getNewsModel() {
+		return mNewsModel;
 	}
 
-	public void setCreatureModel(CreatureGroupListModel creatureModel) {
-		this.mCreatureModel = creatureModel;
+	public void setNewsModel(NewsModel newsModel) {
+		this.mNewsModel = newsModel;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = new ViewHolder();
-		WebImageView imageView = null;
+		ImageView imageView = null;
 
 		if (convertView == null) {
 			mLayoutInflater = LayoutInflater.from(mContext);
-			convertView = mLayoutInflater.inflate(R.layout.group_list_item,
+			convertView = mLayoutInflater.inflate(R.layout.news_item,
 					null);
-			holder.mVietName = (TextView) convertView
-					.findViewById(R.id.vietName_textview);
-			holder.mLatinName = (TextView) convertView
-					.findViewById(R.id.latinName_textview);
-			holder.mImageView = (WebImageView) convertView
-					.findViewById(R.id.creatureList_imageView);
+			holder.mTitle = (TextView) convertView
+					.findViewById(R.id.newsTitle_textview);
+			holder.mDescription = (TextView) convertView
+					.findViewById(R.id.newsDes_textview);
+			holder.mImageView = (ImageView) convertView
+					.findViewById(R.id.news_imageView);
 			holder.mImageContainer = (LinearLayout) convertView
                     .findViewById(R.id.image_container);
 
@@ -81,24 +85,28 @@ public class CreaturesGroupsAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final CreatureGroup creatureItem = mCreatureModel.get(position);
-		holder.mVietName.setText(creatureItem.getViet());
-		holder.mLatinName.setText(creatureItem.getLatin());
-		convertView.setOnClickListener(new OnClickListener() {
+		final NewsItem newsItem = mNewsModel.get(position);
+		holder.mTitle.setText(newsItem.getTitle());
+		holder.mDescription.setText(newsItem.getDescription());
+		String url = String.format(ServerConfig.NEWS_IMAGE_PATH, newsItem.getImage());
+		holder.mImageView.setTag(url);
+		BitmapManager.INSTANCE.loadBitmap(url, holder.mImageContainer, 120, 100);
+		/*convertView.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				mCallback.onClick(creatureItem);
 			}
-		});
+		});*/
+		
 
 		return convertView;
 	}
 
 	static class ViewHolder {
-		WebImageView mImageView;
-		TextView mVietName;
-		TextView mLatinName;
+		ImageView mImageView;
+		TextView mTitle;
+		TextView mDescription;
 		LinearLayout mImageContainer;
 	}
 }

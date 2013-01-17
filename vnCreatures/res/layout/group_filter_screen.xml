@@ -29,5 +29,5 @@
             android:layout_below="@id/filter_editText" >
         </ListView>
     </RelativeLayout>
-
-</RelativeLayout>
+    
+  </RelativeLayout>

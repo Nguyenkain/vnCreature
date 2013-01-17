@@ -18,7 +18,10 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 public enum BitmapManager {
 	INSTANCE;
@@ -29,6 +32,7 @@ public enum BitmapManager {
 			.synchronizedMap(new WeakHashMap<ImageView, String>());
 	private Bitmap placeholder;
 	private ArrayList<Bitmap> creatureArrayBitmap = new ArrayList<Bitmap>();
+	private ProgressBar progressBar;
 
 	BitmapManager() {
 		cache = new HashMap<String, SoftReference<Bitmap>>();
@@ -57,6 +61,10 @@ public enum BitmapManager {
 				if (tag != null && tag.equals(url)) {
 					if (msg.obj != null) {
 						imageView.setImageBitmap((Bitmap) msg.obj);
+						if(progressBar != null) {
+						    progressBar.setVisibility(View.GONE);
+						    imageView.setVisibility(View.VISIBLE);
+						}
 					} else {
 						imageView.setImageBitmap(placeholder);
 						Log.d(null, "fail " + url);
@@ -78,8 +86,14 @@ public enum BitmapManager {
 		});
 	}
 
-	public void loadBitmap(final String url, final ImageView imageView,
+	public void loadBitmap(final String url, final LinearLayout imageContainer,
 			final int width, final int height) {
+	    
+	    //Indicate the image and progress bar
+	    final ImageView imageView = (ImageView) imageContainer.getChildAt(0);
+	    if(imageContainer.getChildAt(1) != null) {
+	        progressBar = (ProgressBar) imageContainer.getChildAt(1);
+	    }
 		imageViews.put(imageView, url);
 		Bitmap bitmap = getBitmapFromCache(url);
 
@@ -87,7 +101,15 @@ public enum BitmapManager {
 		if (bitmap != null) {
 			Log.d(null, "Item loaded from cache: " + url);
 			imageView.setImageBitmap(bitmap);
+			if(progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+                imageView.setVisibility(View.VISIBLE);
+            }
 		} else {
+		    /*if(progressBar != null) {
+                progressBar.setVisibility(View.VISIBLE);
+                imageView.setVisibility(View.GONE);
+            }*/
 			imageView.setImageBitmap(placeholder);
 			queueJob(url, imageView, width, height);
 		}

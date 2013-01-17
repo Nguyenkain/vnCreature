@@ -33,7 +33,7 @@ import com.example.vncreatures.view.MainView;
 import com.markupartist.android.widget.PullToRefreshListView;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 
-public class MainActivity extends AbstracActivity implements OnClickListener {
+public class MainActivity extends AbstractActivity implements OnClickListener {
 
 	private MainViewModel mMainViewModel = new MainViewModel();
 	private MainView mMainView = null;
@@ -46,21 +46,15 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 	private String mClassId = "";
 	private String mName = "";
 
-	private SharedPreferences kingdomPref;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		
 		mMainView = new MainView(this, mMainViewModel);
 
-		// Request progress
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-		setContentView(mMainView);
+		super.onCreate(savedInstanceState);
 
 		// Get Preference
-		kingdomPref = PreferenceManager.getDefaultSharedPreferences(this);
-		mKingdomId = kingdomPref.getString(Common.KINGDOM, "");
+		mKingdomId = pref.getString(Common.KINGDOM, "");
 
 		// Get All list
 		getAllCreatures();
@@ -93,13 +87,17 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 		// Setup UI
 		setupUI(findViewById(R.id.layout_parent));
-
+	}
+	
+	@Override
+	protected View createView() {
+		return mMainView;
 	}
 
 	@Override
 	protected void onResume() {
 		// Transition
-		overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 		super.onResume();
 	}
 
@@ -141,7 +139,11 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				return false;
+				if(newText.equals("")) {
+					mName = newText;
+					searchByName(false);
+				}
+				return true;
 			}
 		});
 
@@ -227,6 +229,7 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		super.onClick(v);
 		switch (v.getId()) {
 		/*
 		 * case R.id.search_button: searchByName(); break;
@@ -407,6 +410,11 @@ public class MainActivity extends AbstracActivity implements OnClickListener {
 		Intent i = new Intent(context, MainActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return i;
+	}
+
+	@Override
+	protected int indentifyTabPosition() {
+		return R.id.tabHome_button;
 	}
 
 }

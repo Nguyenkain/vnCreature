@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/container"
+        style="@style/Fill"
+        android:layout_above="@+id/tab_control" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tab_control"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/tab_shape"
+        android:orientation="horizontal"
+        android:weightSum="5" 
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/tabHome_button"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tab_button_selector"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/home" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tabNews_button"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tab_button_selector"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/note" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tabDiscussion_button"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tab_button_selector"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/comment_bubble" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tabsMap_button"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tab_button_selector"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/world_globe" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tab_button_selector"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/home" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
