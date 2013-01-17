@@ -271,7 +271,7 @@ public class HrmService {
 				key = "Viet";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
-				creature.setvName(stringVal);
+				creature.setVName(stringVal);
 
 				key = "Latin";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
@@ -286,7 +286,7 @@ public class HrmService {
 				key = "Loai";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 						: "";
-				creature.setLoai(stringVal);
+				creature.setKingdom(stringVal);
 
 				key = "Description";
 				stringVal = creatureObj.has(key) ? creatureObj.getString(key)

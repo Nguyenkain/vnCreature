@@ -109,7 +109,7 @@ public class GroupChooseActivity extends AbstracActivity {
 			public void onSuccess(CreatureGroupListModel groupModel) {
 				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
 						groupModel);
-				mModel.listView.setAdapter(mAdapter);
+				mModel.mListView.setAdapter(mAdapter);
 				mCreatureGroupListModel = groupModel;
 				mAdapter.setCallback(new Callback() {
 
@@ -144,7 +144,7 @@ public class GroupChooseActivity extends AbstracActivity {
 			public void onSuccess(CreatureGroupListModel groupModel) {
 				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
 						groupModel);
-				mModel.listView.setAdapter(mAdapter);
+				mModel.mListView.setAdapter(mAdapter);
 				mCreatureGroupListModel = groupModel;
 				mAdapter.setCallback(new Callback() {
 
@@ -179,7 +179,7 @@ public class GroupChooseActivity extends AbstracActivity {
 			public void onSuccess(CreatureGroupListModel groupModel) {
 				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
 						groupModel);
-				mModel.listView.setAdapter(mAdapter);
+				mModel.mListView.setAdapter(mAdapter);
 				mCreatureGroupListModel = groupModel;
 				mAdapter.setCallback(new Callback() {
 
@@ -207,7 +207,7 @@ public class GroupChooseActivity extends AbstracActivity {
 	}
 
 	protected void filterList() {
-		mModel.filterEditText.addTextChangedListener(new TextWatcher() {
+		mModel.mFilterEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,

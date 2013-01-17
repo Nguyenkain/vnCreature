@@ -40,15 +40,15 @@ public class KingdomChooseActivity extends AbstracActivity implements
 		switch (v.getId()) {
 		case R.id.animal_button:
 			kingdomPref.edit().putString(Common.KINGDOM,
-					Common.CREATURE.Animal.toString()).commit();
+					Common.CREATURE.animal.toString()).commit();
 			break;
 		case R.id.plant_button:
 			kingdomPref.edit().putString(Common.KINGDOM,
-					Common.CREATURE.Plant.toString()).commit();
+					Common.CREATURE.plant.toString()).commit();
 			break;
 		case R.id.insect_button:
 			kingdomPref.edit().putString(Common.KINGDOM,
-					Common.CREATURE.Insect.toString()).commit();
+					Common.CREATURE.insect.toString()).commit();
 			break;
 
 		default:

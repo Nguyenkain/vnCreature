@@ -24,7 +24,7 @@ public class Common {
 	public static final String KINGDOM_PREF = "KingdomPrefs";
 
 	public enum CREATURE {
-		Animal("1"), Plant("2"), Insect("3");
+		animal("1"), plant("2"), insect("3");
 
 		private final String identifier;
 

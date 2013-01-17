@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class CreatureGroup implements Parcelable {
 	private String mId;
-	private String mViet;
+	private String mVName;
 	private String mLatin;
 
 	public String getId() {
@@ -17,11 +17,11 @@ public class CreatureGroup implements Parcelable {
 	}
 
 	public String getViet() {
-		return mViet;
+		return mVName;	
 	}
 
 	public void setViet(String viet) {
-		this.mViet = viet;
+		this.mVName = viet;
 	}
 
 	public String getLatin() {
@@ -36,7 +36,7 @@ public class CreatureGroup implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(mId);
 		dest.writeString(mLatin);
-		dest.writeString(mViet);
+		dest.writeString(mVName);
 	}
 
 	public CreatureGroup(Parcel in) {
@@ -46,7 +46,7 @@ public class CreatureGroup implements Parcelable {
 	public CreatureGroup() {
 		mId = "";
 		mLatin = "";
-		mViet = "";
+		mVName = "";
 	}
 
 	private void readFromParcel(Parcel in) {
@@ -56,7 +56,7 @@ public class CreatureGroup implements Parcelable {
 		// written to the parcel
 		mId = in.readString();
 		mLatin = in.readString();
-		mViet = in.readString();
+		mVName = in.readString();
 	}
 
 	public static final Creator<CreatureGroup> CREATOR = new Creator<CreatureGroup>() {

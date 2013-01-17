@@ -20,7 +20,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
 import com.example.vncreatures.customItems.BitmapManager;
-import com.example.vncreatures.view.ImageViewTouchViewPager;
+import com.example.vncreatures.customItems.ImageViewTouchViewPager;
 
 public class ImageViewFlipperActivity extends AbstracActivity {
 	private int mPosition = -1;
