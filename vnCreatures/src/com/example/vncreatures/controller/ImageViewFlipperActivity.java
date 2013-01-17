@@ -109,6 +109,7 @@ public class ImageViewFlipperActivity extends AbstractActivity {
 			Context context = ImageViewFlipperActivity.this;
 			ImageViewTouch imageView = new ImageViewTouch(context, null);
 			imageView.setImageBitmap(mCreatureImage.get(position));
+			imageView.setFitToScreen(true);
 			imageView.setPadding(10, 0, 10, 0);
 			((ViewPager) container).addView(imageView, 0);
 			return imageView;

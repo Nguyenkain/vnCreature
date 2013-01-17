@@ -78,10 +78,10 @@ public class CreaturesListAdapter extends BaseAdapter {
         }
 
         Creature creatureItem = mCreatureModel.get(position);
-        holder.mVietName.setText(creatureItem.getvName());
+        holder.mVietName.setText(creatureItem.getVName());
         holder.mLatinName.setText(creatureItem.getLatin());
 
-        String name = CREATURE.getEnumNameForValue(creatureItem.getLoai());
+        String name = CREATURE.getEnumNameForValue(creatureItem.getKingdom());
         String url = String.format(ServerConfig.IMAGE_PATH, name,
                 creatureItem.getImageId());
         
