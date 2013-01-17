@@ -21,8 +21,8 @@ public class CreatureGroupListModel {
 		return mCreatureGroupList.get(index);
 	}
 	
-	public void remove(int index) {
-		mCreatureGroupList.remove(index);
+	public void remove(final Creature creature) {
+		mCreatureGroupList.remove(creature);
 	}
 	
 	public int count() {

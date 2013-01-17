@@ -26,8 +26,8 @@ public class GroupChooseView extends AbstractView {
 	}
 
 	protected void initUI() {
-		mModel.mListView = (ListView) findViewById(R.id.groupChoose_listview);
-		mModel.mFilterEditText = (EditText) findViewById(R.id.filter_editText);
+		mModel.listView = (ListView) findViewById(R.id.groupChoose_listview);
+		mModel.filterEditText = (EditText) findViewById(R.id.filter_editText);
 	}
 
 }

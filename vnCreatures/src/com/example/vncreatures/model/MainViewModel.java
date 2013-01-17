@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.markupartist.android.widget.PullToRefreshListView;
 
-public class MainViewModel {
+public class MainViewModel extends AbstractModel {
 //	public EditText searchBox_editText = null;
 //	public Button search_button = null;
 	public PullToRefreshListView creature_listview = null;

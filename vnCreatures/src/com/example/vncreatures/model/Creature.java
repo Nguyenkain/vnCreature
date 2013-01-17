@@ -9,13 +9,24 @@ public class Creature {
 	private String mVName = null;
 	private String mLatin = null;
 	private String mImageId = null;
-	private String mKingdom = null;
+	private String mLoai = null;
+	private String mHo = null;
+	private String mBo = null;
 	private String mDescription = null;
 	private String mAuthor = null;
+	private String mLoaiName = null;
 	private ArrayList<Bitmap> mCreatureImage = null;
 
 	public String getImageId() {
 		return mImageId;
+	}
+
+	public String getLoaiName() {
+		return mLoaiName;
+	}
+
+	public void setLoaiName(String loaiName) {
+		this.mLoaiName = loaiName;
 	}
 
 	public void setImageId(String imageId) {
@@ -30,11 +41,11 @@ public class Creature {
 		this.mId = id;
 	}
 
-	public String getVName() {
+	public String getvName() {
 		return mVName;
 	}
 
-	public void setVName(String vName) {
+	public void setvName(String vName) {
 		this.mVName = vName;
 	}
 
@@ -46,12 +57,28 @@ public class Creature {
 		this.mLatin = latin;
 	}
 
-	public void setKingdom(String kingdom) {
-		this.mKingdom = kingdom;
+	public void setLoai(String loai) {
+		this.mLoai = loai;
 	}
 
-	public String getKingdom() {
-		return mKingdom;
+	public String getLoai() {
+		return mLoai;
+	}
+
+	public void setBo(String bo) {
+		this.mBo = bo;
+	}
+
+	public String getBo() {
+		return mBo;
+	}
+
+	public void setHo(String ho) {
+		this.mHo = ho;
+	}
+
+	public String getHo() {
+		return mHo;
 	}
 
 	public void setDescription(String description) {
@@ -77,23 +104,23 @@ public class Creature {
 	public ArrayList<Bitmap> getCreatureImage() {
 		return mCreatureImage;
 	}
-
+	
 	public void addImage(final Bitmap image) {
 		mCreatureImage.add(image);
 	}
-
+	
 	public Bitmap getImage(int index) {
 		return mCreatureImage.get(index);
 	}
-
+	
 	public void removeImage(int index) {
 		mCreatureImage.remove(index);
 	}
-
+	
 	public int countImage() {
 		return mCreatureImage.size();
 	}
-
+	
 	public void clearImage() {
 		mCreatureImage.clear();
 	}

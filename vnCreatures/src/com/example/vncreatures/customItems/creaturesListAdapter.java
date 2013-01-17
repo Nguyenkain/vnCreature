@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.androidquery.AQuery;
@@ -68,7 +69,7 @@ public class CreaturesListAdapter extends BaseAdapter {
             holder.mLatinName = (TextView) convertView
                     .findViewById(R.id.latinName_textview);
             //holder.mImageView = aQuery.id(R.id.creatureList_imageView).getImageView();
-            holder.mImageContainer = (LinearLayout) convertView
+            holder.mImageContainer = (RelativeLayout) convertView
                     .findViewById(R.id.image_container);
 
             convertView.setTag(holder);
@@ -84,7 +85,7 @@ public class CreaturesListAdapter extends BaseAdapter {
         String url = String.format(ServerConfig.IMAGE_PATH, name,
                 creatureItem.getImageId());
         
-        aQuery.id(R.id.creatureList_imageView).image(url);
+        aQuery.id(R.id.creatureList_imageView).progress(R.id.progressBar1).image(url);
         /*
          * holder.mImageView.setImageWithURL( this.mContext,
          * String.format(ServerConfig.IMAGE_PATH, name,
@@ -108,6 +109,6 @@ public class CreaturesListAdapter extends BaseAdapter {
         ImageView mImageView;
         TextView mVietName;
         TextView mLatinName;
-        LinearLayout mImageContainer;
+        RelativeLayout mImageContainer;
     }
 }
