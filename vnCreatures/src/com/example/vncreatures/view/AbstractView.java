@@ -2,8 +2,9 @@ package com.example.vncreatures.view;
 
 import android.content.Context;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-public class AbstractView extends LinearLayout {
+public class AbstractView extends RelativeLayout {
 	
 	private Context mContext = null;
 

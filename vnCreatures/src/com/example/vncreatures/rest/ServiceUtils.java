@@ -241,6 +241,11 @@ public class ServiceUtils {
 					stringVal = creatureObj.has(key) ? creatureObj.getString(key)
 							: "";
 					news.setImage(stringVal);
+					
+					key = "news_content";
+                    stringVal = creatureObj.has(key) ? creatureObj.getString(key)
+                            : "";
+                    news.setContent(stringVal);
 
 					// Add to the model
 					newsListModel.add(news);
@@ -423,6 +428,25 @@ public class ServiceUtils {
 
 		return result;
 	}
+	
+	public static String getNewsDetail(String newsId) {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_NEWS);
+        RestClient client = new RestClient(request);
+        client.addParam("format", "json");
+        client.addParam("id", newsId);
+
+        try {
+            client.execute(RestClient.RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
 
 	// END GET FROM JSOn
 }

@@ -49,13 +49,21 @@ public abstract class AbstractActivity extends SherlockActivity implements
 
         // init view
         setContentView(R.layout.parent_container);
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
         initTabButton();
         container.addView(createView());
-        
 
     }
-    
+
+    protected void showTabbar(boolean visible) {
+        // show hide tab
+        LinearLayout tabControl = (LinearLayout) findViewById(R.id.tab_control);
+        if (visible)
+            tabControl.setVisibility(View.VISIBLE);
+        else
+            tabControl.setVisibility(View.GONE);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

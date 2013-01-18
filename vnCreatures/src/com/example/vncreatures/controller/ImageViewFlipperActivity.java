@@ -32,6 +32,9 @@ public class ImageViewFlipperActivity extends AbstractActivity {
 		
 		super.onCreate(savedInstanceState);
 		
+		//Hide tabbar
+		super.showTabbar(false);
+		
 		ImageViewTouchViewPager viewPager = (ImageViewTouchViewPager) findViewById(R.id.view_pager);
 		ImagePagerAdapter adapter = new ImagePagerAdapter();
 		viewPager.setAdapter(adapter);

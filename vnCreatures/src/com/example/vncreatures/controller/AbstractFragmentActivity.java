@@ -1,14 +1,22 @@
 package com.example.vncreatures.controller;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.example.vncreatures.R;
@@ -37,7 +45,7 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
 
         // init view
         setContentView(R.layout.parent_container);
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
         initTabButton();
         container.addView(createView());
         this.tabPosition = indentifyTabPosition();
@@ -45,7 +53,7 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
         resetTabState();
 
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -120,5 +128,47 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
             else
                 v.setSelected(false);
         }
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity
+                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()
+                .getWindowToken(), 0);
+    }
+
+    public void setupUI(View view) {
+
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    AbstractActivity.hideSoftKeyboard(AbstractFragmentActivity.this);
+                    return false;
+                }
+
+            });
+        }
+
+        // If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
+    }
+
+    protected Intent createShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        return shareIntent;
     }
 }

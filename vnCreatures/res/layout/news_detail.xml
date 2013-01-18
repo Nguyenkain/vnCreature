@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Fill" >
+
+    <LinearLayout
+        xmlns:ExpandoLayout="http://schemas.android.com/apk/res/com.example.vncreatures"
+        android:id="@+id/parent_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:background="#808080" />
+
+        <com.djpsoft.moreDroid.ExpandoLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            ExpandoLayout:compactText="@string/images"
+            ExpandoLayout:expanded="true"
+            ExpandoLayout:expandedText="@string/colapse"
+            ExpandoLayout:moreBar="true"
+            ExpandoLayout:moreBarDefaultViewHeight="40"
+            ExpandoLayout:moreBarFadeColor="#808080"
+            ExpandoLayout:moreBarOnRight="true" >
+
+            <LinearLayout
+                android:id="@+id/nameDescriptionPlace"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/news_title_textView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/title"
+                    android:textStyle="bold" 
+                    android:textSize="18dp"/>
+                
+            </LinearLayout>
+        </com.djpsoft.moreDroid.ExpandoLayout>
+
+        <LinearLayout
+            android:id="@+id/listDescriptionPlace"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <WebView
+                android:id="@+id/newsDetail_webview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@android:color/transparent"
+                android:text="@string/detail" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -58,7 +59,6 @@ public class CreaturesListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = new ViewHolder();
         WebImageView imageView = null;
-        AQuery aQuery = new AQuery(convertView);
 
         if (convertView == null) {
             mLayoutInflater = LayoutInflater.from(mContext);
@@ -68,14 +68,17 @@ public class CreaturesListAdapter extends BaseAdapter {
                     .findViewById(R.id.vietName_textview);
             holder.mLatinName = (TextView) convertView
                     .findViewById(R.id.latinName_textview);
-            //holder.mImageView = aQuery.id(R.id.creatureList_imageView).getImageView();
-            holder.mImageContainer = (RelativeLayout) convertView
-                    .findViewById(R.id.image_container);
+            holder.mImageView = (ImageView) convertView
+                    .findViewById(R.id.creatureList_imageView);
+            holder.mProgressBar = (ProgressBar) convertView
+                    .findViewById(R.id.progressBar1);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        AQuery aQuery = new AQuery(convertView);
 
         Creature creatureItem = mCreatureModel.get(position);
         holder.mVietName.setText(creatureItem.getVName());
@@ -84,16 +87,21 @@ public class CreaturesListAdapter extends BaseAdapter {
         String name = CREATURE.getEnumNameForValue(creatureItem.getKingdom());
         String url = String.format(ServerConfig.IMAGE_PATH, name,
                 creatureItem.getImageId());
-        
-        aQuery.id(R.id.creatureList_imageView).progress(R.id.progressBar1).image(url);
+
+        aQuery.id(holder.mImageView)
+                .progress(holder.mProgressBar)
+                .image(url, true, true, 0, R.drawable.no_thumb, null,
+                        AQuery.FADE_IN_NETWORK);
         /*
          * holder.mImageView.setImageWithURL( this.mContext,
          * String.format(ServerConfig.IMAGE_PATH, name,
          * creatureItem.getImageId()));
          */
 
-        /*holder.mImageView.setTag(url);
-        BitmapManager.INSTANCE.loadBitmap(url, holder.mImageContainer, 120, 80);*/
+        /*
+         * holder.mImageView.setTag(url); BitmapManager.INSTANCE.loadBitmap(url,
+         * holder.mImageContainer, 120, 80);
+         */
 
         // Set Image
         /*
@@ -109,6 +117,6 @@ public class CreaturesListAdapter extends BaseAdapter {
         ImageView mImageView;
         TextView mVietName;
         TextView mLatinName;
-        RelativeLayout mImageContainer;
+        ProgressBar mProgressBar;
     }
 }

@@ -122,6 +122,12 @@ public class HrmService {
 		return true;
 	}
 	
+	public boolean requestGetNewsDetail(String newsId) {
+        GetNewsDetailTask task = new GetNewsDetailTask();
+        task.execute(newsId);
+        return true;
+    }
+	
 	
 	//END REQUEST
 
@@ -398,4 +404,27 @@ public class HrmService {
 			}
 		}
 	}
+	
+	private class GetNewsDetailTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String newsId = params[0];
+            String result = ServiceUtils.getNewsDetail(newsId);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mNewsCallback != null) {
+                if (result == "" || result == null) {
+                    mNewsCallback.onError();
+                } else {
+                    NewsModel newsModel = ServiceUtils
+                            .parseNewsModelFromJSON(result);
+                    mNewsCallback.onGetNewsSuccess(newsModel);
+                }
+            }
+        }
+    }
 }

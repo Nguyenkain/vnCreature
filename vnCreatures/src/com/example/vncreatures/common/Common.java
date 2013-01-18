@@ -8,6 +8,7 @@ public class Common {
 	public static String CREATURE_EXTRA = "creatureId";
 	public static String ACTION_EXTRA = "view detail";
 	public static String CAT_EXTRA = "categoryId";
+	public static String NEWS_EXTRA = "newsId";
 	public static String ACTION_CHOOSE_FAMILY = "choose family";
 	public static String ACTION_CHOOSE_CLASS = "choose class";
 	public static String ACTION_CHOOSE_ORDER = "choose order";
