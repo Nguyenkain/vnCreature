@@ -133,24 +133,6 @@ public class HrmService {
 
 	// END REQUEST
 
-	/* download all image of a creature */
-	public void downloadImages(Context context, Creature creature,
-			Gallery gallery) {
-		BitmapDownloaderTask task = new BitmapDownloaderTask(context, gallery,
-				creature);
-		String name = CREATURE.getEnumNameForValue(creature.getKingdom());
-		task.execute(
-				String.format(ServerConfig.IMAGE_PATH, name, creature.getId()
-						+ "s"),
-				String.format(ServerConfig.IMAGE_PATH, name, creature.getId()
-						+ "_1s"),
-				String.format(ServerConfig.IMAGE_PATH, name, creature.getId()
-						+ "_2s"),
-				String.format(ServerConfig.IMAGE_PATH, name, creature.getId()
-						+ "_3s"),
-				String.format(ServerConfig.IMAGE_PATH, name, creature.getId()));
-	}
-
 	private class GetAllCreatureTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... params) {
@@ -222,64 +204,6 @@ public class HrmService {
 							.parseCreatureModelFromJSON(result);
 					mCallback.onGetAllCreaturesDone(creatureModel);
 				}
-			}
-		}
-	}
-
-	// download all image of a creature
-	private class BitmapDownloaderTask extends
-			AsyncTask<String, Void, Creature> {
-		private Gallery mGallery;
-		private Context mContext;
-		private Bitmap mBitmap = null;
-		private Creature mCreature;
-
-		public BitmapDownloaderTask(Context context, Gallery gallery,
-				Creature creature) {
-			mGallery = gallery;
-			mContext = context;
-			mCreature = creature;
-		}
-
-		@Override
-		// Actual download method, run in the task thread
-		protected Creature doInBackground(String... params) {
-			// params comes from the execute() call: params is the url.
-			for (int i = 0; i < params.length; i++) {
-				mBitmap = Utils.downloadBitmap(params[i]);
-				if (mBitmap != null) {
-					mCreature.getCreatureImage().add(mBitmap);
-				}
-			}
-			BitmapManager.INSTANCE.setCreatureArrayBitmap(mCreature
-					.getCreatureImage());
-			return mCreature;
-		}
-
-		@Override
-		// Once the image is downloaded, associates it to the imageView
-		protected void onPostExecute(final Creature creature) {
-			if (isCancelled()) {
-				mGallery = null;
-			}
-			if (mGallery != null) {
-				mGallery.setAdapter(new GalleryImageAdapter(mContext, creature));
-				mGallery.setOnItemClickListener(new OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> view, View v,
-							int pos, long id) {
-						Intent intent = new Intent();
-						intent.setClass(mContext,
-								ImageViewFlipperActivity.class);
-						Bundle bundle = new Bundle();
-						bundle.putInt(
-								Common.CREATURE_URL_IMAGES_POSITION_EXTRA, pos);
-						intent.putExtras(bundle);
-
-						mContext.startActivity(intent);
-					}
-				});
 			}
 		}
 	}

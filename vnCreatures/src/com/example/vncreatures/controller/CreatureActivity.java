@@ -1,16 +1,22 @@
 package com.example.vncreatures.controller;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.ShareActionProvider;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
+import com.example.vncreatures.common.Common.CREATURE;
+import com.example.vncreatures.common.ServerConfig;
+import com.example.vncreatures.customItems.GalleryImageAdapter;
 import com.example.vncreatures.model.Creature;
 import com.example.vncreatures.model.CreatureDescriptionViewModel;
 import com.example.vncreatures.model.CreatureModel;
@@ -19,118 +25,155 @@ import com.example.vncreatures.rest.HrmService.Callback;
 import com.example.vncreatures.view.CreatureDescriptionView;
 
 public class CreatureActivity extends AbstractActivity implements
-		OnClickListener {
+        OnClickListener {
 
-	private CreatureDescriptionViewModel mCreatureDescriptionViewModel = new CreatureDescriptionViewModel();
-	private CreatureDescriptionView mCreatureDescriptionView = null;
+    private CreatureDescriptionViewModel mCreatureDescriptionViewModel = new CreatureDescriptionViewModel();
+    private CreatureDescriptionView mCreatureDescriptionView = null;
+    private Creature mCreature = null;
 
-	private String mCreatureId = null;
+    private String mCreatureId = null;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		mCreatureDescriptionView = new CreatureDescriptionView(this,
-				mCreatureDescriptionViewModel);
-		
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        mCreatureDescriptionView = new CreatureDescriptionView(this,
+                mCreatureDescriptionViewModel);
 
-		try {
-			Bundle extras = getIntent().getExtras();
-			if (extras != null) {
-				mCreatureId = extras.getString(Common.CREATURE_EXTRA);
-			}
-		} catch (Exception e) {
-		}
+        super.onCreate(savedInstanceState);
 
-		getCreatureById();
+        try {
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                mCreatureId = extras.getString(Common.CREATURE_EXTRA);
+            }
+        } catch (Exception e) {
+        }
 
-	}
+        getCreatureById();
+    }
 
-	@Override
-	protected View createView() {
-		return mCreatureDescriptionView;
-	}
+    private void getImage() {
+        ArrayList<String> listImage = new ArrayList<String>();
+        String name = CREATURE.getEnumNameForValue(mCreature.getKingdom());
+        listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
+                mCreature.getId() + "s"));
+        listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
+                mCreature.getId() + "_1s"));
+        listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
+                mCreature.getId() + "_2s"));
+        listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
+                mCreature.getId() + "_3s"));
+        mCreature.setCreatureImages(listImage);
+        GalleryImageAdapter adapter = new GalleryImageAdapter(this, mCreature);
+        mCreatureDescriptionViewModel.galleryImage.setAdapter(adapter);
+        
+        mCreatureDescriptionViewModel.galleryImage.setOnItemClickListener(new OnItemClickListener() {
 
-	@Override
-	protected void onResume() {
-		// Transition
-		overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
-		super.onResume();
-	}
+            @Override
+            public void onItemClick(AdapterView<?> view, View v,
+                    int pos, long id) {
+                Intent intent = new Intent();
+                intent.setClass(CreatureActivity.this,
+                        ImageViewFlipperActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(
+                        Common.CREATURE_URL_IMAGES_POSITION_EXTRA, pos);
+                intent.putExtras(bundle);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		setTitle(getString(R.string.detail));
+                startActivity(intent);
+            }
+        });
+    }
 
-		// Inflate your menu.
-		getSupportMenuInflater().inflate(R.menu.share_action, menu);
+    @Override
+    protected View createView() {
+        return mCreatureDescriptionView;
+    }
 
-		// Set file with share history to the provider and set the share intent.
-		MenuItem actionItem = menu
-				.findItem(R.id.menu_item_share_action_provider_action_bar);
-		ShareActionProvider actionProvider = (ShareActionProvider) actionItem
-				.getActionProvider();
-		actionProvider
-				.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-		// Note that you can set/change the intent any time,
-		// say when the user has selected an image.
-		actionProvider.setShareIntent(createShareIntent());
+    @Override
+    protected void onResume() {
+        // Transition
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+        super.onResume();
+    }
 
-		// XXX: For now, ShareActionProviders must be displayed on the action
-		// bar
-		// Set file with share history to the provider and set the share intent.
-		// MenuItem overflowItem =
-		// menu.findItem(R.id.menu_item_share_action_provider_overflow);
-		// ShareActionProvider overflowProvider =
-		// (ShareActionProvider) overflowItem.getActionProvider();
-		// overflowProvider.setShareHistoryFileName(
-		// ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-		// Note that you can set/change the intent any time,
-		// say when the user has selected an image.
-		// overflowProvider.setShareIntent(createShareIntent());
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.detail));
 
-		return super.onCreateOptionsMenu(menu);
-	}
+        // Inflate your menu.
+        getSupportMenuInflater().inflate(R.menu.share_action, menu);
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			break;
+        // Set file with share history to the provider and set the share intent.
+        MenuItem actionItem = menu
+                .findItem(R.id.menu_item_share_action_provider_action_bar);
+        ShareActionProvider actionProvider = (ShareActionProvider) actionItem
+                .getActionProvider();
+        actionProvider
+                .setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        // Note that you can set/change the intent any time,
+        // say when the user has selected an image.
+        actionProvider.setShareIntent(createShareIntent());
 
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+        // XXX: For now, ShareActionProviders must be displayed on the action
+        // bar
+        // Set file with share history to the provider and set the share intent.
+        // MenuItem overflowItem =
+        // menu.findItem(R.id.menu_item_share_action_provider_overflow);
+        // ShareActionProvider overflowProvider =
+        // (ShareActionProvider) overflowItem.getActionProvider();
+        // overflowProvider.setShareHistoryFileName(
+        // ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        // Note that you can set/change the intent any time,
+        // say when the user has selected an image.
+        // overflowProvider.setShareIntent(createShareIntent());
 
-	protected void getCreatureById() {
-		HrmService service = new HrmService();
-		service.setCallback(new Callback() {
+        return super.onCreateOptionsMenu(menu);
+    }
 
-			@Override
-			public void onGetAllCreaturesDone(CreatureModel creatureModel) {
-				Creature creature = creatureModel.get(0);
-				mCreatureDescriptionView.setContent(creature);
-			}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
 
-			@Override
-			public void onError() {
+        default:
+            break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-			}
-		});
-		service.requestCreaturesById(mCreatureId);
-	}
+    protected void getCreatureById() {
+        HrmService service = new HrmService();
+        service.setCallback(new Callback() {
 
-	@Override
-	public void onClick(View v) {
-		super.onClick(v);
-	}
+            @Override
+            public void onGetAllCreaturesDone(CreatureModel creatureModel) {
+                Creature creature = creatureModel.get(0);
+                mCreatureDescriptionView.setContent(creature);
+                mCreature = creatureModel.get(0);
+                getImage();
+                setProgressBarIndeterminateVisibility(false);
+            }
 
-	@Override
-	protected int indentifyTabPosition() {
-		return R.id.tabHome_button;
-	}
+            @Override
+            public void onError() {
+
+            }
+        });
+        service.requestCreaturesById(mCreatureId);
+        setProgressBarIndeterminateVisibility(true);
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+    }
+
+    @Override
+    protected int indentifyTabPosition() {
+        return R.id.tabHome_button;
+    }
 
 }

@@ -44,10 +44,7 @@ public class CreatureDescriptionView extends AbstractView {
 	public void setContent(Creature creature) {
 		mCreatureDescriptionViewModel.vietName.setText(creature.getVName());
 		mCreatureDescriptionViewModel.latinName.setText(creature.getLatin());
-		HrmService service = new HrmService();
-		service.downloadImages(mContext, creature,
-				mCreatureDescriptionViewModel.galleryImage);
-
+		
 		// mCreatureDescriptionViewModel.getCreatureDesWebview().setBackgroundColor(0x00000000);
 		mCreatureDescriptionViewModel.creatureDesWebview.getSettings()
 				.setSupportZoom(false);

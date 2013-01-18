@@ -38,7 +38,8 @@
             android:layout_gravity="center"
             ExpandoLayout:text="@string/compact"
             ExpandoLayout:titleRowPadding="5"
-            android:background="#808080" >
+            ExpandoLayout:expanded="true"
+            android:background="@android:color/transparent" >
 
             <!--
             ExpandoLayout:compactText="@string/compact"

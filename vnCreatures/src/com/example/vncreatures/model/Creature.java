@@ -13,6 +13,7 @@ public class Creature {
 	private String mDescription = null;
 	private String mAuthor = null;
 	private ArrayList<Bitmap> mCreatureImage = new ArrayList<Bitmap>();
+	private ArrayList<String> mCreatureImages = new ArrayList<String>();
 
 	public String getImageId() {
 		return mImageId;
@@ -77,4 +78,12 @@ public class Creature {
 	public ArrayList<Bitmap> getCreatureImage() {
 		return mCreatureImage;
 	}
+	
+	public void setCreatureImages(ArrayList<String> creatureImages) {
+        this.mCreatureImages = creatureImages;
+    }
+	
+	public ArrayList<String> getCreatureImages() {
+        return mCreatureImages;
+    }
 }
