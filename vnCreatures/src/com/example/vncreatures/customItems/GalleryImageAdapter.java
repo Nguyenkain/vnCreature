@@ -17,10 +17,10 @@ import com.example.vncreatures.model.Creature;
 public class GalleryImageAdapter extends BaseAdapter {
 	int mGalleryItemBackground;
 	private Context mContext;
-	private ArrayList<Bitmap> mCreatureArrayBitmap = new ArrayList<Bitmap>();
-
-	public GalleryImageAdapter(Context context, ArrayList<Bitmap> arrayBitmap) {
-		mCreatureArrayBitmap = arrayBitmap;
+	private Creature mCreature;
+	
+	public GalleryImageAdapter(Context context, Creature creature) {
+		mCreature = creature;
 		mContext = context;
 		TypedArray typeArray = context
 				.obtainStyledAttributes(R.styleable.GalleryTheme);
@@ -30,7 +30,7 @@ public class GalleryImageAdapter extends BaseAdapter {
 	}
 
 	public int getCount() {
-		return mCreatureArrayBitmap.size();
+		return mCreature.getCreatureImage().size();
 	}
 
 	public Object getItem(int position) {
@@ -43,7 +43,7 @@ public class GalleryImageAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ImageView iv = new ImageView(mContext);
-		iv.setImageBitmap(mCreatureArrayBitmap.get(position));
+		iv.setImageBitmap(mCreature.getCreatureImage().get(position));
 		iv.setLayoutParams(new Gallery.LayoutParams(270, 200));
 		iv.setScaleType(ImageView.ScaleType.FIT_XY);
 		iv.setBackgroundResource(mGalleryItemBackground);
