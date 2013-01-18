@@ -9,49 +9,57 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <View
+        <LinearLayout
+            android:id="@+id/nameDescriptionPlace"
             android:layout_width="fill_parent"
-            android:layout_height="5dp"
-            android:background="#808080" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/vietNameDetail_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/vietnamese_name"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/latinNameDetail_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/latin_name"
+                android:textStyle="italic" />
+        </LinearLayout>
 
         <com.djpsoft.moreDroid.ExpandoLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            ExpandoLayout:compactText="Hình Ảnh"
-            ExpandoLayout:expanded="true"
-            ExpandoLayout:expandedText="Thu Gọn"
+            ExpandoLayout:text="@string/compact"
+            ExpandoLayout:titleRowPadding="5"
+            android:background="#808080" >
+
+            <!--
+            ExpandoLayout:compactText="@string/compact"
+            ExpandoLayout:expanded="false"
+            ExpandoLayout:expandedText="@string/expanded"
             ExpandoLayout:moreBar="true"
-            ExpandoLayout:moreBarDefaultViewHeight="40"
+            ExpandoLayout:moreBarDefaultViewHeight="0"
             ExpandoLayout:moreBarFadeColor="#808080"
-            ExpandoLayout:moreBarOnRight="true" >
+            ExpandoLayout:moreBarOnRight="true"
+            -->
 
             <LinearLayout
-                android:id="@+id/nameDescriptionPlace"
+                android:id="@+id/imageDescriptionPlace"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <TextView
-                    android:id="@+id/vietNameDetail_textview"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/vietnamese_name"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/latinNameDetail_textview"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/latin_name"
-                    android:textStyle="italic" />
-
                 <Gallery
                     android:id="@+id/creatureImage_gallery"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:contentDescription="@string/app_name"

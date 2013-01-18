@@ -33,4 +33,6 @@
     <string name="kindom_choose">Chọn Loài</string>
     <string name="news_image">Ảnh đại diện</string>
     <string name="news">Tin Tức</string>
+    <string name="expanded">Thu gọn</string>
+    <string name="compact">Hình ảnh</string>
 </resources>

@@ -24,18 +24,16 @@ import com.example.vncreatures.view.ImageViewTouchViewPager;
 
 public class ImageViewFlipperActivity extends AbstractActivity {
 	private int mPosition = -1;
-	private int mFlag = 0;
 	private ArrayList<Bitmap> mCreatureImage = new ArrayList<Bitmap>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		
+		mCreatureImage = BitmapManager.INSTANCE.getCreatureArrayBitmap();
 		ImageViewTouchViewPager viewPager = (ImageViewTouchViewPager) findViewById(R.id.view_pager);
 		ImagePagerAdapter adapter = new ImagePagerAdapter();
 		viewPager.setAdapter(adapter);
-
 		try {
 			Bundle extras = getIntent().getExtras();
 			if (extras != null) {
@@ -44,20 +42,7 @@ public class ImageViewFlipperActivity extends AbstractActivity {
 			}
 		} catch (Exception e) {
 		}
-		mFlag = BitmapManager.INSTANCE.getCreatureArrayBitmap().size();
-		if (mPosition != -1) {
-			for (int i = mPosition; mFlag > 0; i++) {
-				// This will create true position image view and add them to
-				// ViewFlipper
-				--mFlag;
-				if (i + 1 > BitmapManager.INSTANCE.getCreatureArrayBitmap()
-						.size()) {
-					i = 0;
-				}
-				mCreatureImage.add(BitmapManager.INSTANCE
-						.getCreatureArrayBitmap().get(i));
-			}
-		}
+		viewPager.setCurrentItem(mPosition);
 	}
 	
 	@Override

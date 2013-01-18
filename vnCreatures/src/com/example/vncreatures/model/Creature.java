@@ -12,7 +12,7 @@ public class Creature {
 	private String mKingdom = null;
 	private String mDescription = null;
 	private String mAuthor = null;
-	private ArrayList<Bitmap> mCreatureImage = null;
+	private ArrayList<Bitmap> mCreatureImage = new ArrayList<Bitmap>();
 
 	public String getImageId() {
 		return mImageId;
@@ -77,25 +77,4 @@ public class Creature {
 	public ArrayList<Bitmap> getCreatureImage() {
 		return mCreatureImage;
 	}
-
-	public void addImage(final Bitmap image) {
-		mCreatureImage.add(image);
-	}
-
-	public Bitmap getImage(int index) {
-		return mCreatureImage.get(index);
-	}
-
-	public void removeImage(int index) {
-		mCreatureImage.remove(index);
-	}
-
-	public int countImage() {
-		return mCreatureImage.size();
-	}
-
-	public void clearImage() {
-		mCreatureImage.clear();
-	}
-
 }
