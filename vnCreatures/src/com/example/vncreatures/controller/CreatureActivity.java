@@ -63,11 +63,12 @@ public class CreatureActivity extends AbstractActivity implements
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
                 mCreature.getId() + "_3s"));
         mCreature.setCreatureImages(listImage);
-        GalleryImageAdapter adapter = new GalleryImageAdapter(this, mCreature);
+        final GalleryImageAdapter adapter = new GalleryImageAdapter(this, mCreature);
+        adapter.setListImages((ArrayList<String>) listImage.clone());
         mCreatureDescriptionViewModel.galleryImage.setAdapter(adapter);
         
         mCreatureDescriptionViewModel.galleryImage.setOnItemClickListener(new OnItemClickListener() {
-
+            
             @Override
             public void onItemClick(AdapterView<?> view, View v,
                     int pos, long id) {
@@ -75,8 +76,8 @@ public class CreatureActivity extends AbstractActivity implements
                 intent.setClass(CreatureActivity.this,
                         ImageViewFlipperActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt(
-                        Common.CREATURE_URL_IMAGES_POSITION_EXTRA, pos);
+                bundle.putStringArrayList(Common.CREATURE_URL_IMAGES_LIST, adapter.getListImages());
+                bundle.putInt(Common.CREATURE_URL_IMAGES_POSITION, pos);
                 intent.putExtras(bundle);
 
                 startActivity(intent);

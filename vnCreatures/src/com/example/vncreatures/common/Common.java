@@ -21,7 +21,8 @@ public class Common {
 
 	public static int CREATURE_ACTIVITY_REQUEST_CODE = 0;
 	public static String CREATURE_URL_IMAGES_EXTRA = "urlImages";
-	public static String CREATURE_URL_IMAGES_POSITION_EXTRA = "urlImagesPosition";
+	public static String CREATURE_URL_IMAGES_LIST = "urlImagesList";
+	public static String CREATURE_URL_IMAGES_POSITION = "urlImagesPosition";
 	
 	public static final String KINGDOM_PREF = "KingdomPrefs";
 	public static final String TAB_PREF = "tabPrefs";
