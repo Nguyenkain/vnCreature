@@ -14,8 +14,29 @@ public class Creature {
 	private String mAuthor = null;
 	private ArrayList<Bitmap> mCreatureImage = new ArrayList<Bitmap>();
 	private ArrayList<String> mCreatureImages = new ArrayList<String>();
+	
+	public Creature() {
+        // TODO Auto-generated constructor stub
+    }
+	
+	
 
-	public String getImageId() {
+	public Creature(String mId, String mVName, String mLatin, String mImageId,
+            String mKingdom, String mDescription, String mAuthor, ArrayList<String> mCreatureImages) {
+        super();
+        this.mId = mId;
+        this.mVName = mVName;
+        this.mLatin = mLatin;
+        this.mImageId = mImageId;
+        this.mKingdom = mKingdom;
+        this.mDescription = mDescription;
+        this.mAuthor = mAuthor;
+        this.mCreatureImages = mCreatureImages;
+    }
+
+
+
+    public String getImageId() {
 		return mImageId;
 	}
 

@@ -38,6 +38,7 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
 
         // Action bar
         setTheme(Common.THEME);
+        getSupportActionBar().setIcon(R.drawable.icon_home);
 
         // get preference
         pref = PreferenceManager

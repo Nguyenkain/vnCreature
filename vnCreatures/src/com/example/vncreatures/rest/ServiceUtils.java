@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.vncreatures.common.Common;
 import com.example.vncreatures.common.ServerConfig;
 import com.example.vncreatures.model.Category;
 import com.example.vncreatures.model.CategoryModel;
@@ -410,13 +411,15 @@ public class ServiceUtils {
 		return result;
 	}
 
-	public static String getNews(String catId) {
+	public static String getNews(String catId, String page) {
 		String result = "";
 
 		String request = String.format(ServerConfig.GET_ALL_NEWS);
 		RestClient client = new RestClient(request);
 		client.addParam("format", "json");
 		client.addParam("category", catId);
+		client.addParam("page", page);
+		client.addParam("recordperpage", ServerConfig.NUM_PER_PAGE);
 
 		try {
 			client.execute(RestClient.RequestMethod.GET);

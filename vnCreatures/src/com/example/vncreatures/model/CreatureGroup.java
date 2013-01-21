@@ -4,74 +4,81 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CreatureGroup implements Parcelable {
-	private String mId;
-	private String mVName;
-	private String mLatin;
+    private String mId;
+    private String mVName;
+    private String mLatin;
 
-	public String getId() {
-		return mId;
-	}
+    public CreatureGroup(String mId, String mVName, String mLatin) {
+        super();
+        this.mId = mId;
+        this.mVName = mVName;
+        this.mLatin = mLatin;
+    }
 
-	public void setId(String id) {
-		this.mId = id;
-	}
+    public String getId() {
+        return mId;
+    }
 
-	public String getViet() {
-		return mVName;	
-	}
+    public void setId(String id) {
+        this.mId = id;
+    }
 
-	public void setViet(String viet) {
-		this.mVName = viet;
-	}
+    public String getViet() {
+        return mVName;
+    }
 
-	public String getLatin() {
-		return mLatin;
-	}
+    public void setViet(String viet) {
+        this.mVName = viet;
+    }
 
-	public void setLatin(String latin) {
-		this.mLatin = latin;
-	}
-	
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(mId);
-		dest.writeString(mLatin);
-		dest.writeString(mVName);
-	}
+    public String getLatin() {
+        return mLatin;
+    }
 
-	public CreatureGroup(Parcel in) {
-		readFromParcel(in);
-	}
+    public void setLatin(String latin) {
+        this.mLatin = latin;
+    }
 
-	public CreatureGroup() {
-		mId = "";
-		mLatin = "";
-		mVName = "";
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mId);
+        dest.writeString(mLatin);
+        dest.writeString(mVName);
+    }
 
-	private void readFromParcel(Parcel in) {
+    public CreatureGroup(Parcel in) {
+        readFromParcel(in);
+    }
 
-		// We just need to read back each
-		// field in the order that it was
-		// written to the parcel
-		mId = in.readString();
-		mLatin = in.readString();
-		mVName = in.readString();
-	}
+    public CreatureGroup() {
+        mId = "";
+        mLatin = "";
+        mVName = "";
+    }
 
-	public static final Creator<CreatureGroup> CREATOR = new Creator<CreatureGroup>() {
-		public CreatureGroup createFromParcel(Parcel in) {
-			return new CreatureGroup(in);
-		}
+    private void readFromParcel(Parcel in) {
 
-		public CreatureGroup[] newArray(int size) {
-			return new CreatureGroup[size];
-		}
-	};
+        // We just need to read back each
+        // field in the order that it was
+        // written to the parcel
+        mId = in.readString();
+        mLatin = in.readString();
+        mVName = in.readString();
+    }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    public static final Creator<CreatureGroup> CREATOR = new Creator<CreatureGroup>() {
+        public CreatureGroup createFromParcel(Parcel in) {
+            return new CreatureGroup(in);
+        }
+
+        public CreatureGroup[] newArray(int size) {
+            return new CreatureGroup[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
 }

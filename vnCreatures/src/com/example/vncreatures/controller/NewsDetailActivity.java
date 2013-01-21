@@ -105,7 +105,11 @@ public class NewsDetailActivity extends AbstractActivity implements
                     if (imgs != null) {
                         for (Element imgElement : imgs) {
                             String imgSrc = imgElement.attr("src");
-                            String srcNew = "http://vncreatures.net/" + imgSrc;
+                            String srcNew;
+                            if(!imgSrc.contains("www.vncreatures.net"))
+                                srcNew = "http://vncreatures.net/" + imgSrc;
+                            else
+                                srcNew = imgSrc;
                             imgElement.attr("src", srcNew);
                             imgElement
                                     .attr("style", "width:200px; height:auto");
