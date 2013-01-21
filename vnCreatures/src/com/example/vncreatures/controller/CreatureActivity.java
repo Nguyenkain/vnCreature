@@ -55,6 +55,8 @@ public class CreatureActivity extends AbstractActivity implements
         ArrayList<String> listImage = new ArrayList<String>();
         String name = CREATURE.getEnumNameForValue(mCreature.getKingdom());
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
+                mCreature.getId()));
+        listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
                 mCreature.getId() + "s"));
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
                 mCreature.getId() + "_1s"));

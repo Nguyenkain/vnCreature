@@ -46,8 +46,7 @@ public class ImageViewFlipperActivity extends AbstractActivity {
                         .getStringArrayList(Common.CREATURE_URL_IMAGES_LIST);
                 for (String urlTest : mCreatureImage) {
                     Bitmap placeholder = aQuery.getCachedImage(urlTest);
-                    if (placeholder.getByteCount() < 5) {
-                        int pos = mCreatureImage.indexOf(urlTest);
+                    if (placeholder.getWidth() < 10) {
                         listDelete.add(urlTest);
                     }
                 }

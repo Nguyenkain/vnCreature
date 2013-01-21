@@ -36,37 +36,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            ExpandoLayout:expanded="true"
             ExpandoLayout:text="@string/compact"
             ExpandoLayout:titleRowPadding="5"
-            ExpandoLayout:expanded="true"
             android:background="@android:color/transparent" >
 
-            <!--
-            ExpandoLayout:compactText="@string/compact"
-            ExpandoLayout:expanded="false"
-            ExpandoLayout:expandedText="@string/expanded"
-            ExpandoLayout:moreBar="true"
-            ExpandoLayout:moreBarDefaultViewHeight="0"
-            ExpandoLayout:moreBarFadeColor="#808080"
-            ExpandoLayout:moreBarOnRight="true"
-            -->
-
-            <LinearLayout
-                android:id="@+id/imageDescriptionPlace"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <Gallery
-                    android:id="@+id/creatureImage_gallery"
-                    android:layout_width="fill_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:contentDescription="@string/app_name"
-                    android:gravity="center"
-                    android:src="@drawable/ic_launcher" />
-            </LinearLayout>
+            <Gallery
+                android:id="@+id/creatureImage_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_launcher" />
         </com.djpsoft.moreDroid.ExpandoLayout>
 
         <LinearLayout
