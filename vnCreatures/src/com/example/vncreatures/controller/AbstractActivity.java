@@ -24,6 +24,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Window;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
+import com.google.android.maps.MapActivity;
 
 public abstract class AbstractActivity extends SherlockActivity implements
         OnClickListener {
@@ -121,7 +122,12 @@ public abstract class AbstractActivity extends SherlockActivity implements
             resetTabState();
             break;
         case R.id.tabsMap_button:
-            resetTabState();
+        	resetTabState();
+            if (v.getId() != id) {
+                Intent mainIntent = new Intent(this,
+                        MapCreatureActivity.class);
+                startActivity(mainIntent);
+            }
             break;
 
         default:

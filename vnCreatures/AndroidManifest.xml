@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.vncreatures"
     android:versionCode="1"
-    android:versionName="1.0"
-    android:installLocation="auto" >
+    android:versionName="1.0" 
+    android:installLocation="auto">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -14,7 +14,15 @@
     <supports-screens android:largeScreens="true" />
 
     <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,8 +32,10 @@
 
     <application
         android:icon="@drawable/icon_app3"
-        android:theme="@style/AppTheme" 
-        android:label="@string/title_activity_main">
+        android:label="@string/title_activity_main"
+        android:theme="@style/AppTheme" >
+        <uses-library android:name="com.google.android.maps" />
+
         <activity android:name=".controller.SplashScreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,6 +66,8 @@
         <activity android:name=".controller.AbstractFragmentActivity" >
         </activity>
         <activity android:name=".controller.NewsDetailActivity" >
+        </activity>
+        <activity android:name=".controller.MapCreatureActivity" >
         </activity>
     </application>
 
