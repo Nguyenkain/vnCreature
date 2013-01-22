@@ -33,28 +33,31 @@ public abstract class AbstractActivity extends SherlockActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Request progress
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         super.onCreate(savedInstanceState);
         // Create indicator bar
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
 
-        // Request progress
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-        // Action bar
-        setTheme(Common.THEME);
-        getSupportActionBar().setIcon(R.drawable.icon_home);
-
         // get preference
         pref = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
 
+        // Action bar
+        setTheme(Common.THEME);
+        getSupportActionBar().setIcon(R.drawable.chikorita);
+
         // init view
         setContentView(R.layout.parent_container);
+
+        // Add View
         RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
         initTabButton();
         container.addView(createView());
 
+        setSupportProgressBarIndeterminateVisibility(false);
     }
 
     protected void showTabbar(boolean visible) {
@@ -122,10 +125,9 @@ public abstract class AbstractActivity extends SherlockActivity implements
             resetTabState();
             break;
         case R.id.tabsMap_button:
-        	resetTabState();
+            resetTabState();
             if (v.getId() != id) {
-                Intent mainIntent = new Intent(this,
-                        MapCreatureActivity.class);
+                Intent mainIntent = new Intent(this, MapCreatureActivity.class);
                 startActivity(mainIntent);
             }
             break;

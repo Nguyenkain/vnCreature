@@ -26,7 +26,7 @@ public class KingdomChooseActivity extends AbstractActivity implements
 		super.onCreate(savedInstanceState);
 
 		initControl();
-
+		
 	}
 
 	@Override

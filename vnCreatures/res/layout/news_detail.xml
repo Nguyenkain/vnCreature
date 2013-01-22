@@ -14,34 +14,39 @@
             android:layout_height="5dp"
             android:background="#808080" />
 
+        <LinearLayout
+            android:id="@+id/nameDescriptionPlace"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/news_title_textView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/title"
+                android:textSize="22dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        
         <com.djpsoft.moreDroid.ExpandoLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            ExpandoLayout:compactText="@string/images"
-            ExpandoLayout:expanded="true"
-            ExpandoLayout:expandedText="@string/colapse"
-            ExpandoLayout:moreBar="true"
-            ExpandoLayout:moreBarDefaultViewHeight="40"
-            ExpandoLayout:moreBarFadeColor="#808080"
-            ExpandoLayout:moreBarOnRight="true" >
+            ExpandoLayout:expanded="false"
+            ExpandoLayout:text="@string/compact"
+            ExpandoLayout:titleRowPadding="5"
+            android:background="@android:color/transparent" >
 
-            <LinearLayout
-                android:id="@+id/nameDescriptionPlace"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/news_title_textView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/title"
-                    android:textStyle="bold" 
-                    android:textSize="18dp"/>
-                
-            </LinearLayout>
+            <Gallery
+                android:id="@+id/newsImage_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_launcher" />
         </com.djpsoft.moreDroid.ExpandoLayout>
 
         <LinearLayout

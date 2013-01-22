@@ -63,6 +63,18 @@ public class Utils {
         }
         return false;
     }
+    
+    public static String convertStreamToString(InputStream is) throws IOException {
+        String text = null;
+        try {
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            text = new String(buffer);
+        } catch (Exception e) { }
+        return text;
+    }
 
     public static Bitmap downloadBitmap(String url) {
         final AndroidHttpClient client = AndroidHttpClient

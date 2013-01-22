@@ -65,26 +65,30 @@ public class CreatureActivity extends AbstractActivity implements
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
                 mCreature.getId() + "_3s"));
         mCreature.setCreatureImages(listImage);
-        final GalleryImageAdapter adapter = new GalleryImageAdapter(this, mCreature);
+        final GalleryImageAdapter adapter = new GalleryImageAdapter(this,
+                mCreature);
         adapter.setListImages((ArrayList<String>) listImage.clone());
         mCreatureDescriptionViewModel.galleryImage.setAdapter(adapter);
-        
-        mCreatureDescriptionViewModel.galleryImage.setOnItemClickListener(new OnItemClickListener() {
-            
-            @Override
-            public void onItemClick(AdapterView<?> view, View v,
-                    int pos, long id) {
-                Intent intent = new Intent();
-                intent.setClass(CreatureActivity.this,
-                        ImageViewFlipperActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList(Common.CREATURE_URL_IMAGES_LIST, adapter.getListImages());
-                bundle.putInt(Common.CREATURE_URL_IMAGES_POSITION, pos);
-                intent.putExtras(bundle);
 
-                startActivity(intent);
-            }
-        });
+        mCreatureDescriptionViewModel.galleryImage
+                .setOnItemClickListener(new OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> view, View v,
+                            int pos, long id) {
+                        Intent intent = new Intent();
+                        intent.setClass(CreatureActivity.this,
+                                ImageViewFlipperActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putStringArrayList(
+                                Common.CREATURE_URL_IMAGES_LIST,
+                                adapter.getListImages());
+                        bundle.putInt(Common.CREATURE_URL_IMAGES_POSITION, pos);
+                        intent.putExtras(bundle);
+
+                        startActivity(intent);
+                    }
+                });
     }
 
     @Override
@@ -104,20 +108,6 @@ public class CreatureActivity extends AbstractActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(getString(R.string.detail));
 
-        // Inflate your menu.
-        getSupportMenuInflater().inflate(R.menu.share_action, menu);
-
-        // Set file with share history to the provider and set the share intent.
-        MenuItem actionItem = menu
-                .findItem(R.id.menu_item_share_action_provider_action_bar);
-        ShareActionProvider actionProvider = (ShareActionProvider) actionItem
-                .getActionProvider();
-        actionProvider
-                .setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-        // Note that you can set/change the intent any time,
-        // say when the user has selected an image.
-        actionProvider.setShareIntent(createShareIntent());
-
         // XXX: For now, ShareActionProviders must be displayed on the action
         // bar
         // Set file with share history to the provider and set the share intent.
@@ -131,6 +121,11 @@ public class CreatureActivity extends AbstractActivity implements
         // say when the user has selected an image.
         // overflowProvider.setShareIntent(createShareIntent());
 
+        // Refresh button
+        MenuItem refreshItem = menu.add(Menu.NONE, R.id.menu_item_refresh, Menu.NONE, R.string.refresh);
+        refreshItem.setIcon(R.drawable.ic_refresh).setShowAsAction(
+                MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -139,6 +134,9 @@ public class CreatureActivity extends AbstractActivity implements
         switch (item.getItemId()) {
         case android.R.id.home:
             finish();
+            break;
+        case R.id.menu_item_refresh:
+            getCreatureById();
             break;
 
         default:
@@ -153,11 +151,11 @@ public class CreatureActivity extends AbstractActivity implements
 
             @Override
             public void onGetAllCreaturesDone(CreatureModel creatureModel) {
+                setSupportProgressBarIndeterminateVisibility(false);
                 Creature creature = creatureModel.get(0);
                 mCreatureDescriptionView.setContent(creature);
                 mCreature = creatureModel.get(0);
                 getImage();
-                setProgressBarIndeterminateVisibility(false);
             }
 
             @Override
@@ -166,7 +164,7 @@ public class CreatureActivity extends AbstractActivity implements
             }
         });
         service.requestCreaturesById(mCreatureId);
-        setProgressBarIndeterminateVisibility(true);
+        setSupportProgressBarIndeterminateVisibility(true);
     }
 
     @Override

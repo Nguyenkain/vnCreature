@@ -47,8 +47,21 @@ public class GalleryImageAdapter extends BaseAdapter {
         typeArray.recycle();
     }
 
+    public GalleryImageAdapter(Context context, ArrayList<String> listImages) {
+        mListImages = listImages;
+        mContext = context;
+        TypedArray typeArray = context
+                .obtainStyledAttributes(R.styleable.GalleryTheme);
+        mGalleryItemBackground = typeArray.getResourceId(
+                R.styleable.GalleryTheme_android_galleryItemBackground, 0);
+        typeArray.recycle();
+    }
+
     public int getCount() {
-        return mCreature.getCreatureImages().size();
+        if (mCreature != null)
+            return mCreature.getCreatureImages().size();
+        else
+            return mListImages.size();
     }
 
     public Object getItem(int position) {
@@ -74,7 +87,12 @@ public class GalleryImageAdapter extends BaseAdapter {
          */
 
         // Identify url
-        String url = mCreature.getCreatureImages().get(position);
+        String url = null;
+        if (mCreature != null) {
+            url = mCreature.getCreatureImages().get(position);
+        } else {
+            url = mListImages.get(position);
+        }
 
         // Set Image using aquery
         AQuery aQuery = new AQuery(convertView);

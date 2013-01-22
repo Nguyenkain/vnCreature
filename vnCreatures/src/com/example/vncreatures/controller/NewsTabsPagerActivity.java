@@ -62,6 +62,7 @@ public class NewsTabsPagerActivity extends AbstractFragmentActivity {
 			@Override
 			public void onGetCatSuccess(CategoryModel catModel) {
 				for (int i = 0; i < catModel.count(); i++) {
+				    setSupportProgressBarIndeterminateVisibility(false);
 
 					TabSpec tabSpec = mTabHost.newTabSpec(catModel.get(i)
 							.getCatName());
@@ -84,6 +85,7 @@ public class NewsTabsPagerActivity extends AbstractFragmentActivity {
 			}
 		});
 		service.requestGetCategory();
+		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
 	@Override

@@ -2,13 +2,14 @@ package com.example.vncreatures.controller;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,10 +19,10 @@ import android.widget.ImageView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
-import com.example.vncreatures.customItems.BitmapManager;
 import com.example.vncreatures.view.ImageViewTouchViewPager;
 
 public class ImageViewFlipperActivity extends AbstractActivity {
@@ -80,7 +81,35 @@ public class ImageViewFlipperActivity extends AbstractActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         setTitle(getString(R.string.view_image));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Inflate your menu.
+        getSupportMenuInflater().inflate(R.menu.share_action, menu);
+        // Set file with share history to the provider and set the share intent.
+        MenuItem actionItem = menu
+                .findItem(R.id.menu_item_share_action_provider_action_bar);
+        ShareActionProvider actionProvider = (ShareActionProvider) actionItem
+                .getActionProvider();
+        actionProvider
+                .setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        // Note that you can set/change the intent any time,
+        // say when the user has selected an image.
+        actionProvider.setShareIntent(createShareIntent());
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected Intent createShareIntent() {
+        AQuery aQuery = new AQuery(this);
+        String url = mCreatureImage.get(mPosition);
+        File file = aQuery.makeSharedFile(url, "creature.png");
+        if (file != null) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("image/*");
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            return shareIntent;
+        }
+        return super.createShareIntent();
     }
 
     @Override

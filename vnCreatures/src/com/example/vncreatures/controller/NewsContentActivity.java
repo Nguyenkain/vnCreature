@@ -31,8 +31,8 @@ public class NewsContentActivity extends SherlockFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSherlockActivity().getSupportActionBar().setTitle(R.string.news);
+        mCatId = this.getArguments().getString(Common.CAT_EXTRA);
         mView = new NewsListView(getActivity());
-        mCatId = this.getArguments().getString(Common.CAT_EXTRA, "");
         initNewsList();
 
         mView.mNewsListView.setOnRefreshListener(new OnRefreshListener() {
@@ -71,7 +71,7 @@ public class NewsContentActivity extends SherlockFragment {
 
             @Override
             public void onGetNewsSuccess(NewsModel newsModel) {
-                getSherlockActivity().setProgressBarIndeterminateVisibility(
+                getSherlockActivity().setSupportProgressBarIndeterminateVisibility(
                         false);
                 mNewsModel = newsModel;
                 dataListInit();
@@ -89,7 +89,7 @@ public class NewsContentActivity extends SherlockFragment {
             }
         });
         service.requestGetNews(mCatId, "1");
-        getSherlockActivity().setProgressBarIndeterminateVisibility(true);
+        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
     }
 
     @Override
