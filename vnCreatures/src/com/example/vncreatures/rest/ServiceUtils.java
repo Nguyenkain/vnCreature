@@ -81,7 +81,8 @@ public class ServiceUtils {
             while (iterator.hasNext()) {
                 JsonElement json2 = (JsonElement) iterator.next();
                 Gson gson = new Gson();
-                CreatureGroup creatureGroup = gson.fromJson(json2, CreatureGroup.class);
+                CreatureGroup creatureGroup = gson.fromJson(json2,
+                        CreatureGroup.class);
                 crGroupListModel.add(creatureGroup);
             }
 
@@ -157,8 +158,8 @@ public class ServiceUtils {
 
         return newsListModel;
     }
-    
- // Parse Province Model
+
+    // Parse Province Model
     public static ProvinceModel parseProvinceModelFromJSON(String data) {
         if (data == null || data == "")
             return null;
@@ -179,12 +180,8 @@ public class ServiceUtils {
             Iterator<?> iterator = array.iterator();
             while (iterator.hasNext()) {
                 JsonElement json2 = (JsonElement) iterator.next();
-                
-                JsonObject jObject = json2.getAsJsonObject();
-                JsonElement json3 = jObject.get("category");
-                
                 Gson gson = new Gson();
-                Province province = gson.fromJson(json3, Province.class);
+                Province province = gson.fromJson(json2, Province.class);
                 provinceModel.add(province);
             }
 
@@ -379,13 +376,12 @@ public class ServiceUtils {
 
         return result;
     }
-    
+
     public static String getProvince(String id) {
         String result = "";
 
         String request = String.format(ServerConfig.GET_PROVINCE);
         RestClient client = new RestClient(request);
-        client.addParam("format", "json");
         client.addParam("id", id);
 
         try {

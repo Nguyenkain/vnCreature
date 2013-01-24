@@ -23,7 +23,7 @@ public class ServerConfig {
 
     // MAP
     public static final String GET_PROVINCE = ROOT
-            + "/webservice/webservice.php?getProvince&format=json&id=1";
+            + "/refactor/public/user/get-province/";
 
     public static final String NUM_PER_PAGE = "10";
     public static final int TIMEOUT = 30000; // 30 seconds
