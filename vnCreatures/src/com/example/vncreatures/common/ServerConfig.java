@@ -1,15 +1,15 @@
 package com.example.vncreatures.common;
 
 public class ServerConfig {
-	public static final String ROOT = "http://113.164.1.45";
-	//public static final String ROOT = "http://192.168.137.1";
+	//public static final String ROOT = "http://113.164.1.45";
+	public static final String ROOT = "http://192.168.137.1";
 	public static final String IMAGE_PATH = ROOT
 			+ "/webData/pictures/%s/%s.jpg";
 
-	public static final String GET_ALL_CREATURE = ROOT
-			+ "/webservice/webservice.php?getAllNameCreature&format=json&kingdom=";
 	/*public static final String GET_ALL_CREATURE = ROOT
-            + "/refactor/public/user/get-all-name-creature/recordPerPage/6/page/2/kingdom/1";*/
+			+ "/webservice/webservice.php?getAllNameCreature&format=json&kingdom=";*/
+	public static final String GET_ALL_CREATURE = ROOT
+            + "/refactor/public/user/get-all-name-creature/";
 	public static final String GET_ALL_CREATURE_BY_NAME2 = ROOT
 			+ "/webservice/webservice.php?getCreatureByName2&format=json&recordperpage=10&page=1&creatureName=&order=&family=&class=";
 	public static final String GET_CREATURE_BY_ID = ROOT
@@ -21,13 +21,6 @@ public class ServerConfig {
 			+ "/webservice/webservice.php?getClass&format=json&kingdom=1&family=&order=";
 	public static final String GET_ORDER = ROOT
 			+ "/webservice/webservice.php?getOrder&format=json&kingdom=1&class=&family=";
-
-	public static final String GET_FAMILY_BY_ID = ROOT
-			+ "/webservice/webservice.php?getFamilyById&format=json&id=";
-	public static final String GET_CLASS_BY_ID = ROOT
-			+ "/webservice/webservice.php?getClassById&format=json&id=";
-	public static final String GET_ORDER_BY_ID = ROOT
-			+ "/webservice/webservice.php?getOrderById&format=json&id=";
 	
 	//NEWS
 	public static final String GET_ALL_CAREGORY = ROOT

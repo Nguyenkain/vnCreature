@@ -38,7 +38,7 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
 
         // Action bar
         setTheme(Common.THEME);
-        getSupportActionBar().setIcon(R.drawable.icon_home);
+        getSupportActionBar().setIcon(R.drawable.chikorita);
 
         // get preference
         pref = PreferenceManager
@@ -112,6 +112,10 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
             break;
         case R.id.tabsMap_button:
             resetTabState();
+            if (v.getId() != id) {
+                Intent mainIntent = new Intent(this, MapCreatureActivity.class);
+                startActivity(mainIntent);
+            }
             break;
 
         default:
@@ -146,7 +150,8 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
             view.setOnTouchListener(new OnTouchListener() {
 
                 public boolean onTouch(View v, MotionEvent event) {
-                    AbstractActivity.hideSoftKeyboard(AbstractFragmentActivity.this);
+                    AbstractActivity
+                            .hideSoftKeyboard(AbstractFragmentActivity.this);
                     return false;
                 }
 

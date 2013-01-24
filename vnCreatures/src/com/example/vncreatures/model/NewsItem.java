@@ -4,98 +4,108 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class NewsItem implements Parcelable {
-	private String mId;
-	private String mTitle;
-	private String mDescription;
-	private String mContent;
-	private String mImage;
+    private String mId;
+    private String mTitle;
+    private String mDescription;
+    private String mContent;
+    private String mImage;
 
-	public String getId() {
-		return mId;
-	}
+    public NewsItem(String mId, String mTitle, String mDescription,
+            String mContent, String mImage) {
+        super();
+        this.mId = mId;
+        this.mTitle = mTitle;
+        this.mDescription = mDescription;
+        this.mContent = mContent;
+        this.mImage = mImage;
+    }
 
-	public void setId(String id) {
-		mId = id;
-	}
+    public String getId() {
+        return mId;
+    }
 
-	public String getTitle() {
-		return mTitle;
-	}
+    public void setId(String id) {
+        mId = id;
+    }
 
-	public void setTitle(String title) {
-		mTitle = title;
-	}
+    public String getTitle() {
+        return mTitle;
+    }
 
-	public String getDescription() {
-		return mDescription;
-	}
+    public void setTitle(String title) {
+        mTitle = title;
+    }
 
-	public void setDescription(String description) {
-		mDescription = description;
-	}
+    public String getDescription() {
+        return mDescription;
+    }
 
-	public String getContent() {
-		return mContent;
-	}
+    public void setDescription(String description) {
+        mDescription = description;
+    }
 
-	public void setContent(String content) {
-		mContent = content;
-	}
+    public String getContent() {
+        return mContent;
+    }
 
-	public String getImage() {
-		return mImage;
-	}
+    public void setContent(String content) {
+        mContent = content;
+    }
 
-	public void setImage(String image) {
-		mImage = image;
-	}
+    public String getImage() {
+        return mImage;
+    }
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(mId);
-		dest.writeString(mDescription);
-		dest.writeString(mTitle);
-		dest.writeString(mContent);
-		dest.writeString(mImage);
-	}
+    public void setImage(String image) {
+        mImage = image;
+    }
 
-	public NewsItem(Parcel in) {
-		readFromParcel(in);
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mId);
+        dest.writeString(mDescription);
+        dest.writeString(mTitle);
+        dest.writeString(mContent);
+        dest.writeString(mImage);
+    }
 
-	public NewsItem() {
-		mId = "";
-		mDescription = "";
-		mTitle = "";
-		mContent = "";
-		mImage = "";
-	}
+    public NewsItem(Parcel in) {
+        readFromParcel(in);
+    }
 
-	private void readFromParcel(Parcel in) {
+    public NewsItem() {
+        mId = "";
+        mDescription = "";
+        mTitle = "";
+        mContent = "";
+        mImage = "";
+    }
 
-		// We just need to read back each
-		// field in the order that it was
-		// written to the parcel
-		mId = in.readString();
-		mDescription = in.readString();
-		mTitle = in.readString();
-		mContent = in.readString();
-		mImage = in.readString();
-	}
+    private void readFromParcel(Parcel in) {
 
-	public static final Creator<NewsItem> CREATOR = new Creator<NewsItem>() {
-		public NewsItem createFromParcel(Parcel in) {
-			return new NewsItem(in);
-		}
+        // We just need to read back each
+        // field in the order that it was
+        // written to the parcel
+        mId = in.readString();
+        mDescription = in.readString();
+        mTitle = in.readString();
+        mContent = in.readString();
+        mImage = in.readString();
+    }
 
-		public NewsItem[] newArray(int size) {
-			return new NewsItem[size];
-		}
-	};
+    public static final Creator<NewsItem> CREATOR = new Creator<NewsItem>() {
+        public NewsItem createFromParcel(Parcel in) {
+            return new NewsItem(in);
+        }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+        public NewsItem[] newArray(int size) {
+            return new NewsItem[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
 }

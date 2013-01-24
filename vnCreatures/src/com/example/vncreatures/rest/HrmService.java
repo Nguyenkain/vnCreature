@@ -1,33 +1,10 @@
 package com.example.vncreatures.rest;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Gallery;
 
-import com.example.vncreatures.common.Common;
-import com.example.vncreatures.common.Common.CREATURE;
-import com.example.vncreatures.common.ServerConfig;
-import com.example.vncreatures.common.Utils;
-import com.example.vncreatures.controller.ImageViewFlipperActivity;
-import com.example.vncreatures.customItems.BitmapManager;
-import com.example.vncreatures.customItems.GalleryImageAdapter;
 import com.example.vncreatures.model.CategoryModel;
-import com.example.vncreatures.model.Creature;
-import com.example.vncreatures.model.CreatureModel;
-import com.example.vncreatures.model.CreatureGroup;
 import com.example.vncreatures.model.CreatureGroupListModel;
+import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.NewsModel;
 
 public class HrmService {
