@@ -1,23 +1,23 @@
 package com.example.vncreatures.model;
 
 public class Category {
-	private String mCatId;
-	private String mCatName;
+	private String category_id;
+	private String category_name;
 
 	public String getCatId() {
-		return mCatId;
+		return category_id;
 	}
 
 	public void setCatId(String catId) {
-		this.mCatId = catId;
+		this.category_id = catId;
 	}
 
 	public String getCatName() {
-		return mCatName;
+		return category_name;
 	}
 
 	public void setCatName(String catName) {
-		this.mCatName = catName;
+		this.category_name = catName;
 	}
 
 }

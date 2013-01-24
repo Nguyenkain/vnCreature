@@ -4,69 +4,69 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class NewsItem implements Parcelable {
-    private String mId;
-    private String mTitle;
-    private String mDescription;
-    private String mContent;
-    private String mImage;
+    private String news_id;
+    private String title;
+    private String short_description;
+    private String news_content;
+    private String image;
 
     public NewsItem(String mId, String mTitle, String mDescription,
             String mContent, String mImage) {
         super();
-        this.mId = mId;
-        this.mTitle = mTitle;
-        this.mDescription = mDescription;
-        this.mContent = mContent;
-        this.mImage = mImage;
+        this.news_id = mId;
+        this.title = mTitle;
+        this.short_description = mDescription;
+        this.news_content = mContent;
+        this.image = mImage;
     }
 
     public String getId() {
-        return mId;
+        return news_id;
     }
 
     public void setId(String id) {
-        mId = id;
+        news_id = id;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String title) {
-        mTitle = title;
+        this.title = title;
     }
 
     public String getDescription() {
-        return mDescription;
+        return short_description;
     }
 
     public void setDescription(String description) {
-        mDescription = description;
+        short_description = description;
     }
 
     public String getContent() {
-        return mContent;
+        return news_content;
     }
 
     public void setContent(String content) {
-        mContent = content;
+        news_content = content;
     }
 
     public String getImage() {
-        return mImage;
+        return image;
     }
 
     public void setImage(String image) {
-        mImage = image;
+        this.image = image;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mId);
-        dest.writeString(mDescription);
-        dest.writeString(mTitle);
-        dest.writeString(mContent);
-        dest.writeString(mImage);
+        dest.writeString(news_id);
+        dest.writeString(short_description);
+        dest.writeString(title);
+        dest.writeString(news_content);
+        dest.writeString(image);
     }
 
     public NewsItem(Parcel in) {
@@ -74,11 +74,11 @@ public class NewsItem implements Parcelable {
     }
 
     public NewsItem() {
-        mId = "";
-        mDescription = "";
-        mTitle = "";
-        mContent = "";
-        mImage = "";
+        news_id = "";
+        short_description = "";
+        title = "";
+        news_content = "";
+        image = "";
     }
 
     private void readFromParcel(Parcel in) {
@@ -86,11 +86,11 @@ public class NewsItem implements Parcelable {
         // We just need to read back each
         // field in the order that it was
         // written to the parcel
-        mId = in.readString();
-        mDescription = in.readString();
-        mTitle = in.readString();
-        mContent = in.readString();
-        mImage = in.readString();
+        news_id = in.readString();
+        short_description = in.readString();
+        title = in.readString();
+        news_content = in.readString();
+        image = in.readString();
     }
 
     public static final Creator<NewsItem> CREATOR = new Creator<NewsItem>() {

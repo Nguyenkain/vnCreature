@@ -105,36 +105,20 @@ public class ServiceUtils {
             data = data.substring(0, data.lastIndexOf('}') + 1);
 
         try {
-            JSONObject creaturesObj = new JSONObject(data);
-            if (!creaturesObj.has("categories"))
+            JsonElement json = new JsonParser().parse(data);
+            JsonObject jsonObject = json.getAsJsonObject();
+            JsonArray array = jsonObject.getAsJsonArray("data");
+            if (array.isJsonNull())
                 return null;
-
-            JSONArray creatureListObj = creaturesObj.getJSONArray("categories");
-            for (int i = 0; i < creatureListObj.length(); i++) {
-                Category cat = new Category();
-                JSONObject creatureObj = creatureListObj.getJSONObject(i);
-                String stringVal = "", key = "";
-                int intVal = -1;
-                key = "category";
-                if (!creatureObj.has(key))
-                    continue;
-                creatureObj = creatureObj.getJSONObject(key);
-
-                key = "category_id";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                cat.setCatId(stringVal);
-
-                key = "category_name";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                cat.setCatName(stringVal);
-
-                // Add to the model
-                catListModel.add(cat);
+            Iterator<?> iterator = array.iterator();
+            while (iterator.hasNext()) {
+                JsonElement json2 = (JsonElement) iterator.next();
+                Gson gson = new Gson();
+                Category category = gson.fromJson(json2, Category.class);
+                catListModel.add(category);
             }
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -154,51 +138,20 @@ public class ServiceUtils {
             data = data.substring(0, data.lastIndexOf('}') + 1);
 
         try {
-            JSONObject obj = new JSONObject(data);
-            if (!obj.has("data"))
+            JsonElement json = new JsonParser().parse(data);
+            JsonObject jsonObject = json.getAsJsonObject();
+            JsonArray array = jsonObject.getAsJsonArray("data");
+            if (array.isJsonNull())
                 return null;
-
-            JSONArray creatureListObj = obj.getJSONArray("data");
-            for (int i = 0; i < creatureListObj.length(); i++) {
-                NewsItem news = new NewsItem();
-                JSONObject creatureObj = creatureListObj.getJSONObject(i);
-                String stringVal = "", key = "";
-                int intVal = -1;
-                key = "news";
-                if (!creatureObj.has(key))
-                    continue;
-                creatureObj = creatureObj.getJSONObject(key);
-
-                key = "news_id";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                news.setId(stringVal);
-
-                key = "short_description";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                news.setDescription(stringVal);
-
-                key = "title";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                news.setTitle(stringVal);
-
-                key = "image";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                news.setImage(stringVal);
-
-                key = "news_content";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                news.setContent(stringVal);
-
-                // Add to the model
-                newsListModel.add(news);
+            Iterator<?> iterator = array.iterator();
+            while (iterator.hasNext()) {
+                JsonElement json2 = (JsonElement) iterator.next();
+                Gson gson = new Gson();
+                NewsItem newsItem = gson.fromJson(json2, NewsItem.class);
+                newsListModel.add(newsItem);
             }
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -375,7 +328,7 @@ public class ServiceUtils {
     public static String getCategory() {
         String result = "";
 
-        String request = String.format(ServerConfig.GET_ALL_CAREGORY);
+        String request = String.format(ServerConfig.GET_CAREGORY);
         RestClient client = new RestClient(request);
 
         try {
@@ -392,9 +345,8 @@ public class ServiceUtils {
     public static String getNews(String catId, String page) {
         String result = "";
 
-        String request = String.format(ServerConfig.GET_ALL_NEWS);
+        String request = String.format(ServerConfig.GET_NEWS);
         RestClient client = new RestClient(request);
-        client.addParam("format", "json");
         client.addParam("category", catId);
         client.addParam("page", page);
         client.addParam("recordperpage", ServerConfig.NUM_PER_PAGE);
@@ -415,7 +367,6 @@ public class ServiceUtils {
 
         String request = String.format(ServerConfig.GET_NEWS);
         RestClient client = new RestClient(request);
-        client.addParam("format", "json");
         client.addParam("id", newsId);
 
         try {
