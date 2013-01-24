@@ -6,11 +6,13 @@ import com.example.vncreatures.model.CategoryModel;
 import com.example.vncreatures.model.CreatureGroupListModel;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.NewsModel;
+import com.example.vncreatures.model.ProvinceModel;
 
 public class HrmService {
     private Callback mCallback = null;
     private GroupCallback mGroupCallback = null;
     private NewsCallback mNewsCallback = null;
+    private ProvinceCallback mProvinceCallback = null;
 
     public interface Callback {
         public void onGetAllCreaturesDone(final CreatureModel creatureModel);
@@ -30,6 +32,16 @@ public class HrmService {
 
     public void setCallback(final GroupCallback callback) {
         mGroupCallback = callback;
+    }
+
+    public interface ProvinceCallback {
+        public void onSuccess(final ProvinceModel provinceModel);
+
+        public void onError();
+    }
+
+    public void setCallback(final ProvinceCallback callback) {
+        mProvinceCallback = callback;
     }
 
     public interface NewsCallback {
@@ -102,6 +114,12 @@ public class HrmService {
     public boolean requestGetNewsDetail(String newsId) {
         GetNewsDetailTask task = new GetNewsDetailTask();
         task.execute(newsId);
+        return true;
+    }
+
+    public boolean requestGetProvince(String provinceId) {
+        GetProvinceTask task = new GetProvinceTask();
+        task.execute(provinceId);
         return true;
     }
 
@@ -329,6 +347,29 @@ public class HrmService {
                     NewsModel newsModel = ServiceUtils
                             .parseNewsModelFromJSON(result);
                     mNewsCallback.onGetNewsSuccess(newsModel);
+                }
+            }
+        }
+    }
+
+    private class GetProvinceTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String provinceId = params[0];
+            String result = ServiceUtils.getProvince(provinceId);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mProvinceCallback != null) {
+                if (result == "" || result == null) {
+                    mProvinceCallback.onError();
+                } else {
+                    ProvinceModel provinceModel = ServiceUtils
+                            .parseProvinceModelFromJSON(result);
+                    mProvinceCallback.onSuccess(provinceModel);
                 }
             }
         }

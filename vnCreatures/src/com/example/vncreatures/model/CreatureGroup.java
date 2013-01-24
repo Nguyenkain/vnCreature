@@ -4,46 +4,46 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CreatureGroup implements Parcelable {
-    private String mId;
-    private String mVName;
-    private String mLatin;
+    private String ID;
+    private String Viet;
+    private String Latin;
 
     public CreatureGroup(String mId, String mVName, String mLatin) {
         super();
-        this.mId = mId;
-        this.mVName = mVName;
-        this.mLatin = mLatin;
+        this.ID = mId;
+        this.Viet = mVName;
+        this.Latin = mLatin;
     }
 
     public String getId() {
-        return mId;
+        return ID;
     }
 
     public void setId(String id) {
-        this.mId = id;
+        this.ID = id;
     }
 
     public String getViet() {
-        return mVName;
+        return Viet;
     }
 
     public void setViet(String viet) {
-        this.mVName = viet;
+        this.Viet = viet;
     }
 
     public String getLatin() {
-        return mLatin;
+        return Latin;
     }
 
     public void setLatin(String latin) {
-        this.mLatin = latin;
+        this.Latin = latin;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mId);
-        dest.writeString(mLatin);
-        dest.writeString(mVName);
+        dest.writeString(ID);
+        dest.writeString(Latin);
+        dest.writeString(Viet);
     }
 
     public CreatureGroup(Parcel in) {
@@ -51,9 +51,9 @@ public class CreatureGroup implements Parcelable {
     }
 
     public CreatureGroup() {
-        mId = "";
-        mLatin = "";
-        mVName = "";
+        ID = "";
+        Latin = "";
+        Viet = "";
     }
 
     private void readFromParcel(Parcel in) {
@@ -61,9 +61,9 @@ public class CreatureGroup implements Parcelable {
         // We just need to read back each
         // field in the order that it was
         // written to the parcel
-        mId = in.readString();
-        mLatin = in.readString();
-        mVName = in.readString();
+        ID = in.readString();
+        Latin = in.readString();
+        Viet = in.readString();
     }
 
     public static final Creator<CreatureGroup> CREATOR = new Creator<CreatureGroup>() {

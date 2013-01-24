@@ -16,6 +16,8 @@ import com.example.vncreatures.model.CreatureGroupListModel;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.NewsItem;
 import com.example.vncreatures.model.NewsModel;
+import com.example.vncreatures.model.Province;
+import com.example.vncreatures.model.ProvinceModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -70,41 +72,20 @@ public class ServiceUtils {
             data = data.substring(0, data.lastIndexOf('}') + 1);
 
         try {
-            JSONObject creaturesObj = new JSONObject(data);
-            if (!creaturesObj.has("groups"))
+            JsonElement json = new JsonParser().parse(data);
+            JsonObject jsonObject = json.getAsJsonObject();
+            JsonArray array = jsonObject.getAsJsonArray("data");
+            if (array.isJsonNull())
                 return null;
-
-            JSONArray creatureListObj = creaturesObj.getJSONArray("groups");
-            for (int i = 0; i < creatureListObj.length(); i++) {
-                CreatureGroup creatureGroup = new CreatureGroup();
-                JSONObject creatureObj = creatureListObj.getJSONObject(i);
-                String stringVal = "", key = "";
-                int intVal = -1;
-                key = "group";
-                if (!creatureObj.has(key))
-                    continue;
-                creatureObj = creatureObj.getJSONObject(key);
-
-                key = "ID";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                creatureGroup.setId(stringVal);
-
-                key = "Viet";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                creatureGroup.setViet(stringVal);
-
-                key = "Latin";
-                stringVal = creatureObj.has(key) ? creatureObj.getString(key)
-                        : "";
-                creatureGroup.setLatin(stringVal);
-
-                // Add to the model
+            Iterator<?> iterator = array.iterator();
+            while (iterator.hasNext()) {
+                JsonElement json2 = (JsonElement) iterator.next();
+                Gson gson = new Gson();
+                CreatureGroup creatureGroup = gson.fromJson(json2, CreatureGroup.class);
                 crGroupListModel.add(creatureGroup);
             }
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -223,6 +204,43 @@ public class ServiceUtils {
 
         return newsListModel;
     }
+    
+ // Parse Province Model
+    public static ProvinceModel parseProvinceModelFromJSON(String data) {
+        if (data == null || data == "")
+            return null;
+
+        ProvinceModel provinceModel = new ProvinceModel();
+
+        if (data.indexOf('{') > -1)
+            data = data.substring(data.indexOf('{'));
+        if (data.lastIndexOf('}') > -1)
+            data = data.substring(0, data.lastIndexOf('}') + 1);
+
+        try {
+            JsonElement json = new JsonParser().parse(data);
+            JsonObject jsonObject = json.getAsJsonObject();
+            JsonArray array = jsonObject.getAsJsonArray("data");
+            if (array.isJsonNull())
+                return null;
+            Iterator<?> iterator = array.iterator();
+            while (iterator.hasNext()) {
+                JsonElement json2 = (JsonElement) iterator.next();
+                
+                JsonObject jObject = json2.getAsJsonObject();
+                JsonElement json3 = jObject.get("category");
+                
+                Gson gson = new Gson();
+                Province province = gson.fromJson(json3, Province.class);
+                provinceModel.add(province);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return provinceModel;
+    }
 
     // END PARSE FROM JSON
 
@@ -230,7 +248,7 @@ public class ServiceUtils {
 
     public static String getAllCreatures(String page, String kingdom) {
         String result = "";
-        String request = String.format(ServerConfig.GET_ALL_CREATURE);
+        String request = String.format(ServerConfig.GET_CREATURE);
         RestClient client = new RestClient(request);
         client.addParam("page", page);
         client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
@@ -250,9 +268,8 @@ public class ServiceUtils {
     public static String getCreaturesByName(String page, String kingdom,
             String name, String familyId, String orderId, String classId) {
         String result = "";
-        String request = String.format(ServerConfig.GET_ALL_CREATURE_BY_NAME2);
+        String request = String.format(ServerConfig.GET_CREATURE);
         RestClient client = new RestClient(request);
-        client.addParam("format", "json");
         client.addParam("creatureName", name);
         client.addParam("page", page);
         client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
@@ -274,10 +291,8 @@ public class ServiceUtils {
 
     public static String getCreaturesById(String id) {
         String result = "";
-        String request = String.format(ServerConfig.GET_CREATURE_BY_ID);
+        String request = String.format(ServerConfig.GET_CREATURE);
         RestClient client = new RestClient(request);
-        client.addParam("getCreatureById", "");
-        client.addParam("format", "json");
         client.addParam("id", id);
 
         try {
@@ -295,9 +310,9 @@ public class ServiceUtils {
             String kingdomId) {
         String result = "";
 
-        String request = String.format(ServerConfig.GET_FAMILY);
+        String request = String.format(ServerConfig.GET_GROUP);
         RestClient client = new RestClient(request);
-        client.addParam("format", "json");
+        client.addParam("table", "family");
         client.addParam("kingdom", kingdomId);
         client.addParam("class", classId);
         client.addParam("order", orderId);
@@ -317,9 +332,9 @@ public class ServiceUtils {
             String kingdomId) {
         String result = "";
 
-        String request = String.format(ServerConfig.GET_ORDER);
+        String request = String.format(ServerConfig.GET_GROUP);
         RestClient client = new RestClient(request);
-        client.addParam("format", "json");
+        client.addParam("table", "order");
         client.addParam("kingdom", kingdomId);
         client.addParam("class", classId);
         client.addParam("family", familyId);
@@ -339,9 +354,9 @@ public class ServiceUtils {
             String kingdomId) {
         String result = "";
 
-        String request = String.format(ServerConfig.GET_CLASS);
+        String request = String.format(ServerConfig.GET_GROUP);
         RestClient client = new RestClient(request);
-        client.addParam("format", "json");
+        client.addParam("table", "class");
         client.addParam("kingdom", kingdomId);
         client.addParam("order", orderId);
         client.addParam("family", familyId);
@@ -402,6 +417,25 @@ public class ServiceUtils {
         RestClient client = new RestClient(request);
         client.addParam("format", "json");
         client.addParam("id", newsId);
+
+        try {
+            client.execute(RestClient.RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+    
+    public static String getProvince(String id) {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_PROVINCE);
+        RestClient client = new RestClient(request);
+        client.addParam("format", "json");
+        client.addParam("id", id);
 
         try {
             client.execute(RestClient.RequestMethod.GET);
