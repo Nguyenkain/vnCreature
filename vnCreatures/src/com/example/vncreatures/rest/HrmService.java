@@ -117,9 +117,9 @@ public class HrmService {
         return true;
     }
 
-    public boolean requestGetProvince(String provinceId) {
+    public boolean requestGetProvince(String creatureId) {
         GetProvinceTask task = new GetProvinceTask();
-        task.execute(provinceId);
+        task.execute(creatureId);
         return true;
     }
 
@@ -356,8 +356,8 @@ public class HrmService {
 
         @Override
         protected String doInBackground(String... params) {
-            String provinceId = params[0];
-            String result = ServiceUtils.getProvince(provinceId);
+            String creatureId = params[0];
+            String result = ServiceUtils.getProvince(creatureId);
             return result;
         }
 
@@ -374,4 +374,5 @@ public class HrmService {
             }
         }
     }
+
 }

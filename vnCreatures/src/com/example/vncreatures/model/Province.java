@@ -5,7 +5,7 @@ public class Province {
     private String creature_id;
     private String province_id;
     private String province_name;
-    private String longtitude;
+    private String longitude;
     private String latitude;
 
     public String getId() {
@@ -40,16 +40,16 @@ public class Province {
         this.province_name = province_name;
     }
 
-    public String getLongtitude() {
-        return longtitude;
+    public int getLongitude() {
+        return (int) (Double.parseDouble(longitude)* 1E6);
     }
 
-    public void setLongtitude(String longtitude) {
-        this.longtitude = longtitude;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public int getLatitude() {
+    	return (int) (Double.parseDouble(latitude)* 1E6);
     }
 
     public void setLatitude(String latitude) {
