@@ -123,6 +123,10 @@ public abstract class AbstractActivity extends SherlockActivity implements
             break;
         case R.id.tabDiscussion_button:
             resetTabState();
+            if (v.getId() != id) {
+                Intent mainIntent = new Intent(this, LoginActivity.class);
+                startActivity(mainIntent);
+            }
             break;
         case R.id.tabsMap_button:
             resetTabState();

@@ -9,7 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.androidquery.AQuery;
 import com.example.vncreatures.R;
+import com.example.vncreatures.common.ServerConfig;
 import com.example.vncreatures.model.CreatureGroup;
 import com.example.vncreatures.model.CreatureGroupListModel;
 import com.raptureinvenice.webimageview.image.WebImageView;
@@ -82,6 +84,9 @@ public class CreaturesGroupsAdapter extends BaseAdapter {
 		}
 
 		final CreatureGroup creatureItem = mCreatureModel.get(position);
+		String url = String.format(ServerConfig.ICON_PATH, creatureItem.getIcon());
+		AQuery aQuery = new AQuery(mContext);
+		aQuery.id(holder.mImageView).image(url);
 		holder.mVietName.setText(creatureItem.getViet());
 		holder.mLatinName.setText(creatureItem.getLatin());
 		convertView.setOnClickListener(new OnClickListener() {

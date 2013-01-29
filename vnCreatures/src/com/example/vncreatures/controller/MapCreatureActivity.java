@@ -25,6 +25,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockMapActivity;
 import com.cyrilmottier.polaris.Annotation;
 import com.cyrilmottier.polaris.MapCalloutView;
 import com.cyrilmottier.polaris.MapViewUtils;
@@ -32,147 +33,152 @@ import com.cyrilmottier.polaris.PolarisMapView;
 import com.cyrilmottier.polaris.PolarisMapView.OnAnnotationSelectionChangedListener;
 import com.cyrilmottier.polaris.PolarisMapView.OnRegionChangedListener;
 import com.example.vncreatures.R;
+import com.example.vncreatures.common.Common;
 import com.example.vncreatures.common.Config;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 
-public class MapCreatureActivity extends MapActivity implements
-		OnRegionChangedListener, OnAnnotationSelectionChangedListener {
+public class MapCreatureActivity extends SherlockMapActivity implements
+        OnRegionChangedListener, OnAnnotationSelectionChangedListener {
 
-	private static final String LOG_TAG = "MainActivity";
+    private static final String LOG_TAG = "MainActivity";
 
-	// @formatter:off
-	private static final Annotation[] sVietNam = {
-			new Annotation(new GeoPoint(21033333, 105850000), "Ha Noi",
-					"Ha noi Capital"),
-			new Annotation(new GeoPoint(19806692, 105785182), "Thanh Hoa",
-					"Thanh Hoa City"), };
+    // @formatter:off
+    private static final Annotation[] sVietNam = {
+            new Annotation(new GeoPoint(21033333, 105850000), "Ha Noi",
+                    "Ha noi Capital"),
+            new Annotation(new GeoPoint(19806692, 105785182), "Thanh Hoa",
+                    "Thanh Hoa City"), };
 
-	// private static final Annotation[][] sRegions = {sFrance, sEurope,
-	// sUsaEastCoast, sUsaWestCoast};
-	private static final Annotation[][] sRegions = { sVietNam };
-	// @formatter:on
+    // private static final Annotation[][] sRegions = {sFrance, sEurope,
+    // sUsaEastCoast, sUsaWestCoast};
+    private static final Annotation[][] sRegions = { sVietNam };
+    // @formatter:on
 
-	private PolarisMapView mMapView;
-	private MapController mMapController;
+    private PolarisMapView mMapView;
+    private MapController mMapController;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.main_activity);
+        // Action bar
+        setTheme(Common.THEME);
+        getSupportActionBar().setIcon(R.drawable.chikorita);
 
-		mMapView = new PolarisMapView(this, Config.GOOGLE_MAPS_API_KEY);
-		mMapView.setUserTrackingButtonEnabled(true);
-		mMapView.setOnRegionChangedListenerListener(this);
-		mMapView.setOnAnnotationSelectionChangedListener(this);
-		mMapView.setBuiltInZoomControls(true);
+        setContentView(R.layout.main_activity);
 
-		mMapController = mMapView.getController();
+        mMapView = new PolarisMapView(this, Config.GOOGLE_MAPS_API_KEY);
+        mMapView.setUserTrackingButtonEnabled(true);
+        mMapView.setOnRegionChangedListenerListener(this);
+        mMapView.setOnAnnotationSelectionChangedListener(this);
+        mMapView.setBuiltInZoomControls(true);
 
-		String coordinates[] = { "23.37582", "109.459099", "8.574163",
-				"102.140503" };
-		double maxlat = Double.parseDouble(coordinates[0]);
-		double maxlng = Double.parseDouble(coordinates[1]);
-		double minlat = Double.parseDouble(coordinates[2]);
-		double minlng = Double.parseDouble(coordinates[3]);
+        mMapController = mMapView.getController();
 
-		GeoPoint p = new GeoPoint((int) ((maxlat + minlat) / 2 * 1E6),
-				(int) ((maxlng + minlng) / 2 * 1E6));
-		mMapController.animateTo(p);
-		mMapController.zoomToSpan((int) ((maxlat - minlat) * 1E6),
-				(int) ((maxlng - minlng) * 1E6));
-		mMapController.setZoom(6);
+        String coordinates[] = { "23.37582", "109.459099", "8.574163",
+                "102.140503" };
+        double maxlat = Double.parseDouble(coordinates[0]);
+        double maxlng = Double.parseDouble(coordinates[1]);
+        double minlat = Double.parseDouble(coordinates[2]);
+        double minlng = Double.parseDouble(coordinates[3]);
 
-		// Prepare an alternate pin Drawable
-		final Drawable altMarker = MapViewUtils
-				.boundMarkerCenterBottom(getResources().getDrawable(
-						R.drawable.map_pin_holed_violet));
+        GeoPoint p = new GeoPoint((int) ((maxlat + minlat) / 2 * 1E6),
+                (int) ((maxlng + minlng) / 2 * 1E6));
+        mMapController.animateTo(p);
+        mMapController.zoomToSpan((int) ((maxlat - minlat) * 1E6),
+                (int) ((maxlng - minlng) * 1E6));
+        mMapController.setZoom(6);
 
-		// Prepare the list of Annotation using the alternate Drawable for all
-		// Annotation located in France
-		final ArrayList<Annotation> annotations = new ArrayList<Annotation>();
-		for (Annotation[] region : sRegions) {
-			for (Annotation annotation : region) {
-				if (region == sVietNam) {
-					annotation.setMarker(altMarker);
-				}
-				annotations.add(annotation);
-			}
-		}
-		mMapView.setAnnotations(annotations, R.drawable.map_pin_holed_blue);
+        // Prepare an alternate pin Drawable
+        final Drawable altMarker = MapViewUtils
+                .boundMarkerCenterBottom(getResources().getDrawable(
+                        R.drawable.map_pin_holed_violet));
 
-		final FrameLayout mapViewContainer = (FrameLayout) findViewById(R.id.map_view_container);
-		mapViewContainer.addView(mMapView, new FrameLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        // Prepare the list of Annotation using the alternate Drawable for all
+        // Annotation located in France
+        final ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+        for (Annotation[] region : sRegions) {
+            for (Annotation annotation : region) {
+                if (region == sVietNam) {
+                    annotation.setMarker(altMarker);
+                }
+                annotations.add(annotation);
+            }
+        }
+        mMapView.setAnnotations(annotations, R.drawable.map_pin_holed_blue);
 
-		mMapView.invalidate();
-	}
+        final FrameLayout mapViewContainer = (FrameLayout) findViewById(R.id.map_view_container);
+        mapViewContainer.addView(mMapView, new FrameLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		mMapView.onStart();
-	}
+        mMapView.invalidate();
+    }
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-		mMapView.onStop();
-	}
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mMapView.onStart();
+    }
 
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
-	}
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mMapView.onStop();
+    }
 
-	@Override
-	public void onRegionChanged(PolarisMapView mapView) {
-		if (Config.INFO_LOGS_ENABLED) {
-			Log.i(LOG_TAG, "onRegionChanged");
-		}
-	}
+    @Override
+    protected boolean isRouteDisplayed() {
+        return false;
+    }
 
-	@Override
-	public void onRegionChangeConfirmed(PolarisMapView mapView) {
-		if (Config.INFO_LOGS_ENABLED) {
-			Log.i(LOG_TAG, "onRegionChangeConfirmed");
-		}
-	}
+    @Override
+    public void onRegionChanged(PolarisMapView mapView) {
+        if (Config.INFO_LOGS_ENABLED) {
+            Log.i(LOG_TAG, "onRegionChanged");
+        }
+    }
 
-	@Override
-	public void onAnnotationSelected(PolarisMapView mapView,
-			MapCalloutView calloutView, int position, Annotation annotation) {
-		if (Config.INFO_LOGS_ENABLED) {
-			Log.i(LOG_TAG, "onAnnotationSelected");
-		}
-		calloutView.setDisclosureEnabled(true);
-		calloutView.setClickable(true);
-		if (!TextUtils.isEmpty(annotation.getSnippet())) {
-			calloutView.setLeftAccessoryView(getLayoutInflater().inflate(
-					R.layout.accessory, calloutView, false));
-		} else {
-			calloutView.setLeftAccessoryView(null);
-		}
-	}
+    @Override
+    public void onRegionChangeConfirmed(PolarisMapView mapView) {
+        if (Config.INFO_LOGS_ENABLED) {
+            Log.i(LOG_TAG, "onRegionChangeConfirmed");
+        }
+    }
 
-	@Override
-	public void onAnnotationDeselected(PolarisMapView mapView,
-			MapCalloutView calloutView, int position, Annotation annotation) {
-		if (Config.INFO_LOGS_ENABLED) {
-			Log.i(LOG_TAG, "onAnnotationDeselected");
-		}
-	}
+    @Override
+    public void onAnnotationSelected(PolarisMapView mapView,
+            MapCalloutView calloutView, int position, Annotation annotation) {
+        if (Config.INFO_LOGS_ENABLED) {
+            Log.i(LOG_TAG, "onAnnotationSelected");
+        }
+        calloutView.setDisclosureEnabled(true);
+        calloutView.setClickable(true);
+        if (!TextUtils.isEmpty(annotation.getSnippet())) {
+            calloutView.setLeftAccessoryView(getLayoutInflater().inflate(
+                    R.layout.accessory, calloutView, false));
+        } else {
+            calloutView.setLeftAccessoryView(null);
+        }
+    }
 
-	@Override
-	public void onAnnotationClicked(PolarisMapView mapView,
-			MapCalloutView calloutView, int position, Annotation annotation) {
-		if (Config.INFO_LOGS_ENABLED) {
-			Log.i(LOG_TAG, "onAnnotationClicked");
-		}
-		Toast.makeText(this,
-				getString(R.string.annotation_clicked, annotation.getTitle()),
-				Toast.LENGTH_SHORT).show();
-	}
+    @Override
+    public void onAnnotationDeselected(PolarisMapView mapView,
+            MapCalloutView calloutView, int position, Annotation annotation) {
+        if (Config.INFO_LOGS_ENABLED) {
+            Log.i(LOG_TAG, "onAnnotationDeselected");
+        }
+    }
+
+    @Override
+    public void onAnnotationClicked(PolarisMapView mapView,
+            MapCalloutView calloutView, int position, Annotation annotation) {
+        if (Config.INFO_LOGS_ENABLED) {
+            Log.i(LOG_TAG, "onAnnotationClicked");
+        }
+        Toast.makeText(this,
+                getString(R.string.annotation_clicked, annotation.getTitle()),
+                Toast.LENGTH_SHORT).show();
+    }
 }

@@ -20,6 +20,8 @@ public class ServerConfig {
             + "/refactor/public/user/get-news/";
     public static final String NEWS_IMAGE_PATH = ROOT
             + "/webData/forumpic/%s.jpg";
+    public static final String ICON_PATH = ROOT
+            + "/webData/forumpic/icon/%s.jpg";
 
     // MAP
     public static final String GET_PROVINCE = ROOT
@@ -27,4 +29,7 @@ public class ServerConfig {
 
     public static final String NUM_PER_PAGE = "10";
     public static final int TIMEOUT = 30000; // 30 seconds
+    
+    //FACEBOOK
+    public static final String FACEBOOK_APP_ID = "427633550638036";
 }

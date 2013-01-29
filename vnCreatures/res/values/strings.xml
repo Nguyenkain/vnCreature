@@ -39,6 +39,12 @@
     <string name="title">Tiêu đề</string>
     <string name="expanded">Thu gọn</string>
     <string name="compact">Hình ảnh</string>
-    
+    <string name="login">Đăng nhập</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+    <string name="facebook_login">Đăng nhập bằng Facebook</string>
     <string name="annotation_clicked">Annotation \'%1$s\' clicked</string>
+    
+    <!-- Facebook App -->
+    <string name="app_id">427633550638036</string>
 </resources>

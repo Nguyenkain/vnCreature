@@ -7,6 +7,15 @@ public class CreatureGroup implements Parcelable {
     private String ID;
     private String Viet;
     private String Latin;
+    private String icon;
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     public CreatureGroup(String mId, String mVName, String mLatin) {
         super();
