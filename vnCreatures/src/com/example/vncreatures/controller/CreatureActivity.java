@@ -121,11 +121,9 @@ public class CreatureActivity extends AbstractActivity implements
         // say when the user has selected an image.
         // overflowProvider.setShareIntent(createShareIntent());
 
-        // Refresh button
-        MenuItem refreshItem = menu.add(Menu.NONE, R.id.menu_item_refresh, Menu.NONE, R.string.refresh);
-        refreshItem.setIcon(R.drawable.ic_refresh).setShowAsAction(
-                MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
+        // Inflate menu
+		getSupportMenuInflater().inflate(R.menu.detail_menu, menu);
+        
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -138,6 +136,10 @@ public class CreatureActivity extends AbstractActivity implements
         case R.id.menu_item_refresh:
             getCreatureById();
             break;
+        case R.id.menu_item_map:
+        	Intent intent = new Intent(CreatureActivity.this, MapCreatureActivity.class);
+			intent.putExtra(Common.CREATURE_EXTRA, mCreatureId);
+			startActivity(intent);
 
         default:
             break;

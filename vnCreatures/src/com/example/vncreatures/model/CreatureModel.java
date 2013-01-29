@@ -37,5 +37,4 @@ public class CreatureModel {
 		ArrayList<Creature> creatures = model.getCreatureList();
 		mCreatureList.addAll(creatures);
 	}
-
 }

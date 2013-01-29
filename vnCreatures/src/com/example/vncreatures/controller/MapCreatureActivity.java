@@ -17,15 +17,22 @@ package com.example.vncreatures.controller;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockMapActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.cyrilmottier.polaris.Annotation;
 import com.cyrilmottier.polaris.MapCalloutView;
 import com.cyrilmottier.polaris.MapViewUtils;
@@ -34,151 +41,283 @@ import com.cyrilmottier.polaris.PolarisMapView.OnAnnotationSelectionChangedListe
 import com.cyrilmottier.polaris.PolarisMapView.OnRegionChangedListener;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
-import com.example.vncreatures.common.Config;
+import com.example.vncreatures.common.MapConfig;
+import com.example.vncreatures.model.Province;
+import com.example.vncreatures.model.ProvinceModel;
+import com.example.vncreatures.rest.HrmService;
+import com.example.vncreatures.rest.HrmService.ProvinceCallback;
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 
 public class MapCreatureActivity extends SherlockMapActivity implements
-        OnRegionChangedListener, OnAnnotationSelectionChangedListener {
+		OnRegionChangedListener, OnAnnotationSelectionChangedListener, OnClickListener {
 
-    private static final String LOG_TAG = "MainActivity";
+	private static final String LOG_TAG = "MainActivity";
+	private final ArrayList<Annotation> mAnnotation = new ArrayList<Annotation>();
 
-    // @formatter:off
-    private static final Annotation[] sVietNam = {
-            new Annotation(new GeoPoint(21033333, 105850000), "Ha Noi",
-                    "Ha noi Capital"),
-            new Annotation(new GeoPoint(19806692, 105785182), "Thanh Hoa",
-                    "Thanh Hoa City"), };
+	private PolarisMapView mMapView;
+	private MapController mMapController;
+	
+	SharedPreferences pref;
 
-    // private static final Annotation[][] sRegions = {sFrance, sEurope,
-    // sUsaEastCoast, sUsaWestCoast};
-    private static final Annotation[][] sRegions = { sVietNam };
-    // @formatter:on
+	private String mCreatureId = null;
 
-    private PolarisMapView mMapView;
-    private MapController mMapController;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		// get preference
+        pref = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+		// Action bar
+		setTheme(Common.THEME);
+		getSupportActionBar().setIcon(R.drawable.chikorita);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.map));
 
-        // Action bar
-        setTheme(Common.THEME);
-        getSupportActionBar().setIcon(R.drawable.chikorita);
+		// init view
+		setContentView(R.layout.map_view);
 
-        setContentView(R.layout.main_activity);
+		// Get creature id
+		getFromExtras();
+		// Initialize map view
+		initMapSpanZoom();
+		// Get province of creature on map
+		getProvince();
 
-        mMapView = new PolarisMapView(this, Config.GOOGLE_MAPS_API_KEY);
-        mMapView.setUserTrackingButtonEnabled(true);
-        mMapView.setOnRegionChangedListenerListener(this);
-        mMapView.setOnAnnotationSelectionChangedListener(this);
-        mMapView.setBuiltInZoomControls(true);
+		final FrameLayout mapViewContainer = (FrameLayout) findViewById(R.id.map_view_container);
+		mapViewContainer.addView(mMapView, new FrameLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		mMapView.invalidate();
+	}
+	
+//	protected void initTabButton() {
+//        /*
+//         * Intent mainIntent = new Intent(context, NewsTabsPagerActivity.class);
+//         * startActivity(mainIntent);
+//         */
+//
+//        resetTabState();
+//
+//        View button = (View) findViewById(R.id.tabHome_button);
+//        button.setOnClickListener(this);
+//        button = (View) findViewById(R.id.tabNews_button);
+//        button.setOnClickListener(this);
+//        button = (View) findViewById(R.id.tabDiscussion_button);
+//        button.setOnClickListener(this);
+//        button = (View) findViewById(R.id.tabsMap_button);
+//        button.setOnClickListener(this);
+//        button = (View) findViewById(R.id.tabNews_button);
+//        button.setOnClickListener(this);
+//    }
 
-        mMapController = mMapView.getController();
+//    @Override
+//    public void onClick(View v) {
+//        int id = pref.getInt(Common.TAB_PREF, R.id.tabHome_button);
+//        switch (v.getId()) {
+//        case R.id.tabHome_button:
+//            resetTabState();
+//            if (v.getId() != id) {
+//                Intent mainIntent = new Intent(this,
+//                        KingdomChooseActivity.class);
+//                startActivity(mainIntent);
+//            }
+//            break;
+//        case R.id.tabNews_button:
+//            resetTabState();
+//            if (v.getId() != id) {
+//                Intent mainIntent = new Intent(this,
+//                        NewsTabsPagerActivity.class);
+//                startActivity(mainIntent);
+//            }
+//            break;
+//        case R.id.tabDiscussion_button:
+//            resetTabState();
+//            break;
+//        case R.id.tabsMap_button:
+//            resetTabState();
+//            if (v.getId() != id) {
+//                Intent mainIntent = new Intent(this, MapCreatureActivity.class);
+//                startActivity(mainIntent);
+//            }
+//            break;
+//
+//        default:
+//            break;
+//        }
+//    }
+//    
+//    private void resetTabState() {
+//        int id = pref.getInt(Common.TAB_PREF, R.id.tabHome_button);
+//        LinearLayout tabControl = (LinearLayout) findViewById(R.id.tab_control);
+//        for (int i = 0; i < tabControl.getChildCount(); i++) {
+//            View v = tabControl.getChildAt(i);
+//            if (v.getId() == id)
+//                v.setSelected(true);
+//            else
+//                v.setSelected(false);
+//        }
+//    }
 
-        String coordinates[] = { "23.37582", "109.459099", "8.574163",
-                "102.140503" };
-        double maxlat = Double.parseDouble(coordinates[0]);
-        double maxlng = Double.parseDouble(coordinates[1]);
-        double minlat = Double.parseDouble(coordinates[2]);
-        double minlng = Double.parseDouble(coordinates[3]);
+	@Override
+	protected void onStart() {
+		super.onStart();
+		mMapView.onStart();
+	}
 
-        GeoPoint p = new GeoPoint((int) ((maxlat + minlat) / 2 * 1E6),
-                (int) ((maxlng + minlng) / 2 * 1E6));
-        mMapController.animateTo(p);
-        mMapController.zoomToSpan((int) ((maxlat - minlat) * 1E6),
-                (int) ((maxlng - minlng) * 1E6));
-        mMapController.setZoom(6);
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mMapView.onStop();
+	}
+//	
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		int tabPosition = R.id.tabsMap_button;
+//        pref.edit().putInt(Common.TAB_PREF, tabPosition).commit();
+//        resetTabState();
+//	}
 
-        // Prepare an alternate pin Drawable
-        final Drawable altMarker = MapViewUtils
-                .boundMarkerCenterBottom(getResources().getDrawable(
-                        R.drawable.map_pin_holed_violet));
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
 
-        // Prepare the list of Annotation using the alternate Drawable for all
-        // Annotation located in France
-        final ArrayList<Annotation> annotations = new ArrayList<Annotation>();
-        for (Annotation[] region : sRegions) {
-            for (Annotation annotation : region) {
-                if (region == sVietNam) {
-                    annotation.setMarker(altMarker);
-                }
-                annotations.add(annotation);
-            }
-        }
-        mMapView.setAnnotations(annotations, R.drawable.map_pin_holed_blue);
+	@Override
+	public void onRegionChanged(PolarisMapView mapView) {
+		if (MapConfig.INFO_LOGS_ENABLED) {
+			Log.i(LOG_TAG, "onRegionChanged");
+		}
+	}
 
-        final FrameLayout mapViewContainer = (FrameLayout) findViewById(R.id.map_view_container);
-        mapViewContainer.addView(mMapView, new FrameLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+	@Override
+	public void onRegionChangeConfirmed(PolarisMapView mapView) {
+		if (MapConfig.INFO_LOGS_ENABLED) {
+			Log.i(LOG_TAG, "onRegionChangeConfirmed");
+		}
+	}
 
-        mMapView.invalidate();
-    }
+	@Override
+	public void onAnnotationSelected(PolarisMapView mapView,
+			MapCalloutView calloutView, int position, Annotation annotation) {
+		if (MapConfig.INFO_LOGS_ENABLED) {
+			Log.i(LOG_TAG, "onAnnotationSelected");
+		}
+		calloutView.setDisclosureEnabled(true);
+		calloutView.setClickable(true);
+		calloutView.setLeftAccessoryView(getLayoutInflater().inflate(
+				R.layout.accessory, calloutView, false));
+	}
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mMapView.onStart();
-    }
+	@Override
+	public void onAnnotationDeselected(PolarisMapView mapView,
+			MapCalloutView calloutView, int position, Annotation annotation) {
+		if (MapConfig.INFO_LOGS_ENABLED) {
+			Log.i(LOG_TAG, "onAnnotationDeselected");
+		}
+	}
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mMapView.onStop();
-    }
+	@Override
+	public void onAnnotationClicked(PolarisMapView mapView,
+			MapCalloutView calloutView, int position, Annotation annotation) {
+		if (MapConfig.INFO_LOGS_ENABLED) {
+			Log.i(LOG_TAG, "onAnnotationClicked");
+		}
+	}
 
-    @Override
-    protected boolean isRouteDisplayed() {
-        return false;
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			super.onBackPressed();
+			break;
 
-    @Override
-    public void onRegionChanged(PolarisMapView mapView) {
-        if (Config.INFO_LOGS_ENABLED) {
-            Log.i(LOG_TAG, "onRegionChanged");
-        }
-    }
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
-    @Override
-    public void onRegionChangeConfirmed(PolarisMapView mapView) {
-        if (Config.INFO_LOGS_ENABLED) {
-            Log.i(LOG_TAG, "onRegionChangeConfirmed");
-        }
-    }
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
-    @Override
-    public void onAnnotationSelected(PolarisMapView mapView,
-            MapCalloutView calloutView, int position, Annotation annotation) {
-        if (Config.INFO_LOGS_ENABLED) {
-            Log.i(LOG_TAG, "onAnnotationSelected");
-        }
-        calloutView.setDisclosureEnabled(true);
-        calloutView.setClickable(true);
-        if (!TextUtils.isEmpty(annotation.getSnippet())) {
-            calloutView.setLeftAccessoryView(getLayoutInflater().inflate(
-                    R.layout.accessory, calloutView, false));
-        } else {
-            calloutView.setLeftAccessoryView(null);
-        }
-    }
+	private void initMapSpanZoom() {
 
-    @Override
-    public void onAnnotationDeselected(PolarisMapView mapView,
-            MapCalloutView calloutView, int position, Annotation annotation) {
-        if (Config.INFO_LOGS_ENABLED) {
-            Log.i(LOG_TAG, "onAnnotationDeselected");
-        }
-    }
+		mMapView = new PolarisMapView(this, MapConfig.GOOGLE_MAPS_API_KEY);
+		mMapView.setUserTrackingButtonEnabled(true);
+		mMapView.setOnRegionChangedListenerListener(this);
+		mMapView.setOnAnnotationSelectionChangedListener(this);
+		mMapView.setBuiltInZoomControls(true);
+		mMapView.setSatellite(true);
 
-    @Override
-    public void onAnnotationClicked(PolarisMapView mapView,
-            MapCalloutView calloutView, int position, Annotation annotation) {
-        if (Config.INFO_LOGS_ENABLED) {
-            Log.i(LOG_TAG, "onAnnotationClicked");
-        }
-        Toast.makeText(this,
-                getString(R.string.annotation_clicked, annotation.getTitle()),
-                Toast.LENGTH_SHORT).show();
-    }
+		mMapController = mMapView.getController();
+
+		String coordinates[] = { "23.37582", "109.459099", "8.574163",
+				"102.140503" };
+		double maxlat = Double.parseDouble(coordinates[0]);
+		double maxlng = Double.parseDouble(coordinates[1]);
+		double minlat = Double.parseDouble(coordinates[2]);
+		double minlng = Double.parseDouble(coordinates[3]);
+
+		GeoPoint p = new GeoPoint((int) ((maxlat + minlat) / 2 * 1E6),
+				(int) ((maxlng + minlng) / 2 * 1E6));
+		mMapController.animateTo(p);
+		mMapController.zoomToSpan((int) ((maxlat - minlat) * 1E6),
+				(int) ((maxlng - minlng) * 1E6));
+		mMapController.setZoom(6);
+	}
+
+	private void getFromExtras() {
+		try {
+			Bundle extras = getIntent().getExtras();
+			if (extras != null) {
+				mCreatureId = extras.getString(Common.CREATURE_EXTRA);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void getProvince() {
+		HrmService service = new HrmService();
+		service.setCallback(new ProvinceCallback() {
+
+			@Override
+			public void onSuccess(ProvinceModel provinceModel) {
+				Province province = null;
+				for (int i = 0; i < provinceModel.count(); i++) {
+					province = provinceModel.get(i);
+					mAnnotation.add(new Annotation(new GeoPoint(province
+							.getLatitude(), province.getLongitude()), province
+							.getProvince_name()));
+				}
+				// Set marker
+				setMarkerOnMap();
+			}
+
+			@Override
+			public void onError() {
+
+			}
+		});
+		service.requestGetProvince(mCreatureId);
+	}
+
+	private void setMarkerOnMap() {
+		// Prepare an alternate pin Drawable
+		final Drawable altMarker = MapViewUtils
+				.boundMarkerCenterBottom(getResources().getDrawable(
+						R.drawable.map_pin_holed_violet));
+
+		// Prepare the list of Annotation using the alternate Drawable for all
+		for (Annotation annotation : mAnnotation) {
+			annotation.setMarker(altMarker);
+		}
+		mMapView.setAnnotations(mAnnotation, R.drawable.map_pin_holed_blue);
+	}
 }

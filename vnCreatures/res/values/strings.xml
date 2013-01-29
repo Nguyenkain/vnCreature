@@ -18,6 +18,7 @@
 	<string name="refresh">Làm mới</string>
 	<string name="search_title">Tra cứu</string>
 	<string name="detail">Chi tiết</string>
+	<string name="map">Phân bố</string>
 	<string name="filter_group">Lựa chọn</string>
 	<string name="share_social">Chia sẻ từ vnCreatures</string>
     <string name="creature_description">Description</string>
@@ -39,6 +40,7 @@
     <string name="title">Tiêu đề</string>
     <string name="expanded">Thu gọn</string>
     <string name="compact">Hình ảnh</string>
+    <string name="map_search">Phân bố</string>
     <string name="login">Đăng nhập</string>
     <string name="username">Tên đăng nhập</string>
     <string name="password">Mật khẩu</string>
