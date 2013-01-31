@@ -11,10 +11,10 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_launcher" 
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"/>
     -->
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/image_container"
         style="@style/Wrap"
         android:layout_alignParentLeft="true"
@@ -24,16 +24,16 @@
             android:id="@+id/creatureList_imageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:background="@android:color/transparent"
             android:src="@drawable/ic_launcher" 
-            android:background="@android:color/transparent"/>
+            android:layout_centerInParent="true"/>
 
         <ProgressBar
             android:id="@+id/progressBar1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-    </LinearLayout>
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/listDescriptionPlace"
@@ -42,8 +42,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/space_between_item"
         android:layout_toRightOf="@+id/image_container"
-        android:orientation="vertical" 
-        >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/vietName_textview"
@@ -57,8 +56,8 @@
             android:id="@+id/latinName_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/latin_name" 
-            android:visibility="gone"/>
+            android:text="@string/latin_name"
+            android:visibility="gone" />
     </LinearLayout>
 
 </RelativeLayout>

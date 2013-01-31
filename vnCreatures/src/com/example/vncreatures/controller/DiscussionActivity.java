@@ -41,11 +41,12 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         mView = new LoginView(this, mModel);
 
         super.onCreate(savedInstanceState);
-        
+
         if (findViewById(R.id.menu_frame) == null) {
             setBehindContentView(R.layout.menu_frame);
             getSlidingMenu().setSlidingEnabled(true);
-            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+            getSlidingMenu()
+                    .setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
             // show home as up so we can toggle
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
@@ -55,12 +56,11 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
             getSlidingMenu().setSlidingEnabled(false);
             getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         }
-        
-     // set the Behind View Fragment
-        getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.menu_frame, new AccountControlFragment())
-        .commit();
+
+        // set the Behind View Fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.menu_frame, new AccountControlFragment())
+                .commit();
 
         // customize the SlidingMenu
         SlidingMenu sm = getSlidingMenu();
@@ -78,10 +78,8 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
             if (savedInstanceState != null) {
                 session = Session.restoreSession(this, null, statusCallback,
                         savedInstanceState);
-            }
-            else {
-                Intent mainIntent = new Intent(this,
-                        LoginActivity.class);
+            } else {
+                Intent mainIntent = new Intent(this, LoginActivity.class);
                 startActivity(mainIntent);
             }
         }
@@ -137,7 +135,11 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
-                        aQuery.id(R.id.username_textView).text(user.getUsername());
+                        aQuery.id(R.id.username_textView).text(
+                                user.getUsername());
+                        aQuery.id(R.id.avatar_imageView).image(
+                                "http://graph.facebook.com/" + user.getId()
+                                        + "/picture.");
                     }
                 }
             });
@@ -155,6 +157,32 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
                 Exception exception) {
             updateView();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Session.getActiveSession().addCallback(statusCallback);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Session.getActiveSession().removeCallback(statusCallback);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Session.getActiveSession().onActivityResult(this, requestCode,
+                resultCode, data);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Session session = Session.getActiveSession();
+        Session.saveSession(session, outState);
     }
 
 }
