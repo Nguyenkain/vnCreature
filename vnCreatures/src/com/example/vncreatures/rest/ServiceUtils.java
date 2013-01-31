@@ -398,11 +398,12 @@ public class ServiceUtils {
         return result;
     }
     
-    public static String getNationalPark() {
+    public static String getNationalPark(String id) {
         String result = "";
 
         String request = String.format(ServerConfig.GET_NATIONAL_PARK);
         RestClient client = new RestClient(request);
+        client.addParam("id", id);
 
         try {
             client.execute(RestClient.RequestMethod.GET);

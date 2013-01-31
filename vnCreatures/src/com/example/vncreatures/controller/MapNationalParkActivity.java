@@ -276,7 +276,7 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 
 			}
 		});
-		service.requestGetNationalPark();
+		service.requestGetNationalPark("");
 	}
 
 	private void setMarkerOnMap() {

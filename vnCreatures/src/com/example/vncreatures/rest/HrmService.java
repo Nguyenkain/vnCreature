@@ -135,9 +135,9 @@ public class HrmService {
         return true;
     }
     
-    public boolean requestGetNationalPark() {
+    public boolean requestGetNationalPark(String nationParkId) {
     	GetNationalParkTask task = new GetNationalParkTask();
-        task.execute();
+        task.execute(nationParkId);
         return true;
     }
     
@@ -406,7 +406,8 @@ public class HrmService {
 
         @Override
         protected String doInBackground(String... params) {
-            String result = ServiceUtils.getNationalPark();
+        	String nationalParkId = params[0];
+            String result = ServiceUtils.getNationalPark(nationalParkId);
             return result;
         }
 

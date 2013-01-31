@@ -133,7 +133,7 @@ public abstract class AbstractActivity extends SherlockActivity implements
         case R.id.tabsMap_button:
             resetTabState();
             if (v.getId() != id) {
-                Intent mainIntent = new Intent(this, MapCreatureActivity.class);
+                Intent mainIntent = new Intent(this, MapNationalParkActivity.class);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
             }
