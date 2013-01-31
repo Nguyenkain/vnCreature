@@ -397,6 +397,23 @@ public class ServiceUtils {
 
         return result;
     }
+    
+    public static String getNationalPark() {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_NATIONAL_PARK);
+        RestClient client = new RestClient(request);
+
+        try {
+            client.execute(RestClient.RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
 
     // END GET FROM JSOn
     

@@ -1,23 +1,9 @@
-/*
- * Copyright (C) 2012 Cyril Mottier (http://www.cyrilmottier.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.vncreatures.controller;
 
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -28,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -49,38 +36,42 @@ import com.example.vncreatures.rest.HrmService.ProvinceCallback;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 
-public class MapCreatureActivity extends SherlockMapActivity implements
-		OnRegionChangedListener, OnAnnotationSelectionChangedListener, OnClickListener {
+public class MapNationalParkActivity extends SherlockMapActivity implements
+		OnRegionChangedListener, OnAnnotationSelectionChangedListener,
+		OnClickListener {
 
 	private static final String LOG_TAG = "MainActivity";
 	private final ArrayList<Annotation> mAnnotation = new ArrayList<Annotation>();
 
 	private PolarisMapView mMapView;
 	private MapController mMapController;
-	
-	SharedPreferences pref;
 
-	private String mCreatureId = null;
+	SharedPreferences pref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// get preference
-        pref = PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext());
+		pref = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext());
 
 		// Action bar
 		setTheme(Common.THEME);
 		getSupportActionBar().setIcon(R.drawable.chikorita);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(getString(R.string.map_search));
+		setTitle(getString(R.string.map_national_park));
 
-		// init view
-		setContentView(R.layout.map_view);
+//		// init view
+//		setContentView(R.layout.map_view);
+        setContentView(R.layout.parent_container);
 
-		// Get creature id
-		getFromExtras(savedInstanceState);
+		// Add View
+		RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
+		LayoutInflater li = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		container.addView(li.inflate(R.layout.map_view, null));
+
 		// Initialize map view
 		initMapSpanZoom();
 		// Get province of creature on map
@@ -91,74 +82,71 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		mMapView.invalidate();
 	}
-	
-//	protected void initTabButton() {
-//        /*
-//         * Intent mainIntent = new Intent(context, NewsTabsPagerActivity.class);
-//         * startActivity(mainIntent);
-//         */
-//
-//        resetTabState();
-//
-//        View button = (View) findViewById(R.id.tabHome_button);
-//        button.setOnClickListener(this);
-//        button = (View) findViewById(R.id.tabNews_button);
-//        button.setOnClickListener(this);
-//        button = (View) findViewById(R.id.tabDiscussion_button);
-//        button.setOnClickListener(this);
-//        button = (View) findViewById(R.id.tabsMap_button);
-//        button.setOnClickListener(this);
-//        button = (View) findViewById(R.id.tabNews_button);
-//        button.setOnClickListener(this);
-//    }
 
-//    @Override
-//    public void onClick(View v) {
-//        int id = pref.getInt(Common.TAB_PREF, R.id.tabHome_button);
-//        switch (v.getId()) {
-//        case R.id.tabHome_button:
-//            resetTabState();
-//            if (v.getId() != id) {
-//                Intent mainIntent = new Intent(this,
-//                        KingdomChooseActivity.class);
-//                startActivity(mainIntent);
-//            }
-//            break;
-//        case R.id.tabNews_button:
-//            resetTabState();
-//            if (v.getId() != id) {
-//                Intent mainIntent = new Intent(this,
-//                        NewsTabsPagerActivity.class);
-//                startActivity(mainIntent);
-//            }
-//            break;
-//        case R.id.tabDiscussion_button:
-//            resetTabState();
-//            break;
-//        case R.id.tabsMap_button:
-//            resetTabState();
-//            if (v.getId() != id) {
-//                Intent mainIntent = new Intent(this, MapCreatureActivity.class);
-//                startActivity(mainIntent);
-//            }
-//            break;
-//
-//        default:
-//            break;
-//        }
-//    }
-//    
-//    private void resetTabState() {
-//        int id = pref.getInt(Common.TAB_PREF, R.id.tabHome_button);
-//        LinearLayout tabControl = (LinearLayout) findViewById(R.id.tab_control);
-//        for (int i = 0; i < tabControl.getChildCount(); i++) {
-//            View v = tabControl.getChildAt(i);
-//            if (v.getId() == id)
-//                v.setSelected(true);
-//            else
-//                v.setSelected(false);
-//        }
-//    }
+	protected void initTabButton() {
+
+		resetTabState();
+
+		View button = (View) findViewById(R.id.tabHome_button);
+		button.setOnClickListener(this);
+		button = (View) findViewById(R.id.tabNews_button);
+		button.setOnClickListener(this);
+		button = (View) findViewById(R.id.tabDiscussion_button);
+		button.setOnClickListener(this);
+		button = (View) findViewById(R.id.tabsMap_button);
+		button.setOnClickListener(this);
+		button = (View) findViewById(R.id.tabNews_button);
+		button.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		int id = pref.getInt(Common.TAB_PREF, R.id.tabHome_button);
+		switch (v.getId()) {
+		case R.id.tabHome_button:
+			resetTabState();
+			if (v.getId() != id) {
+				Intent mainIntent = new Intent(this,
+						KingdomChooseActivity.class);
+				startActivity(mainIntent);
+			}
+			break;
+		case R.id.tabNews_button:
+			resetTabState();
+			if (v.getId() != id) {
+				Intent mainIntent = new Intent(this,
+						NewsTabsPagerActivity.class);
+				startActivity(mainIntent);
+			}
+			break;
+		case R.id.tabDiscussion_button:
+			resetTabState();
+			break;
+		case R.id.tabsMap_button:
+			resetTabState();
+			if (v.getId() != id) {
+				Intent mainIntent = new Intent(this,
+						MapNationalParkActivity.class);
+				startActivity(mainIntent);
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private void resetTabState() {
+		int id = pref.getInt(Common.TAB_PREF, R.id.tabHome_button);
+		LinearLayout tabControl = (LinearLayout) findViewById(R.id.tab_control);
+		for (int i = 0; i < tabControl.getChildCount(); i++) {
+			View v = tabControl.getChildAt(i);
+			if (v.getId() == id)
+				v.setSelected(true);
+			else
+				v.setSelected(false);
+		}
+	}
 
 	@Override
 	protected void onStart() {
@@ -171,14 +159,14 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 		super.onStop();
 		mMapView.onStop();
 	}
-//	
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//		int tabPosition = R.id.tabsMap_button;
-//        pref.edit().putInt(Common.TAB_PREF, tabPosition).commit();
-//        resetTabState();
-//	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		int tabPosition = R.id.tabsMap_button;
+		pref.edit().putInt(Common.TAB_PREF, tabPosition).commit();
+		resetTabState();
+	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -240,12 +228,6 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void initMapSpanZoom() {
 
 		mMapView = new PolarisMapView(this, MapConfig.GOOGLE_MAPS_API_KEY);
@@ -253,7 +235,7 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 		mMapView.setOnRegionChangedListenerListener(this);
 		mMapView.setOnAnnotationSelectionChangedListener(this);
 		mMapView.setBuiltInZoomControls(true);
-		mMapView.setSatellite(true);
+		mMapView.setSatellite(false);
 
 		mMapController = mMapView.getController();
 
@@ -272,29 +254,6 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 		mMapController.setZoom(6);
 	}
 
-	private void getFromExtras(Bundle savedInstanceState) {
-		try {
-		    Bundle extras = new Bundle();
-            if(savedInstanceState != null) {
-                extras = savedInstanceState;
-            }
-            else {
-                extras = getIntent().getExtras();
-            }
-			if (extras != null) {
-				mCreatureId = extras.getString(Common.CREATURE_EXTRA);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-	    super.onSaveInstanceState(outState);
-	    outState.putString(Common.CREATURE_EXTRA, mCreatureId);
-	}
-
 	private void getProvince() {
 		HrmService service = new HrmService();
 		service.setCallback(new ProvinceCallback() {
@@ -306,7 +265,7 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 					province = provinceModel.get(i);
 					mAnnotation.add(new Annotation(new GeoPoint(province
 							.getLatitude(), province.getLongitude()), province
-							.getProvince_name()));
+							.getPark_name()));
 				}
 				// Set marker
 				setMarkerOnMap();
@@ -317,7 +276,7 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 
 			}
 		});
-		service.requestGetProvince(mCreatureId);
+		service.requestGetNationalPark();
 	}
 
 	private void setMarkerOnMap() {

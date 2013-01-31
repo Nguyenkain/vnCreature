@@ -135,6 +135,12 @@ public class HrmService {
         return true;
     }
     
+    public boolean requestGetNationalPark() {
+    	GetNationalParkTask task = new GetNationalParkTask();
+        task.execute();
+        return true;
+    }
+    
     //POST TO SERVER
     
     public boolean requestAddUser(FacebookUser fb) {
@@ -378,6 +384,29 @@ public class HrmService {
         protected String doInBackground(String... params) {
             String creatureId = params[0];
             String result = ServiceUtils.getProvince(creatureId);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mProvinceCallback != null) {
+                if (result == "" || result == null) {
+                    mProvinceCallback.onError();
+                } else {
+                    ProvinceModel provinceModel = ServiceUtils
+                            .parseProvinceModelFromJSON(result);
+                    mProvinceCallback.onSuccess(provinceModel);
+                }
+            }
+        }
+    }
+    
+
+    private class GetNationalParkTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String result = ServiceUtils.getNationalPark();
             return result;
         }
 
