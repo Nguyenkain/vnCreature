@@ -5,6 +5,8 @@ public class Province {
     private String creature_id;
     private String province_id;
     private String province_name;
+    private String park_name;
+    private String park_description;
     private String longitude;
     private String latitude;
 
@@ -55,5 +57,21 @@ public class Province {
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
+
+	public void setPark_name(String park_name) {
+		this.park_name = park_name;
+	}
+
+	public String getPark_name() {
+		return park_name;
+	}
+
+	public void setPark_description(String park_description) {
+		this.park_description = park_description;
+	}
+
+	public String getPark_description() {
+		return park_description;
+	}
 
 }

@@ -18,7 +18,8 @@
 	<string name="refresh">Làm mới</string>
 	<string name="search_title">Tra cứu</string>
 	<string name="detail">Chi tiết</string>
-	<string name="map">Phân bố</string>
+	<string name="map_search">Phân bố</string>
+    <string name="map_national_park">Vườn Quốc Gia</string>
 	<string name="filter_group">Lựa chọn</string>
 	<string name="share_social">Chia sẻ từ vnCreatures</string>
     <string name="creature_description">Description</string>
@@ -45,7 +46,6 @@
     <string name="username">Tên đăng nhập</string>
     <string name="password">Mật khẩu</string>
     <string name="facebook_login">Đăng nhập bằng Facebook</string>
-    <string name="annotation_clicked">Annotation \'%1$s\' clicked</string>
     
     <!-- Facebook App -->
     <string name="app_id">427633550638036</string>

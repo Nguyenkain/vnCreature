@@ -39,10 +39,8 @@ public class MapConfig {
     // /////////////////////////////////////////////////////////////
 
     private static final String LOCAL_CONFIG_CLASS_NAME = "com.cyrilmottier.android.polarissample.util.LocalConfig";
-    //private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
-    private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
-    //private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
-    private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
+    private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
+    private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
 
     private static final Class<?> LOCAL_CONFIG_CLASS = getLocalConfig();
 
@@ -98,8 +96,7 @@ public class MapConfig {
     static {
         /*GOOGLE_MAPS_API_KEY = (COMPILATION_TARGET == COMPILATION_TARGET_RELEASE) ? getLocalConfigString(LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME)
                 : getLocalConfigString(LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME);*/
-    	//GOOGLE_MAPS_API_KEY = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
-    	GOOGLE_MAPS_API_KEY = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
+    	GOOGLE_MAPS_API_KEY = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
     }
 
     // /////////////////////////////////////////////////////////////
