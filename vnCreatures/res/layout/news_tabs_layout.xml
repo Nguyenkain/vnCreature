@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <!--
     <TabHost
         android:id="@+id/news_tabhost"
         android:layout_width="fill_parent"
@@ -32,6 +33,12 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
         </LinearLayout>
-    </TabHost>
+    </TabHost>
+    -->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/news_pager"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"/>
 
 </RelativeLayout>

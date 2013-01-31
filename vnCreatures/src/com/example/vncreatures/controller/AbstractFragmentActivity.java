@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,11 +19,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Window;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
+import com.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
-public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
+public abstract class AbstractFragmentActivity extends SlidingFragmentActivity
         implements OnClickListener {
 
     SharedPreferences pref;
@@ -30,6 +35,9 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
 
     @Override
     protected void onCreate(Bundle arg0) {
+        // Request progress
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         super.onCreate(arg0);
 
         // Create indicator bar
@@ -52,6 +60,12 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
         this.tabPosition = indentifyTabPosition();
         pref.edit().putInt(Common.TAB_PREF, this.tabPosition).commit();
         resetTabState();
+
+        // add a dummy view
+        View v = new View(this);
+        setBehindContentView(v);
+        getSlidingMenu().setSlidingEnabled(false);
+        getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 
     }
 
@@ -96,6 +110,7 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
             if (v.getId() != id) {
                 Intent mainIntent = new Intent(this,
                         KingdomChooseActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
             }
             break;
@@ -104,16 +119,23 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
             if (v.getId() != id) {
                 Intent mainIntent = new Intent(this,
                         NewsTabsPagerActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
             }
             break;
         case R.id.tabDiscussion_button:
             resetTabState();
+            if (v.getId() != id) {
+                Intent mainIntent = new Intent(this, LoginActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(mainIntent);
+            }
             break;
         case R.id.tabsMap_button:
             resetTabState();
             if (v.getId() != id) {
                 Intent mainIntent = new Intent(this, MapCreatureActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
             }
             break;
@@ -135,7 +157,7 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
         }
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
+    public static void hideSoftKeyboard(FragmentActivity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity
                 .getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()
@@ -150,7 +172,7 @@ public abstract class AbstractFragmentActivity extends SherlockFragmentActivity
             view.setOnTouchListener(new OnTouchListener() {
 
                 public boolean onTouch(View v, MotionEvent event) {
-                    AbstractActivity
+                    AbstractFragmentActivity
                             .hideSoftKeyboard(AbstractFragmentActivity.this);
                     return false;
                 }

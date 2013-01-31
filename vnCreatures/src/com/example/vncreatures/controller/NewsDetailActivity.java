@@ -48,8 +48,14 @@ public class NewsDetailActivity extends AbstractActivity implements
         this.mView = new NewsDetailView(this, mModel);
         this.mAQuery = mView.getaQueryView();
         super.onCreate(savedInstanceState);
-        getFromExtras();
+        getFromExtras(savedInstanceState);
         initUI();
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(Common.NEWS_EXTRA, mNewsId);
     }
 
     @Override
@@ -57,9 +63,15 @@ public class NewsDetailActivity extends AbstractActivity implements
         return mView;
     }
 
-    private void getFromExtras() {
+    private void getFromExtras(Bundle savedInstanceState) {
         try {
-            Bundle extras = getIntent().getExtras();
+            Bundle extras = new Bundle();
+            if(savedInstanceState != null) {
+                extras = savedInstanceState;
+            }
+            else {
+                extras = getIntent().getExtras();
+            }
             if (extras != null) {
                 mNewsId = extras.getString(Common.NEWS_EXTRA);
             }

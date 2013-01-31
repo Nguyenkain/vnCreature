@@ -20,11 +20,18 @@ public class ServerConfig {
             + "/refactor/public/user/get-news/";
     public static final String NEWS_IMAGE_PATH = ROOT
             + "/webData/forumpic/%s.jpg";
+    public static final String ICON_PATH = ROOT
+            + "/webData/forumpic/icon/%s.png";
 
     // MAP
     public static final String GET_PROVINCE = ROOT
             + "/refactor/public/user/get-province/";
+    
+    //DISCUSSION
+    public static final String ADD_USER = ROOT
+            + "/refactor/public/user/add-post";
 
     public static final String NUM_PER_PAGE = "10";
     public static final int TIMEOUT = 30000; // 30 seconds
+    
 }

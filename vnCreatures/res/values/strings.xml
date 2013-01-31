@@ -49,4 +49,7 @@
     
     <!-- Facebook App -->
     <string name="app_id">427633550638036</string>
+    
+    <!-- Discussion -->
+    <string name="logout">Đăng xuất</string>
 </resources>

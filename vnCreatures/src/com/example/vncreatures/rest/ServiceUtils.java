@@ -18,6 +18,9 @@ import com.example.vncreatures.model.NewsItem;
 import com.example.vncreatures.model.NewsModel;
 import com.example.vncreatures.model.Province;
 import com.example.vncreatures.model.ProvinceModel;
+import com.example.vncreatures.model.discussion.FacebookUser;
+import com.example.vncreatures.model.discussion.User;
+import com.example.vncreatures.model.discussion.FacebookUser.Location;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -396,4 +399,30 @@ public class ServiceUtils {
     }
 
     // END GET FROM JSOn
+    
+    //POST DATA TO SERVER
+    public static String addUser(FacebookUser fb) {
+        String result = "";
+        
+        Gson gson = new Gson();
+        Location location = fb.getLocation();
+        User us = new User(fb.getId(), fb.getUsername(), fb
+                .getName(), fb.getBirthday(), location
+                .getName(), fb.getEmail(), "", fb.getId());
+        String json = gson.toJson(us);
+
+        String request = String.format(ServerConfig.ADD_USER);
+        RestClient client = new RestClient(request);
+        client.addParam("data", json);
+
+        try {
+            client.execute(RestClient.RequestMethod.POST);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
 }

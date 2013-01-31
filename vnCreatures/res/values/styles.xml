@@ -32,10 +32,35 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="ItemList" parent="Match">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="ButtonListView" parent="android:style/Widget.Button">
+        <item name="android:textSize">21sp</item>
+        <item name="android:layout_margin">0dip</item>
+        <item name="android:background">@android:drawable/menuitem_background</item>
+        <item name="android:padding">10dip</item>
+        <item name="android:gravity">left|center_horizontal</item>
+    </style>
+
+    <style name="LinearLayoutRoundCorners">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/linear_layout_selector</item>
+    </style>
+
     <style name="Theme.Styled.NoTitleBar.Fullscreen" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
         <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
+        <!--
+        <item name="android:actionBarTabStyle">@style/MyActionBarTabStyle</item>
+        <item name="actionBarTabStyle">@style/MyActionBarTabStyle</item>
+        -->
     </style>
 
     <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
@@ -44,5 +69,13 @@
         <item name="backgroundSplit">@drawable/bg_striped_split</item>
         <item name="android:backgroundSplit">@drawable/bg_striped_split</item>
     </style>
-    
+
+    <!-- style for the tabs -->
+    <style name="MyActionBarTabStyle" parent="Widget.Sherlock.Light.ActionBar.TabBar">
+        <item name="android:background">@drawable/actionbar_tab_bg</item>
+        <item name="background">@drawable/actionbar_tab_bg</item>
+        <item name="android:paddingLeft">32dp</item>
+        <item name="android:paddingRight">32dp</item>
+    </style>
+
 </resources>

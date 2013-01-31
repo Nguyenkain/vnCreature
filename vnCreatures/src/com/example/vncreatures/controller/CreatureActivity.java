@@ -41,7 +41,13 @@ public class CreatureActivity extends AbstractActivity implements
         super.onCreate(savedInstanceState);
 
         try {
-            Bundle extras = getIntent().getExtras();
+            Bundle extras = new Bundle();
+            if(savedInstanceState != null) {
+                extras = savedInstanceState;
+            }
+            else {
+                extras = getIntent().getExtras();
+            }
             if (extras != null) {
                 mCreatureId = extras.getString(Common.CREATURE_EXTRA);
             }
@@ -49,6 +55,12 @@ public class CreatureActivity extends AbstractActivity implements
         }
 
         getCreatureById();
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(Common.CREATURE_EXTRA, mCreatureId);
     }
 
     private void getImage() {

@@ -1,7 +1,7 @@
 package com.example.vncreatures.controller;
 
+
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
@@ -18,13 +18,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Window;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
-import com.google.android.maps.MapActivity;
+import com.slidingmenu.lib.app.SlidingActivity;
 
 public abstract class AbstractActivity extends SherlockActivity implements
         OnClickListener {
@@ -110,6 +109,7 @@ public abstract class AbstractActivity extends SherlockActivity implements
             if (v.getId() != id) {
                 Intent mainIntent = new Intent(this,
                         KingdomChooseActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
             }
             break;
@@ -118,6 +118,7 @@ public abstract class AbstractActivity extends SherlockActivity implements
             if (v.getId() != id) {
                 Intent mainIntent = new Intent(this,
                         NewsTabsPagerActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
             }
             break;
@@ -125,6 +126,7 @@ public abstract class AbstractActivity extends SherlockActivity implements
             resetTabState();
             if (v.getId() != id) {
                 Intent mainIntent = new Intent(this, LoginActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
             }
             break;
@@ -132,6 +134,7 @@ public abstract class AbstractActivity extends SherlockActivity implements
             resetTabState();
             if (v.getId() != id) {
                 Intent mainIntent = new Intent(this, MapCreatureActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
             }
             break;
@@ -153,7 +156,7 @@ public abstract class AbstractActivity extends SherlockActivity implements
         }
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
+    public static void hideSoftKeyboard(SherlockActivity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity
                 .getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()

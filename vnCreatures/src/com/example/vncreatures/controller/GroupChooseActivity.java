@@ -24,228 +24,239 @@ import com.example.vncreatures.view.GroupChooseView;
 
 public class GroupChooseActivity extends AbstractActivity {
 
-	private GroupChooseModel mModel = new GroupChooseModel();
-	private GroupChooseView mView;
-	private CreatureGroupListModel mCreatureGroupListModel = null;
-	private CreaturesGroupsAdapter mAdapter;
+    private GroupChooseModel mModel = new GroupChooseModel();
+    private GroupChooseView mView;
+    private CreatureGroupListModel mCreatureGroupListModel = null;
+    private CreaturesGroupsAdapter mAdapter;
+    private Bundle mExtras;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-		// Transition
-		overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+        // Transition
+        overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
 
-		mView = new GroupChooseView(this, mModel);
+        mView = new GroupChooseView(this, mModel);
 
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-		// Get extras
-		getFromExtras();
+        // Get extras
+        getFromExtras(savedInstanceState);
 
-		// Init List
-		filterList();
+        // Init List
+        filterList();
 
-		setupUI(findViewById(R.id.layout_parent));
+        setupUI(findViewById(R.id.layout_parent));
 
-	}
+    }
 
-	@Override
-	protected View createView() {
-		return mView;
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState = mExtras;
+    }
 
-	@Override
-	protected void onResume() {
-		// Transition
-		overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
-		super.onResume();
-	}
+    @Override
+    protected View createView() {
+        return mView;
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		setTitle(R.string.filter_group);
-		return super.onCreateOptionsMenu(menu);
-	}
+    @Override
+    protected void onResume() {
+        // Transition
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+        super.onResume();
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			break;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.filter_group);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
-	@Override
-	public void onClick(View v) {
-		super.onClick(v);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
 
-	protected void getFromExtras() {
-		try {
-			Bundle extras = getIntent().getExtras();
-			if (extras != null) {
-				String familyId = extras.getString(Common.FAMILY_EXTRA);
-				String orderId = extras.getString(Common.ORDER_EXTRA);
-				String classId = extras.getString(Common.CLASS_EXTRA);
-				String action = getIntent().getAction();
-				if (action.equalsIgnoreCase(Common.ACTION_CHOOSE_FAMILY))
-					initFamilyList(familyId, classId, orderId);
-				else if (action.equalsIgnoreCase(Common.ACTION_CHOOSE_ORDER))
-					initOrderList(familyId, classId, orderId);
-				else if (action.equalsIgnoreCase(Common.ACTION_CHOOSE_CLASS))
-					initClassList(familyId, classId, orderId);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        default:
+            break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-	protected void initFamilyList(String familyId, String classId,
-			String orderId) {
-		HrmService service = new HrmService();
-		service.setCallback(new GroupCallback() {
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+    }
 
-			@Override
-			public void onSuccess(CreatureGroupListModel groupModel) {
-				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
-						groupModel);
-				mModel.listView.setAdapter(mAdapter);
-				mCreatureGroupListModel = groupModel;
-				mAdapter.setCallback(new Callback() {
+    protected void getFromExtras(Bundle savedInstanceState) {
+        try {
+            if (savedInstanceState != null) {
+                mExtras = savedInstanceState;
+            } else {
+                mExtras = getIntent().getExtras();
+            }
+            if (mExtras != null) {
+                String familyId = mExtras.getString(Common.FAMILY_EXTRA);
+                String orderId = mExtras.getString(Common.ORDER_EXTRA);
+                String classId = mExtras.getString(Common.CLASS_EXTRA);
+                String action = getIntent().getAction();
+                if (action.equalsIgnoreCase(Common.ACTION_CHOOSE_FAMILY))
+                    initFamilyList(familyId, classId, orderId);
+                else if (action.equalsIgnoreCase(Common.ACTION_CHOOSE_ORDER))
+                    initOrderList(familyId, classId, orderId);
+                else if (action.equalsIgnoreCase(Common.ACTION_CHOOSE_CLASS))
+                    initClassList(familyId, classId, orderId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-					@Override
-					public void onClick(CreatureGroup creatureGroup) {
-						Intent intent = new Intent();
-						intent.setAction(Common.ACTION_CHOOSE_FAMILY);
-						intent.putExtra(Common.FAMILY_EXTRA, creatureGroup);
-						setResult(Activity.RESULT_OK, intent);
-						finish();
-					}
-				});
-				setSupportProgressBarIndeterminateVisibility(false);
-			}
+    protected void initFamilyList(String familyId, String classId,
+            String orderId) {
+        HrmService service = new HrmService();
+        service.setCallback(new GroupCallback() {
 
-			@Override
-			public void onError() {
+            @Override
+            public void onSuccess(CreatureGroupListModel groupModel) {
+                mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
+                        groupModel);
+                mModel.listView.setAdapter(mAdapter);
+                mCreatureGroupListModel = groupModel;
+                mAdapter.setCallback(new Callback() {
 
-			}
-		});
-		service.requestGetFamily(pref.getString(Common.KINGDOM, null), orderId,
-				classId);
-		setSupportProgressBarIndeterminateVisibility(true);
-	}
+                    @Override
+                    public void onClick(CreatureGroup creatureGroup) {
+                        Intent intent = new Intent();
+                        intent.setAction(Common.ACTION_CHOOSE_FAMILY);
+                        intent.putExtra(Common.FAMILY_EXTRA, creatureGroup);
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
+                    }
+                });
+                setSupportProgressBarIndeterminateVisibility(false);
+            }
 
-	protected void initOrderList(String familyId, String classId, String orderId) {
-		HrmService service = new HrmService();
-		service.setCallback(new GroupCallback() {
+            @Override
+            public void onError() {
 
-			@Override
-			public void onSuccess(CreatureGroupListModel groupModel) {
-				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
-						groupModel);
-				mModel.listView.setAdapter(mAdapter);
-				mCreatureGroupListModel = groupModel;
-				mAdapter.setCallback(new Callback() {
+            }
+        });
+        service.requestGetFamily(pref.getString(Common.KINGDOM, null), orderId,
+                classId);
+        setSupportProgressBarIndeterminateVisibility(true);
+    }
 
-					@Override
-					public void onClick(CreatureGroup creatureGroup) {
-						Intent intent = new Intent();
-						intent.setAction(Common.ACTION_CHOOSE_ORDER);
-						intent.putExtra(Common.ORDER_EXTRA, creatureGroup);
-						setResult(Activity.RESULT_OK, intent);
-						finish();
-					}
-				});
-				setSupportProgressBarIndeterminateVisibility(false);
-			}
+    protected void initOrderList(String familyId, String classId, String orderId) {
+        HrmService service = new HrmService();
+        service.setCallback(new GroupCallback() {
 
-			@Override
-			public void onError() {
+            @Override
+            public void onSuccess(CreatureGroupListModel groupModel) {
+                mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
+                        groupModel);
+                mModel.listView.setAdapter(mAdapter);
+                mCreatureGroupListModel = groupModel;
+                mAdapter.setCallback(new Callback() {
 
-			}
-		});
-		service.requestGetOrder(pref.getString(Common.KINGDOM, null), familyId,
-				classId);
-		setSupportProgressBarIndeterminateVisibility(true);
-	}
+                    @Override
+                    public void onClick(CreatureGroup creatureGroup) {
+                        Intent intent = new Intent();
+                        intent.setAction(Common.ACTION_CHOOSE_ORDER);
+                        intent.putExtra(Common.ORDER_EXTRA, creatureGroup);
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
+                    }
+                });
+                setSupportProgressBarIndeterminateVisibility(false);
+            }
 
-	protected void initClassList(String familyId, String classId, String orderId) {
-		HrmService service = new HrmService();
-		service.setCallback(new GroupCallback() {
+            @Override
+            public void onError() {
 
-			@Override
-			public void onSuccess(CreatureGroupListModel groupModel) {
-				mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
-						groupModel);
-				mModel.listView.setAdapter(mAdapter);
-				mCreatureGroupListModel = groupModel;
-				mAdapter.setCallback(new Callback() {
+            }
+        });
+        service.requestGetOrder(pref.getString(Common.KINGDOM, null), familyId,
+                classId);
+        setSupportProgressBarIndeterminateVisibility(true);
+    }
 
-					@Override
-					public void onClick(CreatureGroup creatureGroup) {
-						Intent intent = new Intent();
-						intent.setAction(Common.ACTION_CHOOSE_CLASS);
-						intent.putExtra(Common.CLASS_EXTRA, creatureGroup);
-						setResult(Activity.RESULT_OK, intent);
-						finish();
-					}
-				});
-				setSupportProgressBarIndeterminateVisibility(false);
-			}
+    protected void initClassList(String familyId, String classId, String orderId) {
+        HrmService service = new HrmService();
+        service.setCallback(new GroupCallback() {
 
-			@Override
-			public void onError() {
+            @Override
+            public void onSuccess(CreatureGroupListModel groupModel) {
+                mAdapter = new CreaturesGroupsAdapter(GroupChooseActivity.this,
+                        groupModel);
+                mModel.listView.setAdapter(mAdapter);
+                mCreatureGroupListModel = groupModel;
+                mAdapter.setCallback(new Callback() {
 
-			}
-		});
-		service.requestGetClass(pref.getString(Common.KINGDOM, null), orderId,
-				familyId);
-		setSupportProgressBarIndeterminateVisibility(true);
-	}
+                    @Override
+                    public void onClick(CreatureGroup creatureGroup) {
+                        Intent intent = new Intent();
+                        intent.setAction(Common.ACTION_CHOOSE_CLASS);
+                        intent.putExtra(Common.CLASS_EXTRA, creatureGroup);
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
+                    }
+                });
+                setSupportProgressBarIndeterminateVisibility(false);
+            }
 
-	protected void filterList() {
-		mModel.filterEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onError() {
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				CreatureGroupListModel temp = new CreatureGroupListModel();
-				for (int i = 0; i < mCreatureGroupListModel.count(); i++) {
-					CreatureGroup creatureGroup = mCreatureGroupListModel
-							.get(i);
-					if (creatureGroup.getViet().toLowerCase()
-							.contains(s.toString().toLowerCase())
-							|| creatureGroup.getLatin().toLowerCase()
-									.contains(s.toString().toLowerCase())) {
-						temp.add(creatureGroup);
-					}
-				}
-				mAdapter.setCreatureModel(temp);
-				mAdapter.notifyDataSetChanged();
-			}
+            }
+        });
+        service.requestGetClass(pref.getString(Common.KINGDOM, null), orderId,
+                familyId);
+        setSupportProgressBarIndeterminateVisibility(true);
+    }
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+    protected void filterList() {
+        mModel.filterEditText.addTextChangedListener(new TextWatcher() {
 
-			}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                    int count) {
+                CreatureGroupListModel temp = new CreatureGroupListModel();
+                for (int i = 0; i < mCreatureGroupListModel.count(); i++) {
+                    CreatureGroup creatureGroup = mCreatureGroupListModel
+                            .get(i);
+                    if (creatureGroup.getViet().toLowerCase()
+                            .contains(s.toString().toLowerCase())
+                            || creatureGroup.getLatin().toLowerCase()
+                                    .contains(s.toString().toLowerCase())) {
+                        temp.add(creatureGroup);
+                    }
+                }
+                mAdapter.setCreatureModel(temp);
+                mAdapter.notifyDataSetChanged();
+            }
 
-			@Override
-			public void afterTextChanged(Editable s) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
 
-			}
-		});
-	}
+            }
 
-	@Override
-	protected int indentifyTabPosition() {
-		return R.id.tabHome_button;
-	}
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    @Override
+    protected int indentifyTabPosition() {
+        return R.id.tabHome_button;
+    }
 
 }

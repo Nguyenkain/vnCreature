@@ -7,17 +7,29 @@ import com.example.vncreatures.model.CreatureGroupListModel;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.NewsModel;
 import com.example.vncreatures.model.ProvinceModel;
+import com.example.vncreatures.model.discussion.FacebookUser;
 
 public class HrmService {
     private Callback mCallback = null;
     private GroupCallback mGroupCallback = null;
     private NewsCallback mNewsCallback = null;
     private ProvinceCallback mProvinceCallback = null;
+    private PostTaskCallback mPostTaskCallback = null;
 
     public interface Callback {
         public void onGetAllCreaturesDone(final CreatureModel creatureModel);
 
         public void onError();
+    }
+    
+    public interface PostTaskCallback {
+        public void onSuccess(final String result);
+
+        public void onError();
+    }
+    
+    public void setCallback(final PostTaskCallback callback) {
+        mPostTaskCallback = callback;
     }
 
     public void setCallback(final Callback callback) {
@@ -120,6 +132,14 @@ public class HrmService {
     public boolean requestGetProvince(String creatureId) {
         GetProvinceTask task = new GetProvinceTask();
         task.execute(creatureId);
+        return true;
+    }
+    
+    //POST TO SERVER
+    
+    public boolean requestAddUser(FacebookUser fb) {
+        AddUserTask task = new AddUserTask(fb);
+        task.execute();
         return true;
     }
 
@@ -374,5 +394,31 @@ public class HrmService {
             }
         }
     }
+    
+    //POST TO SERVER TASK
+    private class AddUserTask extends AsyncTask<String, Void, String> {
 
+        FacebookUser mUser;
+        
+        public AddUserTask(final FacebookUser fb) {
+            this.mUser = fb;
+        }
+        
+        @Override
+        protected String doInBackground(String... params) {
+            String result = ServiceUtils.addUser(mUser);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mPostTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mPostTaskCallback.onError();
+                } else {
+                    mPostTaskCallback.onSuccess(result);
+                }
+            }
+        }
+    }
 }

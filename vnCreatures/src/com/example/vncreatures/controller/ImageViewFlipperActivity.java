@@ -40,7 +40,13 @@ public class ImageViewFlipperActivity extends AbstractActivity {
 
         ArrayList<String> listDelete = new ArrayList<String>();
         try {
-            Bundle extras = getIntent().getExtras();
+            Bundle extras = new Bundle();
+            if(savedInstanceState != null) {
+                extras = savedInstanceState;
+            }
+            else {
+                extras = getIntent().getExtras();
+            }
             if (extras != null) {
                 mPosition = extras.getInt(Common.CREATURE_URL_IMAGES_POSITION);
                 mCreatureImage = extras
@@ -62,6 +68,13 @@ public class ImageViewFlipperActivity extends AbstractActivity {
         ImagePagerAdapter adapter = new ImagePagerAdapter();
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(mPosition);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Common.CREATURE_URL_IMAGES_POSITION, mPosition);
+        outState.putStringArrayList(Common.CREATURE_URL_IMAGES_LIST, mCreatureImage);
     }
 
     @Override

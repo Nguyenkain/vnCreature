@@ -80,7 +80,7 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 		setContentView(R.layout.map_view);
 
 		// Get creature id
-		getFromExtras();
+		getFromExtras(savedInstanceState);
 		// Initialize map view
 		initMapSpanZoom();
 		// Get province of creature on map
@@ -272,15 +272,27 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 		mMapController.setZoom(6);
 	}
 
-	private void getFromExtras() {
+	private void getFromExtras(Bundle savedInstanceState) {
 		try {
-			Bundle extras = getIntent().getExtras();
+		    Bundle extras = new Bundle();
+            if(savedInstanceState != null) {
+                extras = savedInstanceState;
+            }
+            else {
+                extras = getIntent().getExtras();
+            }
 			if (extras != null) {
 				mCreatureId = extras.getString(Common.CREATURE_EXTRA);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    outState.putString(Common.CREATURE_EXTRA, mCreatureId);
 	}
 
 	private void getProvince() {

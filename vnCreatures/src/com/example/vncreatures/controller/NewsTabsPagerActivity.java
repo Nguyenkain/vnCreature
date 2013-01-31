@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
 import com.example.vncreatures.customItems.TabsAdapter;
@@ -18,87 +20,88 @@ import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.NewsCallback;
 
 public class NewsTabsPagerActivity extends AbstractFragmentActivity {
-	TabHost mTabHost;
-	ViewPager mViewPager;
-	TabsAdapter mTabsAdapter;
-	SharedPreferences pref;
+    ViewPager mViewPager;
+    TabsAdapter mTabsAdapter;
+    SharedPreferences pref;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		//setContentView(R.layout.news_tabs_layout);
+        // setContentView(R.layout.news_tabs_layout);
 
-		// init Tabs
-		initTabs();
+        // init Tabs
+        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        initTabs();
+        
+        if (savedInstanceState != null) {
+            getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+        }
+    }
 
-		if (savedInstanceState != null) {
-			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
-		}
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+    }
 
-	}
-	
-	@Override
-	public void onClick(View v) {
-		super.onClick(v);
-	}
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+    }
 
-	protected void initTabs() {
-		mTabHost = (TabHost) findViewById(R.id.news_tabhost);
-		mTabHost.setup();
+    protected void initTabs() {
 
-		mViewPager = (ViewPager) findViewById(R.id.news_pager);
+        final ActionBar bar = getSupportActionBar();
 
-		mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
+        mViewPager = (ViewPager) findViewById(R.id.news_pager);
 
-		HrmService service = new HrmService();
-		service.setCallback(new NewsCallback() {
+        mTabsAdapter = new TabsAdapter(this, mViewPager);
 
-			@Override
-			public void onGetCatSuccess(CategoryModel catModel) {
-				for (int i = 0; i < catModel.count(); i++) {
-				    setSupportProgressBarIndeterminateVisibility(false);
+        HrmService service = new HrmService();
+        service.setCallback(new NewsCallback() {
 
-					TabSpec tabSpec = mTabHost.newTabSpec(catModel.get(i)
-							.getCatName());
-					tabSpec.setIndicator(catModel.get(i).getCatName(), null);
-					Bundle bundle = new Bundle();
-					bundle.putString(Common.CAT_EXTRA, catModel.get(i).getCatId());
-					mTabsAdapter.addTab(tabSpec, NewsContentActivity.class,
-							bundle);
-				}
-			}
+            @Override
+            public void onGetCatSuccess(CategoryModel catModel) {
+                for (int i = 0; i < catModel.count(); i++) {
+                    setSupportProgressBarIndeterminateVisibility(false);
+                    
+                    final Tab tab = bar.newTab()
+                            .setText(catModel.get(i).getCatName());
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Common.CAT_EXTRA, catModel.get(i)
+                            .getCatId());
+                    mTabsAdapter.addTab(tab, NewsContentActivity.class,
+                            bundle);
+                }
+            }
 
-			@Override
-			public void onError() {
+            @Override
+            public void onError() {
 
-			}
+            }
 
-			@Override
-			public void onGetNewsSuccess(NewsModel newsModel) {
-				// DO NOTHING
-			}
-		});
-		service.requestGetCategory();
-		setSupportProgressBarIndeterminateVisibility(true);
-	}
+            @Override
+            public void onGetNewsSuccess(NewsModel newsModel) {
+                // DO NOTHING
+            }
+        });
+        service.requestGetCategory();
+        setSupportProgressBarIndeterminateVisibility(true);
+    }
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putString("tab", mTabHost.getCurrentTabTag());
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
+    }
 
-	@Override
-	protected View createView() {
-		LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		return li.inflate(R.layout.news_tabs_layout, null);
-	}
+    @Override
+    protected View createView() {
+        LayoutInflater li = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        return li.inflate(R.layout.news_tabs_layout, null);
+    }
 
     @Override
     protected int indentifyTabPosition() {

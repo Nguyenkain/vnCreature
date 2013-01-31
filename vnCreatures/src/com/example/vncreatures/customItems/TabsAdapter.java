@@ -5,109 +5,93 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabWidget;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class TabsAdapter extends FragmentPagerAdapter implements
-		OnTabChangeListener, OnPageChangeListener {
-	private final Context mContext;
-	private final TabHost mTabHost;
-	private final ViewPager mViewPager;
-	private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+        ActionBar.TabListener, OnPageChangeListener {
+    private final Context mContext;
+    private final ActionBar mActionBar;
+    private final ViewPager mViewPager;
+    private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
-	static final class TabInfo {
-		private final String tag;
-		private final Class<?> clss;
-		private final Bundle args;
+    static final class TabInfo {
+        private final Class<?> clss;
+        private final Bundle args;
 
-		TabInfo(String _tag, Class<?> _class, Bundle _args) {
-			tag = _tag;
-			clss = _class;
-			args = _args;
-		}
-	}
+        TabInfo(Class<?> _class, Bundle _args) {
+            clss = _class;
+            args = _args;
+        }
+    }
 
-	static class DummyTabFactory implements TabHost.TabContentFactory {
-		private final Context mContext;
+    public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+        super(activity.getSupportFragmentManager());
+        mContext = activity;
+        mActionBar = activity.getSupportActionBar();
+        mViewPager = pager;
+        mViewPager.setAdapter(this);
+        mViewPager.setOnPageChangeListener(this);
+    }
 
-		public DummyTabFactory(Context context) {
-			mContext = context;
-		}
+    public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
+        TabInfo info = new TabInfo(clss, args);
+        tab.setTag(info);
+        tab.setTabListener(this);
+        mTabs.add(info);
+        mActionBar.addTab(tab);
+        notifyDataSetChanged();
+    }
 
-		@Override
-		public View createTabContent(String tag) {
-			View v = new View(mContext);
-			v.setMinimumWidth(0);
-			v.setMinimumHeight(0);
-			return v;
-		}
-	}
+    public int getCount() {
+        return mTabs.size();
+    }
 
-	public TabsAdapter(FragmentActivity activity, TabHost tabHost,
-			ViewPager pager) {
-		super(activity.getSupportFragmentManager());
-		mContext = activity;
-		mTabHost = tabHost;
-		mViewPager = pager;
-		mTabHost.setOnTabChangedListener(this);
-		mViewPager.setAdapter(this);
-		mViewPager.setOnPageChangeListener(this);
-	}
+    public SherlockFragment getItem(int position) {
+        TabInfo info = mTabs.get(position);
+        return (SherlockFragment) Fragment.instantiate(mContext,
+                info.clss.getName(), info.args);
+    }
 
-	public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args) {
-		tabSpec.setContent(new DummyTabFactory(mContext));
-		String tag = tabSpec.getTag();
+    public void onPageScrolled(int position, float positionOffset,
+            int positionOffsetPixels) {
+    }
 
-		TabInfo info = new TabInfo(tag, clss, args);
-		mTabs.add(info);
-		mTabHost.addTab(tabSpec);
-		notifyDataSetChanged();
-	}
+    public void onPageSelected(int position) {
+        mActionBar.setSelectedNavigationItem(position);
+    }
 
-	@Override
-	public int getCount() {
-		return mTabs.size();
-	}
+    public void onPageScrollStateChanged(int state) {
+    }
 
-	@Override
-	public Fragment getItem(int position) {
-		TabInfo info = mTabs.get(position);
-		return Fragment.instantiate(mContext, info.clss.getName(), info.args);
-	}
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        mViewPager.setCurrentItem(tab.getPosition());
+        // Log.v(TAG, "clicked");
+        Object tag = tab.getTag();
+        for (int i = 0; i < mTabs.size(); i++) {
+            if (mTabs.get(i) == tag) {
+                mViewPager.setCurrentItem(i);
+            }
+        }
+    }
 
-	@Override
-	public void onTabChanged(String tabId) {
-		int position = mTabHost.getCurrentTab();
-		mViewPager.setCurrentItem(position);
-	}
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    }
 
-	@Override
-	public void onPageScrolled(int position, float positionOffset,
-			int positionOffsetPixels) {
-	}
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    }
 
-	@Override
-	public void onPageSelected(int position) {
-		// Unfortunately when TabHost changes the current tab, it kindly
-		// also takes care of putting focus on it when not in touch mode.
-		// The jerk.
-		// This hack tries to prevent this from pulling focus out of our
-		// ViewPager.
-		TabWidget widget = mTabHost.getTabWidget();
-		int oldFocusability = widget.getDescendantFocusability();
-		widget.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-		mTabHost.setCurrentTab(position);
-		widget.setDescendantFocusability(oldFocusability);
-	}
+    public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
+    }
 
-	@Override
-	public void onPageScrollStateChanged(int state) {
-	}
+    public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
+    }
 }

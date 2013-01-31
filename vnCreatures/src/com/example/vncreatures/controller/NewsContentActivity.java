@@ -31,7 +31,16 @@ public class NewsContentActivity extends SherlockFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSherlockActivity().getSupportActionBar().setTitle(R.string.news);
-        mCatId = this.getArguments().getString(Common.CAT_EXTRA);
+        
+        //GET FROM EXTRAS
+        Bundle extras = new Bundle();
+        if(savedInstanceState != null) {
+            extras = savedInstanceState;
+        }
+        else {
+            extras = this.getArguments();
+        }
+        mCatId = extras.getString(Common.CAT_EXTRA);
         mView = new NewsListView(getActivity());
         initNewsList();
 
@@ -42,6 +51,12 @@ public class NewsContentActivity extends SherlockFragment {
                 initNewsList();
             }
         });
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(Common.CAT_EXTRA, mCatId);
     }
 
     private void dataListInit() {
@@ -64,7 +79,7 @@ public class NewsContentActivity extends SherlockFragment {
                 .setOnScrollListener(new EndlessScrollListener.EndlessScrollNewsListener(
                         mAdapter, mCatId));
     }
-
+    
     private void initNewsList() {
         HrmService service = new HrmService();
         service.setCallback(new NewsCallback() {
