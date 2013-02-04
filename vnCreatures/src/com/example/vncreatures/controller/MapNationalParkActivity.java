@@ -16,7 +16,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockMapActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -59,15 +58,16 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 		// Action bar
 		setTheme(Common.THEME);
 		getSupportActionBar().setIcon(R.drawable.chikorita);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		setTitle(getString(R.string.map_national_park));
 
-//		// init view
-//		setContentView(R.layout.map_view);
-        setContentView(R.layout.parent_container);
+		// // init view
+		// setContentView(R.layout.map_view);
+		setContentView(R.layout.parent_container);
 
 		// Add View
 		RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
+		initTabButton();
 		LayoutInflater li = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		container.addView(li.inflate(R.layout.map_view, null));
@@ -121,6 +121,11 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 			break;
 		case R.id.tabDiscussion_button:
 			resetTabState();
+			if (v.getId() != id) {
+				Intent mainIntent = new Intent(this, LoginActivity.class);
+				mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(mainIntent);
+			}
 			break;
 		case R.id.tabsMap_button:
 			resetTabState();
@@ -213,6 +218,11 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 		if (MapConfig.INFO_LOGS_ENABLED) {
 			Log.i(LOG_TAG, "onAnnotationClicked");
 		}
+		Intent intent = new Intent(Common.ACTION_EXTRA, null,
+				this, NationalParkActivity.class);
+		intent.putExtra(Common.PARK_EXTRA, String.valueOf(position + 1));
+		startActivityForResult(intent,
+                Common.CREATURE_ACTIVITY_REQUEST_CODE);
 	}
 
 	@Override
@@ -266,7 +276,7 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 					mAnnotation.add(new Annotation(new GeoPoint(province
 							.getLatitude(), province.getLongitude()), province
 							.getPark_name()));
-				}
+			                                                                                                                                                                                                                      	}
 				// Set marker
 				setMarkerOnMap();
 			}

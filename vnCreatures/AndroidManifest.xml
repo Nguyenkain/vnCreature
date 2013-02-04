@@ -71,6 +71,10 @@
         </activity>
         <activity android:name=".controller.MapNationalParkActivity" >
         </activity>
+        <activity android:name=".controller.NationalParkActivity" >
+        </activity>
+        <activity android:name=".controller.LoginActivity" >
+        </activity>
         <activity android:name=".controller.DiscussionActivity" >
         </activity>
 
