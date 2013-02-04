@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
+import com.example.vncreatures.rest.ServiceUtils;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Response;

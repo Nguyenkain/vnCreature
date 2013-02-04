@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:padding="5dp" >
+
+    <RelativeLayout style="@style/Fill" >
+
+        <RelativeLayout
+            android:id="@+id/info_layout"
+            style="@style/Wrap" >
+
+            <LinearLayout
+                android:id="@+id/info_layout"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:paddingTop="10dp" >
+
+                <!--
+                     <ImageView
+                    android:id="@+id/avatar_imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_launcher" />
+                -->
+
+                <com.facebook.widget.ProfilePictureView
+                    android:id="@+id/profile_pic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    facebook:preset_size="small" />
+
+                <TextView
+                    android:id="@+id/username_textView"
+                    style="@style/Wrap"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/username"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Normal_Match"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/space_between_item"
+                android:layout_toRightOf="@+id/info_layout"
+                android:orientation="vertical" >
+
+                <com.example.vncreatures.customItems.RelativeLayoutCustom
+                    android:id="@+id/content_layout"
+                    style="@style/Fill"
+                    android:layout_marginTop="@dimen/space_between_item"
+                    android:background="@drawable/button_border"
+                    android:paddingBottom="0dp" >
+
+                    <TextView
+                        android:id="@+id/post_content_TextView"
+                        style="@style/Wrap"
+                        android:text="@string/loading"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/post_time_textView"
+                        style="@style/Wrap"
+                        android:layout_below="@+id/post_content_TextView"
+                        android:layout_marginTop="@dimen/space_between_item"
+                        android:text="@string/app_id"
+                        android:textColor="@color/grey"
+                        android:textSize="9dp" />
+                </com.example.vncreatures.customItems.RelativeLayoutCustom>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        xmlns:facebook="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/thread_layout"
+        style="@style/MatchWidth"
+        android:background="@android:color/transparent"
+        android:padding="10dp" >
+
+        <com.example.vncreatures.customItems.RelativeLayoutCustom
+            android:layout_width="fill_parent"
+            android:layout_height="180dp"
+            android:background="@drawable/button_border"
+            android:paddingBottom="10dp" >
+
+            <RelativeLayout
+                android:id="@+id/info_layout"
+                style="@style/Wrap" >
+
+                <com.facebook.widget.ProfilePictureView
+                    android:id="@+id/avatarProfile_pic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    facebook:preset_size="small" />
+
+                <!--
+                     <ImageView
+                    android:id="@+id/avatar_imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_launcher" />
+                -->
+
+                <LinearLayout
+                    style="@style/Normal_Match"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/space_between_item"
+                    android:layout_toRightOf="@+id/avatarProfile_pic"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/username_textView"
+                        style="@style/Wrap"
+                        android:text="@string/username"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/topic_title_TextView"
+                        style="@style/Wrap"
+                        android:text="@string/loading"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/time_textView"
+                        style="@style/Wrap"
+                        android:text="@string/title"
+                        android:textColor="@color/grey"
+                        android:textSize="9dp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/content_layout"
+                style="@style/Normal_Match"
+                android:layout_below="@+id/info_layout"
+                android:layout_marginTop="@dimen/space_between_item" >
+
+                <TextView
+                    android:id="@+id/content_textView"
+                    style="@style/Wrap"
+                    android:layout_below="@+id/topic_title_TextView"
+                    android:layout_marginTop="@dimen/space_between_item"
+                    android:text="@string/app_id" />
+            </RelativeLayout>
+        </com.example.vncreatures.customItems.RelativeLayoutCustom>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/post_layout"
+        style="@style/Fill"
+        android:layout_above="@+id/postText_layout"
+        android:layout_below="@+id/thread_layout" >
+
+        <ListView
+            android:id="@+id/post_listView"
+            style="@style/Wrap"
+            android:cacheColorHint="#00000000"
+            android:clickable="false"
+            android:divider="#19000000"
+            android:dividerHeight="0dp"
+            android:fadingEdge="none"
+            android:fastScrollEnabled="false"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false"
+            android:smoothScrollbar="true" >
+        </ListView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/postText_layout"
+        style="@style/Wrap"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/post_button"
+            style="@style/Wrap"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:text="@string/post" />
+
+        <EditText
+            android:id="@+id/post_editText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/post_button"
+            android:inputType="text"
+            android:singleLine="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -19,6 +19,8 @@ import com.example.vncreatures.model.NewsModel;
 import com.example.vncreatures.model.Province;
 import com.example.vncreatures.model.ProvinceModel;
 import com.example.vncreatures.model.discussion.FacebookUser;
+import com.example.vncreatures.model.discussion.Thread;
+import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.model.discussion.User;
 import com.example.vncreatures.model.discussion.FacebookUser.Location;
 import com.google.gson.Gson;
@@ -193,6 +195,39 @@ public class ServiceUtils {
         }
 
         return provinceModel;
+    }
+
+    // Parse Thread Model
+    public static ThreadModel parseThreadModelFromJSON(String data) {
+        if (data == null || data == "")
+            return null;
+
+        ThreadModel threadModel = new ThreadModel();
+
+        if (data.indexOf('{') > -1)
+            data = data.substring(data.indexOf('{'));
+        if (data.lastIndexOf('}') > -1)
+            data = data.substring(0, data.lastIndexOf('}') + 1);
+
+        try {
+            JsonElement json = new JsonParser().parse(data);
+            JsonObject jsonObject = json.getAsJsonObject();
+            JsonArray array = jsonObject.getAsJsonArray("data");
+            if (array.isJsonNull())
+                return null;
+            Iterator<?> iterator = array.iterator();
+            while (iterator.hasNext()) {
+                JsonElement json2 = (JsonElement) iterator.next();
+                Gson gson = new Gson();
+                Thread thread = gson.fromJson(json2, Thread.class);
+                threadModel.add(thread);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return threadModel;
     }
 
     // END PARSE FROM JSON
@@ -397,7 +432,7 @@ public class ServiceUtils {
 
         return result;
     }
-    
+
     public static String getNationalPark(String id) {
         String result = "";
 
@@ -416,18 +451,130 @@ public class ServiceUtils {
         return result;
     }
 
-    // END GET FROM JSOn
+    public static String getAllThread() {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_THREAD);
+        RestClient client = new RestClient(request);
+
+        try {
+            client.execute(RestClient.RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+    public static String getProfilePictureUrl(String profileId) {
+        String result = "";
+
+        String request = String.format(ServerConfig.PROFILE_PICTURE, profileId);
+        RestClient client = new RestClient(request);
+
+        try {
+            client.execute(RestClient.RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
     
-    //POST DATA TO SERVER
+    public static String getThreadById(String threadId) {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_THREAD);
+        RestClient client = new RestClient(request);
+        client.addParam("id", threadId);
+
+        try {
+            client.execute(RestClient.RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+    
+    public static String getPostByThreadId(String threadId) {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_POST);
+        RestClient client = new RestClient(request);
+        client.addParam("id", threadId);
+
+        try {
+            client.execute(RestClient.RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+    // END GET FROM JSOn
+
+    // POST DATA TO SERVER
     public static String addUser(FacebookUser fb) {
         String result = "";
-        
+
         Gson gson = new Gson();
         Location location = fb.getLocation();
-        User us = new User(fb.getId(), fb.getUsername(), fb
-                .getName(), fb.getBirthday(), location
-                .getName(), fb.getEmail(), "", fb.getId());
+        User us = new User(fb.getId(), fb.getUsername(), fb.getName(),
+                fb.getBirthday(), location.getName(), fb.getEmail(), "",
+                fb.getId());
         String json = gson.toJson(us);
+
+        String request = String.format(ServerConfig.ADD_USER);
+        RestClient client = new RestClient(request);
+        client.addParam("data", json);
+
+        try {
+            client.execute(RestClient.RequestMethod.POST);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+    
+    public static String addThread(Thread thread) {
+        String result = "";
+
+        Gson gson = new Gson();
+        String json = gson.toJson(thread);
+
+        String request = String.format(ServerConfig.ADD_THREAD);
+        RestClient client = new RestClient(request);
+        client.addParam("data", json);
+
+        try {
+            client.execute(RestClient.RequestMethod.POST);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+    
+    public static String addPost(Thread thread) {
+        String result = "";
+
+        Gson gson = new Gson();
+        String json = gson.toJson(thread);
 
         String request = String.format(ServerConfig.ADD_USER);
         RestClient client = new RestClient(request);

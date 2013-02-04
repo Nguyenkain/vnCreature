@@ -31,13 +31,12 @@ public class NewsContentActivity extends SherlockFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSherlockActivity().getSupportActionBar().setTitle(R.string.news);
-        
-        //GET FROM EXTRAS
+
+        // GET FROM EXTRAS
         Bundle extras = new Bundle();
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             extras = savedInstanceState;
-        }
-        else {
+        } else {
             extras = this.getArguments();
         }
         mCatId = extras.getString(Common.CAT_EXTRA);
@@ -79,18 +78,20 @@ public class NewsContentActivity extends SherlockFragment {
                 .setOnScrollListener(new EndlessScrollListener.EndlessScrollNewsListener(
                         mAdapter, mCatId));
     }
-    
+
     private void initNewsList() {
         HrmService service = new HrmService();
         service.setCallback(new NewsCallback() {
 
             @Override
             public void onGetNewsSuccess(NewsModel newsModel) {
-                getSherlockActivity().setSupportProgressBarIndeterminateVisibility(
-                        false);
-                mNewsModel = newsModel;
-                dataListInit();
-                mView.mNewsListView.onRefreshComplete();
+                if (newsModel != null && newsModel.count() > 0) {
+                    getSherlockActivity()
+                            .setSupportProgressBarIndeterminateVisibility(false);
+                    mNewsModel = newsModel;
+                    dataListInit();
+                    mView.mNewsListView.onRefreshComplete();
+                }
             }
 
             @Override
@@ -104,7 +105,8 @@ public class NewsContentActivity extends SherlockFragment {
             }
         });
         service.requestGetNews(mCatId, "1");
-        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
+        getSherlockActivity()
+                .setSupportProgressBarIndeterminateVisibility(true);
     }
 
     @Override

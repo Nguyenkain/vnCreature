@@ -31,7 +31,14 @@ public class ServerConfig {
 
 	// DISCUSSION
 	public static final String ADD_USER = ROOT
-			+ "/refactor/public/user/add-post";
+			+ "/refactor/public/user/add-user";
+	public static final String PROFILE_PICTURE = "http://graph.facebook.com/%s/picture.";
+	public static final String GET_THREAD = ROOT
+            + "/refactor/public/user/get-thread";
+	public static final String ADD_THREAD = ROOT
+            + "/refactor/public/user/add-thread";
+	public static final String GET_POST = ROOT
+            + "/refactor/public/user/get-post";
 
 	public static final String NUM_PER_PAGE = "10";
 	public static final int TIMEOUT = 30000; // 30 seconds

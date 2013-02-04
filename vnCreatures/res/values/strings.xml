@@ -52,4 +52,8 @@
     
     <!-- Discussion -->
     <string name="logout">Đăng xuất</string>
+    <string name="post">Gửi</string>
+    <string name="num_post">Có %s bài trả lời</string>
+    <string name="content">Nội dung</string>
+    <string name="discuss">Thảo Luận</string>
 </resources>

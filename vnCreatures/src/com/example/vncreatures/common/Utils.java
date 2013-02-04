@@ -63,8 +63,9 @@ public class Utils {
         }
         return false;
     }
-    
-    public static String convertStreamToString(InputStream is) throws IOException {
+
+    public static String convertStreamToString(InputStream is)
+            throws IOException {
         String text = null;
         try {
             int size = is.available();
@@ -72,8 +73,18 @@ public class Utils {
             is.read(buffer);
             is.close();
             text = new String(buffer);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return text;
+    }
+
+    public static Bitmap getUserPic(String userID) {
+        String imageURL;
+        Bitmap bitmap = null;
+        imageURL = "http://graph.facebook.com/" + userID
+                + "/picture?type=small";
+        bitmap = downloadBitmap(imageURL);
+        return bitmap;
     }
 
     public static Bitmap downloadBitmap(String url) {

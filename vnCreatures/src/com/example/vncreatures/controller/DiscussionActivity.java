@@ -1,10 +1,10 @@
 package com.example.vncreatures.controller;
 
-import java.util.TooManyListenersException;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,23 +22,22 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
+import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.slidingmenu.lib.SlidingMenu;
 
 public class DiscussionActivity extends AbstractFragmentActivity implements
         OnClickListener {
 
-    private LoginViewModel mModel = new LoginViewModel();
-    private LoginView mView;
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
+    private UiLifecycleHelper uiHelper;
+    private Fragment mContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         // Transition
         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
-
-        mView = new LoginView(this, mModel);
 
         super.onCreate(savedInstanceState);
 
@@ -57,6 +56,15 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
             getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         }
 
+        // set the Above View Fragment
+        if (savedInstanceState != null)
+            mContent = getSupportFragmentManager().getFragment(
+                    savedInstanceState, "mContent");
+        if (mContent == null)
+            mContent = new ThreadFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, mContent).commit();
+
         // set the Behind View Fragment
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.menu_frame, new AccountControlFragment())
@@ -71,6 +79,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         sm.setFadeDegree(0.25f);
 
         // init session
+        uiHelper = new UiLifecycleHelper(this, statusCallback);
         Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
         Session session = Session.getActiveSession();
@@ -83,7 +92,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
                 startActivity(mainIntent);
             }
         }
-        updateView();
+        // updateView();
     }
 
     @Override
@@ -91,7 +100,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         LayoutInflater li = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        return li.inflate(R.layout.profile_layout, null);
+        return li.inflate(R.layout.discussion_layout, null);
     }
 
     @Override
@@ -99,22 +108,31 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         // Transition
         overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
         super.onResume();
+        uiHelper.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        uiHelper.onPause();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(R.string.login);
+        setTitle(R.string.discuss);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            toggle();
-            break;
-
+     
         default:
             break;
         }
@@ -126,26 +144,6 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         super.onClick(v);
     }
 
-    private void updateView() {
-        Session session = Session.getActiveSession();
-        final AQuery aQuery = new AQuery(this);
-        if (session.isOpened()) {
-            Request.executeMeRequestAsync(session, new GraphUserCallback() {
-
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        aQuery.id(R.id.username_textView).text(
-                                user.getUsername());
-                        aQuery.id(R.id.avatar_imageView).image(
-                                "http://graph.facebook.com/" + user.getId()
-                                        + "/picture.");
-                    }
-                }
-            });
-        }
-    }
-
     @Override
     protected int indentifyTabPosition() {
         return R.id.tabDiscussion_button;
@@ -155,34 +153,32 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         @Override
         public void call(Session session, SessionState state,
                 Exception exception) {
-            updateView();
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Session.getActiveSession().addCallback(statusCallback);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Session.getActiveSession().removeCallback(statusCallback);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Session.getActiveSession().onActivityResult(this, requestCode,
-                resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Session session = Session.getActiveSession();
-        Session.saveSession(session, outState);
+        uiHelper.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "mContent", mContent);
+    }
+
+    public void switchContent(final Fragment fragment) {
+        mContent = fragment;
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment).commit();
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            public void run() {
+                getSlidingMenu().showContent();
+            }
+        }, 50);
     }
 
 }

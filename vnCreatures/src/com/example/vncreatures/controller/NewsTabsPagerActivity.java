@@ -33,9 +33,10 @@ public class NewsTabsPagerActivity extends AbstractFragmentActivity {
         // init Tabs
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         initTabs();
-        
+
         if (savedInstanceState != null) {
-            getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+            getSupportActionBar().setSelectedNavigationItem(
+                    savedInstanceState.getInt("tab", 0));
         }
     }
 
@@ -63,16 +64,18 @@ public class NewsTabsPagerActivity extends AbstractFragmentActivity {
 
             @Override
             public void onGetCatSuccess(CategoryModel catModel) {
-                for (int i = 0; i < catModel.count(); i++) {
-                    setSupportProgressBarIndeterminateVisibility(false);
-                    
-                    final Tab tab = bar.newTab()
-                            .setText(catModel.get(i).getCatName());
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Common.CAT_EXTRA, catModel.get(i)
-                            .getCatId());
-                    mTabsAdapter.addTab(tab, NewsContentActivity.class,
-                            bundle);
+                if (catModel != null && catModel.count() > 0) {
+                    for (int i = 0; i < catModel.count(); i++) {
+                        setSupportProgressBarIndeterminateVisibility(false);
+
+                        final Tab tab = bar.newTab().setText(
+                                catModel.get(i).getCatName());
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Common.CAT_EXTRA, catModel.get(i)
+                                .getCatId());
+                        mTabsAdapter.addTab(tab, NewsContentActivity.class,
+                                bundle);
+                    }
                 }
             }
 
@@ -93,7 +96,8 @@ public class NewsTabsPagerActivity extends AbstractFragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
+        outState.putInt("tab", getSupportActionBar()
+                .getSelectedNavigationIndex());
     }
 
     @Override

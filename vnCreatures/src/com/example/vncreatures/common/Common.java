@@ -26,6 +26,9 @@ public class Common {
 	
 	public static final String KINGDOM_PREF = "KingdomPrefs";
 	public static final String TAB_PREF = "tabPrefs";
+	
+	public static final String USER_ID = "userid";
+	public static final String THREAD_ID = "threadid";
 
 	public enum CREATURE {
 		animal("1"), plant("2"), insect("3");

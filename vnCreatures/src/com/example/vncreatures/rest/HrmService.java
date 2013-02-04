@@ -1,6 +1,8 @@
 package com.example.vncreatures.rest;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.ImageView;
 
 import com.example.vncreatures.model.CategoryModel;
 import com.example.vncreatures.model.CreatureGroupListModel;
@@ -8,6 +10,8 @@ import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.NewsModel;
 import com.example.vncreatures.model.ProvinceModel;
 import com.example.vncreatures.model.discussion.FacebookUser;
+import com.example.vncreatures.model.discussion.Thread;
+import com.example.vncreatures.model.discussion.ThreadModel;
 
 public class HrmService {
     private Callback mCallback = null;
@@ -15,21 +19,32 @@ public class HrmService {
     private NewsCallback mNewsCallback = null;
     private ProvinceCallback mProvinceCallback = null;
     private PostTaskCallback mPostTaskCallback = null;
+    private ThreadTaskCallback mThreadTaskCallback = null;
 
     public interface Callback {
         public void onGetAllCreaturesDone(final CreatureModel creatureModel);
 
         public void onError();
     }
-    
+
     public interface PostTaskCallback {
         public void onSuccess(final String result);
 
         public void onError();
     }
-    
+
     public void setCallback(final PostTaskCallback callback) {
         mPostTaskCallback = callback;
+    }
+
+    public interface ThreadTaskCallback {
+        public void onSuccess(final ThreadModel threadModel);
+
+        public void onError();
+    }
+
+    public void setCallback(final ThreadTaskCallback callback) {
+        mThreadTaskCallback = callback;
     }
 
     public void setCallback(final Callback callback) {
@@ -134,17 +149,48 @@ public class HrmService {
         task.execute(creatureId);
         return true;
     }
-    
+
     public boolean requestGetNationalPark(String nationParkId) {
-    	GetNationalParkTask task = new GetNationalParkTask();
+        GetNationalParkTask task = new GetNationalParkTask();
         task.execute(nationParkId);
         return true;
     }
-    
-    //POST TO SERVER
-    
+
+    public boolean requestGetAllThread() {
+        GetThreadTask task = new GetThreadTask();
+        task.execute("");
+        return true;
+    }
+
+    public boolean requestGetThreadById(String threadId) {
+        GetThreadTask task = new GetThreadTask();
+        task.execute(threadId);
+        return true;
+    }
+
+    public boolean requestGetPostByThreadId(String threadId) {
+        GetPostTask task = new GetPostTask();
+        task.execute(threadId);
+        return true;
+    }
+
+    public boolean requestGetPictureProfile(Context context, ImageView imv,
+            String profileId) {
+        GetUrlProfilePic task = new GetUrlProfilePic(context, imv);
+        task.execute(profileId);
+        return true;
+    }
+
+    // POST TO SERVER
+
     public boolean requestAddUser(FacebookUser fb) {
         AddUserTask task = new AddUserTask(fb);
+        task.execute();
+        return true;
+    }
+    
+    public boolean requestAddThread(Thread thread) {
+        AddThreadTask task = new AddThreadTask(thread);
         task.execute();
         return true;
     }
@@ -257,13 +303,25 @@ public class HrmService {
     // Get Order Task
     private class GetOrderTask extends AsyncTask<String, Void, String> {
 
+        private volatile boolean running = true;
+
         @Override
         protected String doInBackground(String... params) {
-            String familyId = params[0];
-            String classId = params[1];
-            String kingdomId = params[2];
-            String result = ServiceUtils.getOrder(familyId, classId, kingdomId);
-            return result;
+            while (running) {
+                String familyId = params[0];
+                String classId = params[1];
+                String kingdomId = params[2];
+                String result = ServiceUtils.getOrder(familyId, classId,
+                        kingdomId);
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
         }
 
         @Override
@@ -310,16 +368,27 @@ public class HrmService {
     // Get Category Task
     private class GetCategoryTask extends AsyncTask<String, Void, String> {
 
+        private volatile boolean running = true;
+
         @Override
         protected String doInBackground(String... params) {
-            String result = ServiceUtils.getCategory();
-            return result;
+            while (running) {
+                String result = ServiceUtils.getCategory();
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
         }
 
         @Override
         protected void onPostExecute(String result) {
             if (mNewsCallback != null) {
-                if (result == "") {
+                if (result == "" || result == null) {
                     mNewsCallback.onError();
                 } else {
                     CategoryModel catModel = ServiceUtils
@@ -331,14 +400,26 @@ public class HrmService {
     }
 
     // Get News Task
-    private class GetNewsTask extends AsyncTask<String, Void, String> {
+    public class GetNewsTask extends AsyncTask<String, Void, String> {
+
+        private volatile boolean running = true;
 
         @Override
         protected String doInBackground(String... params) {
-            String catId = params[0];
-            String page = params[1];
-            String result = ServiceUtils.getNews(catId, page);
-            return result;
+            while (running) {
+                String catId = params[0];
+                String page = params[1];
+                String result = ServiceUtils.getNews(catId, page);
+                return result;
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
         }
 
         @Override
@@ -400,13 +481,12 @@ public class HrmService {
             }
         }
     }
-    
 
     private class GetNationalParkTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
-        	String nationalParkId = params[0];
+            String nationalParkId = params[0];
             String result = ServiceUtils.getNationalPark(nationalParkId);
             return result;
         }
@@ -424,19 +504,189 @@ public class HrmService {
             }
         }
     }
-    
-    //POST TO SERVER TASK
+
+    public class GetThreadTask extends AsyncTask<String, Void, String> {
+
+        private volatile boolean running = true;
+
+        @Override
+        protected String doInBackground(String... params) {
+            while (running) {
+
+                String result = null;
+                if (!params[0].equalsIgnoreCase("")) {
+                    String id = params[0];
+                    result = ServiceUtils.getThreadById(id);
+                } else {
+                    result = ServiceUtils.getAllThread();
+                }
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mThreadTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mThreadTaskCallback.onError();
+                } else {
+                    ThreadModel threadModel = ServiceUtils
+                            .parseThreadModelFromJSON(result);
+                    mThreadTaskCallback.onSuccess(threadModel);
+                }
+            }
+        }
+    }
+
+    public class GetPostTask extends AsyncTask<String, Void, String> {
+
+        private volatile boolean running = true;
+
+        @Override
+        protected String doInBackground(String... params) {
+            while (running) {
+                String id = params[0];
+                String result = ServiceUtils.getPostByThreadId(id);
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mThreadTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mThreadTaskCallback.onError();
+                } else {
+                    ThreadModel threadModel = ServiceUtils
+                            .parseThreadModelFromJSON(result);
+                    mThreadTaskCallback.onSuccess(threadModel);
+                }
+            }
+        }
+    }
+
+    public class GetUrlProfilePic extends AsyncTask<String, Void, String> {
+
+        private volatile boolean running = true;
+        private Context mContext = null;
+        private ImageView mImageView = null;
+        
+        
+
+        public GetUrlProfilePic(Context mContext, ImageView mImageView) {
+            super();
+            this.mContext = mContext;
+            this.mImageView = mImageView;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            while (running) {
+                String id = params[0];
+                String result = ServiceUtils.getProfilePictureUrl(id);
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mThreadTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mThreadTaskCallback.onError();
+                } else {
+                    ThreadModel threadModel = ServiceUtils
+                            .parseThreadModelFromJSON(result);
+                    mThreadTaskCallback.onSuccess(threadModel);
+                }
+            }
+        }
+    }
+
+    // POST TO SERVER TASK
     private class AddUserTask extends AsyncTask<String, Void, String> {
 
         FacebookUser mUser;
-        
+
         public AddUserTask(final FacebookUser fb) {
             this.mUser = fb;
         }
-        
+
         @Override
         protected String doInBackground(String... params) {
             String result = ServiceUtils.addUser(mUser);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mPostTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mPostTaskCallback.onError();
+                } else {
+                    mPostTaskCallback.onSuccess(result);
+                }
+            }
+        }
+    }
+    
+    private class AddThreadTask extends AsyncTask<String, Void, String> {
+
+        Thread mThread = null;
+
+        public AddThreadTask(final Thread thread) {
+            this.mThread = thread;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String result = ServiceUtils.addThread(mThread);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mPostTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mPostTaskCallback.onError();
+                } else {
+                    mPostTaskCallback.onSuccess(result);
+                }
+            }
+        }
+    }
+    
+    private class AddPostTask extends AsyncTask<String, Void, String> {
+
+        Thread mThread = null;
+
+        public AddPostTask(final Thread thread) {
+            this.mThread = thread;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String result = ServiceUtils.addThread(mThread);
             return result;
         }
 
