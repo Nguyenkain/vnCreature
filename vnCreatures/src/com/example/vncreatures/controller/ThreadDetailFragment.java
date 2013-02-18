@@ -6,8 +6,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
@@ -20,21 +25,34 @@ import com.example.vncreatures.customItems.PostListAdapter;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.rest.HrmService;
+import com.example.vncreatures.rest.HrmService.PostTaskCallback;
 import com.example.vncreatures.rest.HrmService.ThreadTaskCallback;
 import com.facebook.widget.ProfilePictureView;
+import com.markupartist.android.widget.PullToRefreshListView;
+import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
+import com.mobsandgeeks.saripaar.Rule;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.Validator.ValidationListener;
+import com.mobsandgeeks.saripaar.annotation.Required;
 
-public class ThreadDetailFragment extends SherlockFragment {
+public class ThreadDetailFragment extends SherlockFragment implements
+        ValidationListener {
     AQuery aQuery;
+    Validator validator;
     private String mThreadId = null;
-    private ProfilePictureView mProfilePic = null;
+    private ListView mListView = null;
     SharedPreferences pref;
+
+    @Required(order = 1, message = Common.CONTENT_MESSAGE)
+    private EditText mPostContent = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.thread_detail_layout, null);
-        aQuery = new AQuery(view);
+
         setHasOptionsMenu(true);
+
         // get preference
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (savedInstanceState != null) {
@@ -45,8 +63,32 @@ public class ThreadDetailFragment extends SherlockFragment {
             }
         }
         mThreadId = pref.getString(Common.THREAD_ID, null);
-        mProfilePic = (ProfilePictureView) view
-                .findViewById(R.id.avatarProfile_pic);
+
+        // init ListView
+        mListView = (ListView) view
+                .findViewById(R.id.post_listView);
+        View threadDetail = inflater.inflate(
+                R.layout.thread_detail_footer_header, null);
+        mListView.addHeaderView(threadDetail);
+
+        // init UI
+        aQuery = new AQuery(threadDetail);
+        mPostContent = (EditText) view.findViewById(R.id.post_editText);
+
+        // init validator
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+
+        // Event
+        Button button = (Button) view.findViewById(R.id.post_button);
+        button.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                validator.validateAsync();
+            }
+        });
+
         initData();
         return view;
     }
@@ -58,7 +100,7 @@ public class ThreadDetailFragment extends SherlockFragment {
         if (userid != null) {
             outState.putString(Common.USER_ID, userid);
         }
-        if(mThreadId != null) {
+        if (mThreadId != null) {
             outState.putString(Common.THREAD_ID, mThreadId);
         }
     }
@@ -80,7 +122,12 @@ public class ThreadDetailFragment extends SherlockFragment {
                                 thread.getThread_created_time());
                         aQuery.id(R.id.content_textView).text(
                                 thread.getThread_content());
-                        mProfilePic.setProfileId(thread.getUser_avatar());
+                        String url = "http://graph.facebook.com/"
+                                + thread.getUser_avatar()
+                                + "/picture?type=small";
+                        aQuery.id(R.id.avatar_imageView).image(url, true, true,
+                                0, R.drawable.no_thumb, null,
+                                AQuery.FADE_IN_NETWORK);
                     }
                 }
             }
@@ -99,16 +146,18 @@ public class ThreadDetailFragment extends SherlockFragment {
     }
 
     private void initCommentData() {
-        final ListView listView = aQuery.id(R.id.post_listView).getListView();
         HrmService service = new HrmService();
+        ThreadModel model = new ThreadModel();
+        final PostListAdapter adapter = new PostListAdapter(getActivity(),
+                model);
+        mListView.setAdapter(adapter);
         service.setCallback(new ThreadTaskCallback() {
 
             @Override
             public void onSuccess(ThreadModel threadModel) {
                 if (threadModel != null) {
-                    PostListAdapter adapter = new PostListAdapter(
-                            getActivity(), threadModel);
-                    listView.setAdapter(adapter);
+                    adapter.setModel(threadModel);
+                    adapter.notifyDataSetChanged();
                     getSherlockActivity()
                             .setSupportProgressBarIndeterminateVisibility(false);
                 }
@@ -120,6 +169,34 @@ public class ThreadDetailFragment extends SherlockFragment {
             }
         });
         service.requestGetPostByThreadId(mThreadId);
+    }
+
+    private void postNewComment() {
+        String content = mPostContent.getText().toString();
+        String userid = pref.getString(Common.USER_ID, null);
+        Thread thread = new Thread();
+        thread.setPost_content(content);
+        thread.setUser_id(userid);
+        thread.setThread_id(mThreadId);
+        if (userid != null) {
+            HrmService service = new HrmService();
+            service.requestAddPost(thread);
+            service.setCallback(new PostTaskCallback() {
+
+                @Override
+                public void onSuccess(String result) {
+                    mPostContent.setText("");
+                    getSherlockActivity()
+                            .setSupportProgressBarIndeterminateVisibility(true);
+                    initCommentData();
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -136,6 +213,7 @@ public class ThreadDetailFragment extends SherlockFragment {
         Fragment frag = null;
         switch (item.getItemId()) {
         case R.id.menu_item_refresh:
+            initData();
             break;
         case android.R.id.home:
             frag = new ThreadFragment();
@@ -158,5 +236,31 @@ public class ThreadDetailFragment extends SherlockFragment {
             DiscussionActivity dca = (DiscussionActivity) getActivity();
             dca.switchContent(fragment);
         }
+    }
+
+    @Override
+    public void preValidation() {
+    }
+
+    @Override
+    public void onSuccess() {
+        postNewComment();
+    }
+
+    @Override
+    public void onFailure(View failedView, Rule<?> failedRule) {
+        String message = failedRule.getFailureMessage();
+
+        if (failedView instanceof EditText) {
+            failedView.requestFocus();
+            ((EditText) failedView).setError(message);
+        } else {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onValidationCancelled() {
+
     }
 }

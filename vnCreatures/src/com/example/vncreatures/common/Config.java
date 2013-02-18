@@ -38,7 +38,7 @@ public class Config {
 	//
 	// /////////////////////////////////////////////////////////////
 
-	private static final String LOCAL_CONFIG_CLASS_NAME = "com.cyrilmottier.android.polarissample.util.LocalConfig";
+	private static final String LOCAL_CONFIG_CLASS_NAME = "com.example.vncreatures.common.Config";
 	private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
 	private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
 

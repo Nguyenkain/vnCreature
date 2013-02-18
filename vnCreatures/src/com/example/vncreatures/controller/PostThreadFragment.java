@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
@@ -18,11 +21,26 @@ import com.example.vncreatures.common.Common;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.PostTaskCallback;
+import com.mobsandgeeks.saripaar.Rule;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.Validator.ValidationListener;
+import com.mobsandgeeks.saripaar.annotation.Required;
+import com.mobsandgeeks.saripaar.annotation.TextRule;
 
-public class PostThreadFragment extends SherlockFragment {
+public class PostThreadFragment extends SherlockFragment implements
+        ValidationListener {
 
     AQuery aQuery;
     SharedPreferences pref;
+    Validator validator;
+
+    @Required(order = 1, message = Common.TITLE_MESSAGE)
+    @TextRule(order = 4, minLength = 8, message = Common.MINLENGTH_MESSAGE)
+    private EditText mTitleEditText = null;
+
+    @Required(order = 2, message = Common.CONTENT_MESSAGE)
+    @TextRule(order = 3, minLength = 8, message = Common.MINLENGTH_MESSAGE)
+    private EditText mContentEditText = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,6 +48,14 @@ public class PostThreadFragment extends SherlockFragment {
         View view = inflater.inflate(R.layout.post_new_thread_layout, null);
         aQuery = new AQuery(view);
         setHasOptionsMenu(true);
+
+        // init UI
+        mTitleEditText = aQuery.id(R.id.title_editText).getEditText();
+        mContentEditText = aQuery.id(R.id.content_editText).getEditText();
+
+        // init validator
+        validator = new Validator(this);
+        validator.setValidationListener(this);
 
         // get preference
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -65,7 +91,7 @@ public class PostThreadFragment extends SherlockFragment {
         Fragment frag = null;
         switch (item.getItemId()) {
         case R.id.menu_item_accept:
-            postNewThread();
+            validator.validateAsync();
             break;
         case R.id.menu_item_cancel:
             frag = new ThreadFragment();
@@ -83,8 +109,8 @@ public class PostThreadFragment extends SherlockFragment {
     }
 
     private void postNewThread() {
-        String title = aQuery.id(R.id.title_editText).getText().toString();
-        String content = aQuery.id(R.id.content_editText).getText().toString();
+        String title = mTitleEditText.getText().toString();
+        String content = mContentEditText.getText().toString();
         String userid = pref.getString(Common.USER_ID, null);
         Thread thread = new Thread();
         thread.setThread_title(title);
@@ -118,5 +144,32 @@ public class PostThreadFragment extends SherlockFragment {
             DiscussionActivity dca = (DiscussionActivity) getActivity();
             dca.switchContent(fragment);
         }
+    }
+
+    @Override
+    public void preValidation() {
+
+    }
+
+    @Override
+    public void onSuccess() {
+        postNewThread();
+    }
+
+    @Override
+    public void onFailure(View failedView, Rule<?> failedRule) {
+        String message = failedRule.getFailureMessage();
+
+        if (failedView instanceof EditText) {
+            failedView.requestFocus();
+            ((EditText) failedView).setError(message);
+        } else {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onValidationCancelled() {
+
     }
 }

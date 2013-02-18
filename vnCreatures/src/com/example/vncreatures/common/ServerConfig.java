@@ -31,12 +31,14 @@ public class ServerConfig {
 
 	// DISCUSSION
 	public static final String ADD_USER = ROOT
-			+ "/refactor/public/user/add-user";
+			+ "/refactor/public/user/set-user";
 	public static final String PROFILE_PICTURE = "http://graph.facebook.com/%s/picture.";
 	public static final String GET_THREAD = ROOT
             + "/refactor/public/user/get-thread";
 	public static final String ADD_THREAD = ROOT
-            + "/refactor/public/user/add-thread";
+            + "/refactor/public/user/set-thread";
+	public static final String ADD_POST = ROOT
+            + "/refactor/public/user/set-post";
 	public static final String GET_POST = ROOT
             + "/refactor/public/user/get-post";
 

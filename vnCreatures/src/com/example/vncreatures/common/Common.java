@@ -3,33 +3,38 @@ package com.example.vncreatures.common;
 import com.example.vncreatures.R;
 
 public class Common {
-	public static int THEME = R.style.Theme_Styled_NoTitleBar_Fullscreen;
+	public static final int THEME = R.style.Theme_Styled_NoTitleBar_Fullscreen;
 	
-	public static String CREATURE_EXTRA = "creatureId";
-	public static String ACTION_EXTRA = "view detail";
-	public static String CAT_EXTRA = "categoryId";
-	public static String NEWS_EXTRA = "newsId";
-	public static String PARK_EXTRA = "parkId";
-	public static String ACTION_CHOOSE_FAMILY = "choose family";
-	public static String ACTION_CHOOSE_CLASS = "choose class";
-	public static String ACTION_CHOOSE_ORDER = "choose order";
+	public static final String CREATURE_EXTRA = "creatureId";
+	public static final String ACTION_EXTRA = "view detail";
+	public static final String CAT_EXTRA = "categoryId";
+	public static final String NEWS_EXTRA = "newsId";
+	public static final String PARK_EXTRA = "parkId";
+	public static final String ACTION_CHOOSE_FAMILY = "choose family";
+	public static final String ACTION_CHOOSE_CLASS = "choose class";
+	public static final String ACTION_CHOOSE_ORDER = "choose order";
 
-	public static String FAMILY_EXTRA = "familyId";
-	public static String ORDER_EXTRA = "orderId";
-	public static String CLASS_EXTRA = "classId";
+	public static final String FAMILY_EXTRA = "familyId";
+	public static final String ORDER_EXTRA = "orderId";
+	public static final String CLASS_EXTRA = "classId";
 
-	public static String KINGDOM = "kingdom";
+	public static final String KINGDOM = "kingdom";
 
-	public static int CREATURE_ACTIVITY_REQUEST_CODE = 0;
-	public static String CREATURE_URL_IMAGES_EXTRA = "urlImages";
-	public static String CREATURE_URL_IMAGES_LIST = "urlImagesList";
-	public static String CREATURE_URL_IMAGES_POSITION = "urlImagesPosition";
+	public static final int CREATURE_ACTIVITY_REQUEST_CODE = 0;
+	public static final String CREATURE_URL_IMAGES_EXTRA = "urlImages";
+	public static final String CREATURE_URL_IMAGES_LIST = "urlImagesList";
+	public static final String CREATURE_URL_IMAGES_POSITION = "urlImagesPosition";
 	
 	public static final String KINGDOM_PREF = "KingdomPrefs";
 	public static final String TAB_PREF = "tabPrefs";
 	
 	public static final String USER_ID = "userid";
 	public static final String THREAD_ID = "threadid";
+	
+	//Validation message
+	public static final String TITLE_MESSAGE = "Tiêu đề không được để trống";
+	public static final String CONTENT_MESSAGE = "Nội dung không được để trống";
+	public static final String MINLENGTH_MESSAGE = "Nội dung không được ít hơn 8 ký tự";
 
 	public enum CREATURE {
 		animal("1"), plant("2"), insect("3");
