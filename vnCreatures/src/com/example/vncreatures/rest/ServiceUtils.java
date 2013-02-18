@@ -384,7 +384,7 @@ public class ServiceUtils {
         RestClient client = new RestClient(request);
         client.addParam("category", catId);
         client.addParam("page", page);
-        client.addParam("recordperpage", ServerConfig.NUM_PER_PAGE);
+        client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
 
         try {
             client.execute(RestClient.RequestMethod.GET);
@@ -576,7 +576,7 @@ public class ServiceUtils {
         Gson gson = new Gson();
         String json = gson.toJson(thread);
 
-        String request = String.format(ServerConfig.ADD_USER);
+        String request = String.format(ServerConfig.ADD_POST);
         RestClient client = new RestClient(request);
         client.addParam("data", json);
 

@@ -71,10 +71,14 @@ public class PostListAdapter extends BaseAdapter {
         if (convertView == null) {
             mLayoutInflater = LayoutInflater.from(mContext);
             convertView = mLayoutInflater.inflate(R.layout.post_item, null);
-            holder.mProfilePicture = (ProfilePictureView) convertView.findViewById(R.id.profile_pic);
-            holder.mContent = (TextView) convertView.findViewById(R.id.post_content_TextView);
-            holder.mTime = (TextView) convertView.findViewById(R.id.post_time_textView);
-            holder.mUsername = (TextView) convertView.findViewById(R.id.username_textView);
+            holder.mProfilePic = (ImageView) convertView.findViewById(R.id.avatar_imageView);
+            holder.progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar1);
+            holder.mContent = (TextView) convertView
+                    .findViewById(R.id.post_content_TextView);
+            holder.mTime = (TextView) convertView
+                    .findViewById(R.id.post_time_textView);
+            holder.mUsername = (TextView) convertView
+                    .findViewById(R.id.username_textView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -84,12 +88,16 @@ public class PostListAdapter extends BaseAdapter {
         aQuery.id(holder.mContent).text(thread.getPost_content());
         aQuery.id(holder.mUsername).text(thread.getName());
         aQuery.id(holder.mTime).text(thread.getPost_time_created());
-        holder.mProfilePicture.setProfileId(thread.getUser_avatar());
+        String url = "http://graph.facebook.com/" + thread.getUser_avatar()
+                + "/picture?type=small";
+        aQuery.id(holder.mProfilePic).image(url, true, true, 0, R.drawable.no_thumb, null,
+                AQuery.FADE_IN_NETWORK).progress(holder.progressBar);
         return convertView;
     }
 
     static class ViewHolder {
-        ProfilePictureView mProfilePicture;
+        ImageView mProfilePic;
+        ProgressBar progressBar;
         TextView mUsername;
         TextView mTime;
         TextView mContent;

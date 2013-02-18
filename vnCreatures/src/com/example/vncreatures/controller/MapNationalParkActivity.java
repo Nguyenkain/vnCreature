@@ -279,6 +279,7 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 			}
 		});
 		service.requestGetNationalPark("");
+		setSupportProgressBarIndeterminateVisibility(true);
 	}
 
 	private void setMarkerOnMap() {
@@ -292,5 +293,6 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 			annotation.setMarker(altMarker);
 		}
 		mMapView.setAnnotations(mAnnotation, R.drawable.map_pin_holed_blue);
+		setSupportProgressBarIndeterminateVisibility(false);
 	}
 }

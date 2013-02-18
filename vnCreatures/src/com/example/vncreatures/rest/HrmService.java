@@ -194,6 +194,12 @@ public class HrmService {
         task.execute();
         return true;
     }
+    
+    public boolean requestAddPost(Thread thread) {
+        AddPostTask task = new AddPostTask(thread);
+        task.execute();
+        return true;
+    }
 
     // END REQUEST
 
@@ -686,7 +692,7 @@ public class HrmService {
 
         @Override
         protected String doInBackground(String... params) {
-            String result = ServiceUtils.addThread(mThread);
+            String result = ServiceUtils.addPost(mThread);
             return result;
         }
 

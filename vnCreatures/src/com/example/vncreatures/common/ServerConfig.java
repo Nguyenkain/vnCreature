@@ -37,6 +37,8 @@ public class ServerConfig {
             + "/refactor/public/user/get-thread";
 	public static final String ADD_THREAD = ROOT
             + "/refactor/public/user/set-thread";
+	public static final String ADD_POST = ROOT
+            + "/refactor/public/user/set-post";
 	public static final String GET_POST = ROOT
             + "/refactor/public/user/get-post";
 

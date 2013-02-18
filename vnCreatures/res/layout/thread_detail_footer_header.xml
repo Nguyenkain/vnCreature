@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        xmlns:facebook="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/thread_layout"
+        style="@style/MatchWidth"
+        android:background="@android:color/transparent"
+        android:padding="10dp" >
+
+        <com.example.vncreatures.customItems.RelativeLayoutCustom
+            style="@style/MatchWidth"
+            android:background="@drawable/button_border"
+            android:paddingBottom="10dp" >
+
+            <RelativeLayout
+                android:id="@+id/info_layout"
+                style="@style/Wrap" >
+
+                <ImageView
+                    android:id="@+id/avatar_imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    android:src="@drawable/ic_launcher" />
+
+                <LinearLayout
+                    style="@style/Normal_Match"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/space_between_item"
+                    android:layout_toRightOf="@+id/avatar_imageView"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/username_textView"
+                        style="@style/Wrap"
+                        android:text="@string/username"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/topic_title_TextView"
+                        style="@style/Wrap"
+                        android:text="@string/loading"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/time_textView"
+                        style="@style/Wrap"
+                        android:text="@string/title"
+                        android:textColor="@color/grey"
+                        android:textSize="9dp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/content_layout"
+                style="@style/Normal_Match"
+                android:layout_below="@+id/info_layout"
+                android:layout_marginTop="@dimen/space_between_item" >
+
+                <TextView
+                    android:id="@+id/content_textView"
+                    style="@style/Wrap"
+                    android:layout_below="@+id/topic_title_TextView"
+                    android:layout_marginTop="@dimen/space_between_item"
+                    android:text="@string/app_id" />
+            </RelativeLayout>
+        </com.example.vncreatures.customItems.RelativeLayoutCustom>
+    </RelativeLayout>
+
+</LinearLayout>
