@@ -9,11 +9,6 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="5dp"
-            android:background="#808080" />
-
         <LinearLayout
             android:id="@+id/nameDescriptionPlace"
             android:layout_width="fill_parent"

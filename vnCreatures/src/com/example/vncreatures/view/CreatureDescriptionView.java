@@ -44,12 +44,14 @@ public class CreatureDescriptionView extends AbstractView {
 	public void setContent(Creature creature) {
 		mCreatureDescriptionViewModel.vietName.setText(creature.getVName());
 		mCreatureDescriptionViewModel.latinName.setText(creature.getLatin());
-		
+
 		// mCreatureDescriptionViewModel.getCreatureDesWebview().setBackgroundColor(0x00000000);
 		mCreatureDescriptionViewModel.creatureDesWebview.getSettings()
 				.setSupportZoom(false);
 		mCreatureDescriptionViewModel.creatureDesWebview.getSettings()
 				.setDefaultTextEncodingName("utf-8");
+		mCreatureDescriptionViewModel.creatureDesWebview.getSettings()
+				.setDefaultFontSize(18);
 		mCreatureDescriptionViewModel.creatureDesWebview.loadDataWithBaseURL(
 				null, creature.getDescription(), "text/html", "utf-8", null);
 

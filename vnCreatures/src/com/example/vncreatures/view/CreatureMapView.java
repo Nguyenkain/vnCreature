@@ -20,6 +20,7 @@ public class CreatureMapView extends AbstractView {
 		LayoutInflater li = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		li.inflate(R.layout.map_view, this);
+		mMapViewModel = model;
 		initUI();
 	}
 
