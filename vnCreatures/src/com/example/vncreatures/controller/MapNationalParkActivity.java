@@ -28,10 +28,12 @@ import com.cyrilmottier.polaris.PolarisMapView.OnRegionChangedListener;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
 import com.example.vncreatures.common.MapConfig;
+import com.example.vncreatures.model.CreatureMapViewModel;
 import com.example.vncreatures.model.Province;
 import com.example.vncreatures.model.ProvinceModel;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.ProvinceCallback;
+import com.example.vncreatures.view.CreatureMapView;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 
@@ -39,9 +41,13 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 		OnRegionChangedListener, OnAnnotationSelectionChangedListener,
 		OnClickListener {
 
+	private static double LATITUDE = 21.03333;
+	private static double LONGITUDE = 105.85000;
 	private static final String LOG_TAG = "MainActivity";
 	private final ArrayList<Annotation> mAnnotation = new ArrayList<Annotation>();
 
+	private CreatureMapView mCreatureMapView = null;
+	private CreatureMapViewModel mCreatureMapViewModel = new CreatureMapViewModel();
 	private PolarisMapView mMapView;
 	private MapController mMapController;
 
@@ -62,23 +68,20 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 		setTitle(getString(R.string.map_national_park));
 
 		// // init view
-		// setContentView(R.layout.map_view);
 		setContentView(R.layout.parent_container);
-
+		
 		// Add View
+		mCreatureMapView = new CreatureMapView(this, mCreatureMapViewModel);
 		RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
 		initTabButton();
-		LayoutInflater li = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		container.addView(li.inflate(R.layout.map_view, null));
+		container.addView(mCreatureMapView);
 
 		// Initialize map view
 		initMapSpanZoom();
 		// Get province of creature on map
 		getProvince();
 
-		final FrameLayout mapViewContainer = (FrameLayout) findViewById(R.id.map_view_container);
-		mapViewContainer.addView(mMapView, new FrameLayout.LayoutParams(
+		mCreatureMapViewModel.mapViewContainer.addView(mMapView, new FrameLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		mMapView.invalidate();
 	}
@@ -167,6 +170,7 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 
 	@Override
 	protected void onResume() {
+		overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
 		super.onResume();
 		int tabPosition = R.id.tabsMap_button;
 		pref.edit().putInt(Common.TAB_PREF, tabPosition).commit();
@@ -218,11 +222,10 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 		if (MapConfig.INFO_LOGS_ENABLED) {
 			Log.i(LOG_TAG, "onAnnotationClicked");
 		}
-		Intent intent = new Intent(Common.ACTION_EXTRA, null,
-				this, NationalParkActivity.class);
+		Intent intent = new Intent(Common.ACTION_EXTRA, null, this,
+				NationalParkActivity.class);
 		intent.putExtra(Common.PARK_EXTRA, String.valueOf(position + 1));
-		startActivityForResult(intent,
-                Common.CREATURE_ACTIVITY_REQUEST_CODE);
+		startActivityForResult(intent, Common.CREATURE_ACTIVITY_REQUEST_CODE);
 	}
 
 	@Override
@@ -245,23 +248,13 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 		mMapView.setOnRegionChangedListenerListener(this);
 		mMapView.setOnAnnotationSelectionChangedListener(this);
 		mMapView.setBuiltInZoomControls(true);
-		mMapView.setSatellite(false);
+		mMapView.setSatellite(true);
 
 		mMapController = mMapView.getController();
 
-		String coordinates[] = { "23.37582", "109.459099", "8.574163",
-				"102.140503" };
-		double maxlat = Double.parseDouble(coordinates[0]);
-		double maxlng = Double.parseDouble(coordinates[1]);
-		double minlat = Double.parseDouble(coordinates[2]);
-		double minlng = Double.parseDouble(coordinates[3]);
-
-		GeoPoint p = new GeoPoint((int) ((maxlat + minlat) / 2 * 1E6),
-				(int) ((maxlng + minlng) / 2 * 1E6));
+		GeoPoint p = new GeoPoint((int) (LATITUDE * 1E6),(int) (LONGITUDE * 1E6));
 		mMapController.animateTo(p);
-		mMapController.zoomToSpan((int) ((maxlat - minlat) * 1E6),
-				(int) ((maxlng - minlng) * 1E6));
-		mMapController.setZoom(6);
+		mMapController.setZoom(8);
 	}
 
 	private void getProvince() {
@@ -276,7 +269,7 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 					mAnnotation.add(new Annotation(new GeoPoint(province
 							.getLatitude(), province.getLongitude()), province
 							.getPark_name()));
-			                                                                                                                                                                                                                      	}
+				}
 				// Set marker
 				setMarkerOnMap();
 			}
