@@ -109,6 +109,13 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 		super.onStop();
 		mMapView.onStop();
 	}
+	
+	@Override
+    protected void onResume() {
+        // Transition
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+        super.onResume();
+    }
 
 	@Override
 	protected boolean isRouteDisplayed() {

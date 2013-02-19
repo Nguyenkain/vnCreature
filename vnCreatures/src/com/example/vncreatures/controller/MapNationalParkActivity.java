@@ -170,6 +170,7 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 
 	@Override
 	protected void onResume() {
+		overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
 		super.onResume();
 		int tabPosition = R.id.tabsMap_button;
 		pref.edit().putInt(Common.TAB_PREF, tabPosition).commit();
