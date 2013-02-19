@@ -8,13 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -27,9 +29,6 @@ import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.PostTaskCallback;
 import com.example.vncreatures.rest.HrmService.ThreadTaskCallback;
-import com.facebook.widget.ProfilePictureView;
-import com.markupartist.android.widget.PullToRefreshListView;
-import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 import com.mobsandgeeks.saripaar.Rule;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.Validator.ValidationListener;
@@ -39,8 +38,11 @@ public class ThreadDetailFragment extends SherlockFragment implements
         ValidationListener {
     AQuery aQuery;
     Validator validator;
+    ActionMode mMode;
+    
     private String mThreadId = null;
     private ListView mListView = null;
+    
     SharedPreferences pref;
 
     @Required(order = 1, message = Common.CONTENT_MESSAGE)
@@ -78,7 +80,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
         // init validator
         validator = new Validator(this);
         validator.setValidationListener(this);
-
+        
         // Event
         Button button = (Button) view.findViewById(R.id.post_button);
         button.setOnClickListener(new OnClickListener() {
@@ -169,6 +171,15 @@ public class ThreadDetailFragment extends SherlockFragment implements
             }
         });
         service.requestGetPostByThreadId(mThreadId);
+        
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+                    long arg3) {
+                mMode = getSherlockActivity().startActionMode(new AnActionModeOfEpicProportions());
+            }
+        });
     }
 
     private void postNewComment() {
@@ -262,5 +273,55 @@ public class ThreadDetailFragment extends SherlockFragment implements
     @Override
     public void onValidationCancelled() {
 
+    }
+    
+    private final class AnActionModeOfEpicProportions implements ActionMode.Callback {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            //Used to put dark icons on light action bar
+            boolean isLight = Common.THEME == R.style.Theme_Sherlock_Light;
+
+            menu.add("Save")
+                .setIcon(isLight ? R.drawable.ic_compose_inverse : R.drawable.ic_compose)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            menu.add("Search")
+                .setIcon(isLight ? R.drawable.ic_search_inverse : R.drawable.ic_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            menu.add("Refresh")
+                .setIcon(isLight ? R.drawable.ic_refresh_inverse : R.drawable.ic_refresh)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            menu.add("Save")
+                .setIcon(isLight ? R.drawable.ic_compose_inverse : R.drawable.ic_compose)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            menu.add("Search")
+                .setIcon(isLight ? R.drawable.ic_search_inverse : R.drawable.ic_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            menu.add("Refresh")
+                .setIcon(isLight ? R.drawable.ic_refresh_inverse : R.drawable.ic_refresh)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            Toast.makeText(getSherlockActivity(), "Got click: " + item, Toast.LENGTH_SHORT).show();
+            mode.finish();
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+        }
     }
 }

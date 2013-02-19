@@ -2,11 +2,6 @@ package com.example.vncreatures.rest;
 
 import java.util.Iterator;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.example.vncreatures.common.Common;
 import com.example.vncreatures.common.ServerConfig;
 import com.example.vncreatures.model.Category;
 import com.example.vncreatures.model.CategoryModel;
@@ -19,10 +14,10 @@ import com.example.vncreatures.model.NewsModel;
 import com.example.vncreatures.model.Province;
 import com.example.vncreatures.model.ProvinceModel;
 import com.example.vncreatures.model.discussion.FacebookUser;
+import com.example.vncreatures.model.discussion.FacebookUser.Location;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.model.discussion.User;
-import com.example.vncreatures.model.discussion.FacebookUser.Location;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -243,7 +238,7 @@ public class ServiceUtils {
         client.addParam("kingdom", kingdom);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -267,7 +262,7 @@ public class ServiceUtils {
         client.addParam("kingdom", kingdom);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -284,7 +279,7 @@ public class ServiceUtils {
         client.addParam("id", id);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,7 +301,7 @@ public class ServiceUtils {
         client.addParam("order", orderId);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -328,7 +323,7 @@ public class ServiceUtils {
         client.addParam("family", familyId);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -350,7 +345,7 @@ public class ServiceUtils {
         client.addParam("family", familyId);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -367,7 +362,7 @@ public class ServiceUtils {
         RestClient client = new RestClient(request);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -387,7 +382,7 @@ public class ServiceUtils {
         client.addParam("recordPerPage", ServerConfig.NUM_PER_PAGE);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -405,7 +400,7 @@ public class ServiceUtils {
         client.addParam("id", newsId);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -423,7 +418,7 @@ public class ServiceUtils {
         client.addParam("id", id);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -441,7 +436,7 @@ public class ServiceUtils {
         client.addParam("id", id);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -458,7 +453,7 @@ public class ServiceUtils {
         RestClient client = new RestClient(request);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -475,7 +470,7 @@ public class ServiceUtils {
         RestClient client = new RestClient(request);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -493,7 +488,7 @@ public class ServiceUtils {
         client.addParam("id", threadId);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -511,7 +506,7 @@ public class ServiceUtils {
         client.addParam("id", threadId);
 
         try {
-            client.execute(RestClient.RequestMethod.GET);
+            client.execute(RequestMethod.GET);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -539,7 +534,7 @@ public class ServiceUtils {
         client.addParam("data", json);
 
         try {
-            client.execute(RestClient.RequestMethod.POST);
+            client.execute(RequestMethod.POST);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -560,7 +555,7 @@ public class ServiceUtils {
         client.addParam("data", json);
 
         try {
-            client.execute(RestClient.RequestMethod.POST);
+            client.execute(RequestMethod.POST);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -581,7 +576,7 @@ public class ServiceUtils {
         client.addParam("data", json);
 
         try {
-            client.execute(RestClient.RequestMethod.POST);
+            client.execute(RequestMethod.POST);
             result = client.getResponse();
         } catch (Exception e) {
             e.printStackTrace();
