@@ -92,7 +92,9 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
                 startActivity(mainIntent);
             }
         }
+        
         // updateView();
+        setupUI(findViewById(R.id.layout_parent));
     }
 
     @Override

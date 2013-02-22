@@ -75,6 +75,9 @@ public class NationalParkActivity extends AbstractActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setTitle(R.string.national_park_information);
+		getSupportMenuInflater().inflate(
+                R.menu.detail_menu, menu);
+        menu.removeItem(R.id.menu_item_map);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -84,6 +87,9 @@ public class NationalParkActivity extends AbstractActivity {
 		case android.R.id.home:
 			finish();
 			break;
+		case R.id.menu_item_refresh:
+            initUI();
+            break;
 
 		default:
 			break;

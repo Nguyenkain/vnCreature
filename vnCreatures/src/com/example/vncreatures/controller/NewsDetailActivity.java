@@ -51,7 +51,7 @@ public class NewsDetailActivity extends AbstractActivity implements
         getFromExtras(savedInstanceState);
         initUI();
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -66,10 +66,9 @@ public class NewsDetailActivity extends AbstractActivity implements
     private void getFromExtras(Bundle savedInstanceState) {
         try {
             Bundle extras = new Bundle();
-            if(savedInstanceState != null) {
+            if (savedInstanceState != null) {
                 extras = savedInstanceState;
-            }
-            else {
+            } else {
                 extras = getIntent().getExtras();
             }
             if (extras != null) {
@@ -84,7 +83,11 @@ public class NewsDetailActivity extends AbstractActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.news);
+        // Inflate menu
+        getSupportMenuInflater().inflate(R.menu.detail_menu, menu);
+        menu.removeItem(R.id.menu_item_map);
         return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -92,6 +95,9 @@ public class NewsDetailActivity extends AbstractActivity implements
         switch (item.getItemId()) {
         case android.R.id.home:
             finish();
+            break;
+        case R.id.menu_item_refresh:
+            initUI();
             break;
 
         default:
@@ -169,8 +175,8 @@ public class NewsDetailActivity extends AbstractActivity implements
                         "text/html", "utf-8", null);
                 aQuery.id(R.id.news_title_textView).text(
                         newsModel.get(0).getTitle());
-                
-                //Get Image
+
+                // Get Image
                 getImage();
             }
 

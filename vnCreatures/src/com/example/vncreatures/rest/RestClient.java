@@ -1,21 +1,19 @@
-/**
- * Example:
-  	RestClient client = new RestClient(LOGIN_URL);
- 	client.AddParam("accountType", "GOOGLE");
- 	client.AddParam("source", "tboda-widgalytics-0.1");
- 	client.AddParam("username", username);
-	client.AddParam("password", password);
-	client.AddParam("service", "analytics");
-	client.AddHeader("GData-Version", "2");
-	client.addHeader("Cookie", "ci_session=" + controller.getLoginPhpSessId());	
-	try {
-	    client.execute(RequestMethod.POST);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-
-	String response = client.getResponse();
+/*
+ * Copyright (C) 2011 Tyler Smith.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.example.vncreatures.rest;
 
 import java.io.BufferedReader;
@@ -28,139 +26,194 @@ import java.util.ArrayList;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
-import com.example.vncreatures.common.ServerConfig;
+
+import android.content.Context;
 
 public class RestClient {
-	public enum RequestMethod {
-		GET,
-		POST
+
+	private boolean authentication;
+	private ArrayList<NameValuePair> headers;
+
+	private String jsonBody;
+	private String message;
+
+	private ArrayList<NameValuePair> params;
+	private String response;
+	private int responseCode;
+
+	private String url;
+
+	// HTTP Basic Authentication
+	private String username;
+	private String password;
+
+	protected Context context;
+
+	public RestClient(String url) {
+		this.url = url;
+		params = new ArrayList<NameValuePair>();
+		headers = new ArrayList<NameValuePair>();
+	}
+	//Be warned that this is sent in clear text, don't use basic auth unless you have to.
+	public void addBasicAuthentication(String user, String pass) {
+		authentication = true;
+		username = user;
+		password = pass;
 	}
 
-	private ArrayList <NameValuePair> mParams;
-	private ArrayList <NameValuePair> mHeaders;
-
-	private String mUrl;
-
-	private int mResponseCode;
-	private String mMessage;
-
-	private String mResponse;
-
-	public String getResponse() {
-		return mResponse;
+	public void addHeader(String name, String value) {
+		headers.add(new BasicNameValuePair(name, value));
 	}
 
-	public String getErrorMessage() {
-		return mMessage;
-	}
-
-	public int getResponseCode() {
-		return mResponseCode;
-	}
-
-	public RestClient(final String url) {
-		this.mUrl = url;
-		mParams = new ArrayList<NameValuePair>();
-		mHeaders = new ArrayList<NameValuePair>();
-	}
-
-	public void addParam(final String name, final String value) {
-		mParams.add(new BasicNameValuePair(name, value));
-	}
-
-	public void addHeader(final String name, final String value) {
-		mHeaders.add(new BasicNameValuePair(name, value));
+	public void addParam(String name, String value) {
+		params.add(new BasicNameValuePair(name, value));
 	}
 
 	public void execute(RequestMethod method) throws Exception {
-		switch(method) {
-		case GET: {
-			// Add parameters
-			String combinedParams = "";
-			if(!mParams.isEmpty()) {
-				combinedParams += "?";
-				for(NameValuePair p : mParams) {
-					String paramString = p.getName() + "=" + URLEncoder.encode(p.getValue(),"UTF-8");
-					if(combinedParams.length() > 1) {
-						combinedParams  +=  "&" + paramString;
-					} else {
-						combinedParams += paramString;
-					}
-				}
+		switch (method) {
+			case GET: {
+				HttpGet request = new HttpGet(url + addGetParams());
+				request = (HttpGet) addHeaderParams(request);
+				executeRequest(request, url);
+				break;
 			}
-
-			HttpGet request = new HttpGet(mUrl + combinedParams);
-
-			// Add headers
-			for(NameValuePair h : mHeaders) {
-				request.addHeader(h.getName(), h.getValue());
+			case POST: {
+				HttpPost request = new HttpPost(url);
+				request = (HttpPost) addHeaderParams(request);
+				request = (HttpPost) addBodyParams(request);
+				executeRequest(request, url);
+				break;
 			}
-
-			executeRequest(request, mUrl);
-			break;
-		}
-		case POST: {
-			HttpPost request = new HttpPost(mUrl);
-
-			// Add headers
-			for(NameValuePair h : mHeaders) {
-				request.addHeader(h.getName(), h.getValue());
+			case PUT: {
+				HttpPut request = new HttpPut(url);
+				request = (HttpPut) addHeaderParams(request);
+				request = (HttpPut) addBodyParams(request);
+				executeRequest(request, url);
+				break;
 			}
-
-			if(!mParams.isEmpty()) {
-				request.setEntity(new UrlEncodedFormEntity(mParams, HTTP.UTF_8));
+			case DELETE: {
+				HttpDelete request = new HttpDelete(url);
+				request = (HttpDelete) addHeaderParams(request);
+				executeRequest(request, url);
 			}
-
-			executeRequest(request, mUrl);
-			break;
-		}
-		default:
-			break;
 		}
 	}
 
-	private void executeRequest(HttpUriRequest request, final String url) {
-		HttpClient client = null;
-		HttpResponse httpResponse;
-		try {
-			// Begin setting TIMEOUT param
-			HttpParams httpParameters = new BasicHttpParams();
-			// Set the timeout in milliseconds until a connection is established.
-			int timeoutConnection = ServerConfig.TIMEOUT;
-			HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-			// Set the default socket timeout (SO_TIMEOUT) 
-			// in milliseconds which is the timeout for waiting for data.
-			int timeoutSocket = ServerConfig.TIMEOUT;
-			HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-			// Create a new HttpClient and Post Header
-			client = new DefaultHttpClient(httpParameters);
-			// End setting TIMEOUT param
+	private HttpUriRequest addHeaderParams(HttpUriRequest request)
+			throws Exception {
+		for (NameValuePair h : headers) {
+			request.addHeader(h.getName(), h.getValue());
+		}
 
+		if (authentication) {
+
+			UsernamePasswordCredentials creds = new UsernamePasswordCredentials(
+					username, password);
+			request.addHeader(new BasicScheme().authenticate(creds, request));
+		}
+
+		return request;
+	}
+
+	private HttpUriRequest addBodyParams(HttpUriRequest request)
+			throws Exception {
+		if (jsonBody != null) {
+			request.addHeader("Content-Type", "application/json");
+			if (request instanceof HttpPost)
+				((HttpPost) request).setEntity(new StringEntity(jsonBody,
+						"UTF-8"));
+			else if (request instanceof HttpPut)
+				((HttpPut) request).setEntity(new StringEntity(jsonBody,
+						"UTF-8"));
+
+		} else if (!params.isEmpty()) {
+			if (request instanceof HttpPost)
+				((HttpPost) request).setEntity(new UrlEncodedFormEntity(params,
+						HTTP.UTF_8));
+			else if (request instanceof HttpPut)
+				((HttpPut) request).setEntity(new UrlEncodedFormEntity(params,
+						HTTP.UTF_8));
+		}
+		return request;
+	}
+
+	private String addGetParams() throws Exception {
+		//Using StringBuffer append for better performance.
+		StringBuffer combinedParams = new StringBuffer();
+		if (!params.isEmpty()) {
+			combinedParams.append("?");
+			for (NameValuePair p : params) {
+				combinedParams.append((combinedParams.length() > 1 ? "&" : "")
+						+ p.getName() + "="
+						+ URLEncoder.encode(p.getValue(), "UTF-8"));
+			}
+		}
+		return combinedParams.toString();
+	}
+
+	public String getErrorMessage() {
+		return message;
+	}
+
+	public String getResponse() {
+		return response;
+	}
+
+	public int getResponseCode() {
+		return responseCode;
+	}
+
+	public void setContext(Context ctx) {
+		context = ctx;
+	}
+
+	public void setJSONString(String data) {
+		jsonBody = data;
+	}
+
+	private void executeRequest(HttpUriRequest request, String url) {
+
+		DefaultHttpClient client = new DefaultHttpClient();
+		HttpParams params = client.getParams();
+
+		// Setting 30 second timeouts
+		HttpConnectionParams.setConnectionTimeout(params, 30 * 1000);
+		HttpConnectionParams.setSoTimeout(params, 30 * 1000);
+
+		HttpResponse httpResponse;
+
+		try {
 			httpResponse = client.execute(request);
-			mResponseCode = httpResponse.getStatusLine().getStatusCode();
-			mMessage = httpResponse.getStatusLine().getReasonPhrase();
+			responseCode = httpResponse.getStatusLine().getStatusCode();
+			message = httpResponse.getStatusLine().getReasonPhrase();
 
 			HttpEntity entity = httpResponse.getEntity();
+
 			if (entity != null) {
+
 				InputStream instream = entity.getContent();
-				mResponse = convertStreamToString(instream);
+				response = convertStreamToString(instream);
 
 				// Closing the input stream will trigger connection release
 				instream.close();
 			}
+
 		} catch (ClientProtocolException e) {
 			client.getConnectionManager().shutdown();
 			e.printStackTrace();
@@ -171,6 +224,7 @@ public class RestClient {
 	}
 
 	private static String convertStreamToString(InputStream is) {
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		StringBuilder sb = new StringBuilder();
 

@@ -39,10 +39,12 @@ public class MapConfig {
     // /////////////////////////////////////////////////////////////
 
     private static final String LOCAL_CONFIG_CLASS_NAME = "com.cyrilmottier.android.polarissample.util.LocalConfig";
-//    private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
-    private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
-//    private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
-    private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
+    private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
+    // private static final String LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME
+    // = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
+    private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
+    // private static final String LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME =
+    // "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
 
     private static final Class<?> LOCAL_CONFIG_CLASS = getLocalConfig();
 
@@ -50,7 +52,8 @@ public class MapConfig {
         try {
             return Class.forName(LOCAL_CONFIG_CLASS_NAME);
         } catch (ClassNotFoundException e) {
-            Log.e(LOG_TAG, "No local configuration file with class name (" + LOCAL_CONFIG_CLASS_NAME + ") found");
+            Log.e(LOG_TAG, "No local configuration file with class name ("
+                    + LOCAL_CONFIG_CLASS_NAME + ") found");
             return null;
         }
     }
@@ -82,7 +85,8 @@ public class MapConfig {
     /**
      * The current compilation target
      */
-    private static final int COMPILATION_TARGET = BuildConfig.DEBUG ? COMPILATION_TARGET_DEBUG : COMPILATION_TARGET_RELEASE;
+    private static final int COMPILATION_TARGET = BuildConfig.DEBUG ? COMPILATION_TARGET_DEBUG
+            : COMPILATION_TARGET_RELEASE;
 
     // /////////////////////////////////////////////////////////////
     //
@@ -96,10 +100,14 @@ public class MapConfig {
     public static final String GOOGLE_MAPS_API_KEY;
 
     static {
-        /*GOOGLE_MAPS_API_KEY = (COMPILATION_TARGET == COMPILATION_TARGET_RELEASE) ? getLocalConfigString(LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME)
-                : getLocalConfigString(LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME);*/
-    	GOOGLE_MAPS_API_KEY = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
-//    	GOOGLE_MAPS_API_KEY = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
+        /*
+         * GOOGLE_MAPS_API_KEY = (COMPILATION_TARGET ==
+         * COMPILATION_TARGET_RELEASE) ?
+         * getLocalConfigString(LOCAL_GOOGLE_MAPS_API_KEY_RELEASE_FIELD_NAME) :
+         * getLocalConfigString(LOCAL_GOOGLE_MAPS_API_KEY_DEBUG_FIELD_NAME);
+         */
+        // GOOGLE_MAPS_API_KEY = "0mmtIZOoOqhAc1BmwAopQpluHghXxMc88B3-LQw";
+        GOOGLE_MAPS_API_KEY = "0C0dZ18lFmNn9Lbp6dqbdc2gYx8FeTRTVTXhMQw";
     }
 
     // /////////////////////////////////////////////////////////////
@@ -117,7 +125,8 @@ public class MapConfig {
      * Set this flag to LOG_LEVEL_NONE when releasing your application in order
      * to remove all logs.
      */
-    private static final int LOG_LEVEL = COMPILATION_TARGET == COMPILATION_TARGET_DEBUG ? LOG_LEVEL_INFO : LOG_LEVEL_ERROR;
+    private static final int LOG_LEVEL = COMPILATION_TARGET == COMPILATION_TARGET_DEBUG ? LOG_LEVEL_INFO
+            : LOG_LEVEL_ERROR;
 
     /**
      * Indicates whether info logs are enabled. This should be true only when
@@ -128,12 +137,14 @@ public class MapConfig {
     /**
      * Indicates whether warning logs are enabled
      */
-    public static final boolean WARNING_LOGS_ENABLED = INFO_LOGS_ENABLED || (LOG_LEVEL == LOG_LEVEL_WARNING);
+    public static final boolean WARNING_LOGS_ENABLED = INFO_LOGS_ENABLED
+            || (LOG_LEVEL == LOG_LEVEL_WARNING);
 
     /**
      * Indicates whether error logs are enabled. Error logs are usually always
      * enabled, even in production releases.
      */
-    public static final boolean ERROR_LOGS_ENABLED = WARNING_LOGS_ENABLED || (LOG_LEVEL == LOG_LEVEL_ERROR);
+    public static final boolean ERROR_LOGS_ENABLED = WARNING_LOGS_ENABLED
+            || (LOG_LEVEL == LOG_LEVEL_ERROR);
 
 }
