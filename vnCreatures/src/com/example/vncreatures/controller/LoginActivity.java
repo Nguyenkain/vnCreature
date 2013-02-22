@@ -42,8 +42,9 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
 
         mView = new LoginView(this, mModel);
-
+        mView.setVisibility(View.INVISIBLE);
         super.onCreate(savedInstanceState);
+        
 
         uiHelper = new UiLifecycleHelper(this, statusCallback);
         uiHelper.onCreate(savedInstanceState);
@@ -77,7 +78,7 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
         // Event
         mModel.facebookLoginButton.setOnClickListener(this);
         mModel.loginButton.setOnClickListener(this);
-
+        mView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -162,6 +163,7 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
         @Override
         public void call(Session session, SessionState state,
                 Exception exception) {
+            mView.setVisibility(View.INVISIBLE);
             String userid = pref.getString(
                     com.example.vncreatures.common.Common.USER_ID, null);
             if (state == SessionState.OPENING) {
@@ -177,15 +179,43 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                     if (userid == null) {
                         addUser(session);
                     } else {
-                        Intent mainIntent = new Intent(LoginActivity.this,
-                                DiscussionActivity.class);
-                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(mainIntent);
-                        finish();
+                        updateUser(session);
                     }
                 }
             }
+            else {
+                mView.setVisibility(View.VISIBLE);
+            }
         }
+    }
+
+    private void updateUser(Session session) {
+
+        Request.executeMeRequestAsync(session, new GraphUserCallback() {
+
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    Gson gson = new Gson();
+                    String json2 = user.getInnerJSONObject().toString();
+                    final FacebookUser fb = gson.fromJson(json2,
+                            FacebookUser.class);
+                    pref.edit()
+                            .putString(
+                                    com.example.vncreatures.common.Common.USER_NAME,
+                                    fb.getUsername()).commit();
+                    pref.edit()
+                            .putString(
+                                    com.example.vncreatures.common.Common.FB_ID,
+                                    fb.getId()).commit();
+                    Intent mainIntent = new Intent(LoginActivity.this,
+                            DiscussionActivity.class);
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(mainIntent);
+                    finish();
+                }
+            }
+        });
     }
 
     private void addUser(Session session) {
@@ -198,7 +228,8 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                 if (user != null) {
                     Gson gson = new Gson();
                     String json2 = user.getInnerJSONObject().toString();
-                    FacebookUser fb = gson.fromJson(json2, FacebookUser.class);
+                    final FacebookUser fb = gson.fromJson(json2,
+                            FacebookUser.class);
                     HrmService service = new HrmService();
                     service.setCallback(new PostTaskCallback() {
 
@@ -208,6 +239,14 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                                     .putString(
                                             com.example.vncreatures.common.Common.USER_ID,
                                             result).commit();
+                            pref.edit()
+                                    .putString(
+                                            com.example.vncreatures.common.Common.USER_NAME,
+                                            fb.getUsername()).commit();
+                            pref.edit()
+                                    .putString(
+                                            com.example.vncreatures.common.Common.FB_ID,
+                                            fb.getId()).commit();
                             setSupportProgressBarIndeterminateVisibility(false);
                             Intent mainIntent = new Intent(LoginActivity.this,
                                     DiscussionActivity.class);

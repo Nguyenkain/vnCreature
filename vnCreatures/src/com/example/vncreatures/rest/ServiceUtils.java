@@ -524,8 +524,12 @@ public class ServiceUtils {
 
         Gson gson = new Gson();
         Location location = fb.getLocation();
+        String locationName = "";
+        if(location != null) {
+            locationName = location.getName();
+        }
         User us = new User(fb.getId(), fb.getUsername(), fb.getName(),
-                fb.getBirthday(), location.getName(), fb.getEmail(), "",
+                fb.getBirthday(), locationName, fb.getEmail(), "",
                 fb.getId());
         String json = gson.toJson(us);
 

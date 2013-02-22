@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.SherlockMapActivity;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.cyrilmottier.polaris.Annotation;
 import com.cyrilmottier.polaris.MapCalloutView;
@@ -227,6 +228,14 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 		intent.putExtra(Common.PARK_EXTRA, String.valueOf(position + 1));
 		startActivityForResult(intent, Common.CREATURE_ACTIVITY_REQUEST_CODE);
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    getSupportMenuInflater().inflate(
+                R.menu.detail_menu, menu);
+        menu.removeItem(R.id.menu_item_map);
+	    return super.onCreateOptionsMenu(menu);
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -234,6 +243,9 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 		case android.R.id.home:
 			super.onBackPressed();
 			break;
+		case R.id.menu_item_refresh:
+            getProvince();
+            break;
 
 		default:
 			break;

@@ -57,4 +57,14 @@
     <string name="num_post">Có %s bài trả lời</string>
     <string name="content">Nội dung</string>
     <string name="discuss">Thảo Luận</string>
+    
+    <!-- Quick Action Item -->
+    <string name="edit">Sửa</string>
+    <string name="delete">Xóa</string>
+    <string name="share">Chia sẻ</string>
+    
+    <!-- Dialog -->
+    <string name="delete_message">Bạn có chắc chắn muốn xóa ?</string>
+    <string name="confirm">Đồng ý</string>
+    <string name="cancel">Hủy</string>
 </resources>

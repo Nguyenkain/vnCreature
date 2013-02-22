@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
-
-    
+    android:layout_height="wrap_content"
+    android:background="@color/listViewBg" >
 
     <RelativeLayout
         android:id="@+id/post_layout"
         style="@style/Fill"
-        android:layout_above="@+id/postText_layout">
+        android:layout_above="@+id/postText_layout"
+        android:background="@drawable/disscusback"
+        android:layout_margin="10dp">
 
         <ListView
             android:id="@+id/post_listView"
-            style="@style/Wrap"
+            style="@style/Fill"
             android:cacheColorHint="#00000000"
             android:clickable="false"
             android:divider="#19000000"
-            android:dividerHeight="0dp"
+            android:dividerHeight="1dp"
             android:fadingEdge="none"
             android:fastScrollEnabled="false"
             android:footerDividersEnabled="false"
             android:headerDividersEnabled="false"
             android:smoothScrollbar="true" />
-
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/postText_layout"
-        style="@style/Wrap" 
-        android:layout_alignParentBottom="true">
-
-        <Button
-            android:id="@+id/post_button"
-            style="@style/Wrap"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:text="@string/post" />
+        style="@style/Normal_Match"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/message_bar" >
 
         <EditText
             android:id="@+id/post_editText"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toLeftOf="@+id/post_button"
-            android:inputType="text"
-            android:singleLine="true" />
+            android:layout_height="fill_parent"
+            android:layout_margin="5sp"
+            android:layout_weight="1"
+            android:background="@drawable/message_field"
+            android:hint="@string/content"
+            android:padding="5sp"
+            android:textColor="@color/textFieldColor"/>
 
-
-    </RelativeLayout>
+        <Button
+            android:id="@+id/post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="5sp"
+            android:background="@drawable/send_button"
+            android:paddingBottom="5sp"
+            android:paddingLeft="15sp"
+            android:paddingRight="15sp"
+            android:paddingTop="5sp"
+            android:text="@string/post"
+            android:textColor="#FFF" />
+    </LinearLayout>
 
 </RelativeLayout>

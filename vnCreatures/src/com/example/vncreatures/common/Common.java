@@ -29,6 +29,8 @@ public class Common {
 	public static final String TAB_PREF = "tabPrefs";
 	
 	public static final String USER_ID = "userid";
+	public static final String USER_NAME = "username";
+	public static final String FB_ID = "fbid";
 	public static final String THREAD_ID = "threadid";
 	
 	//Validation message
