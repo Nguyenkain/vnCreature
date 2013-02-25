@@ -3,9 +3,11 @@ package com.example.vncreatures.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.vncreatures.R;
 import com.example.vncreatures.model.LoginViewModel;
+import com.facebook.widget.LoginButton;
 
 public class LoginView extends AbstractView {
 
@@ -22,8 +24,7 @@ public class LoginView extends AbstractView {
     }
 
     private void initUI() {
-        mModel.loginButton = (Button) findViewById(R.id.login_button);
-        mModel.facebookLoginButton = (Button) findViewById(R.id.facebookLogin_button);
+        mModel.loginButton = (ImageButton) findViewById(R.id.facebookLogin_button);
     }
 
 }

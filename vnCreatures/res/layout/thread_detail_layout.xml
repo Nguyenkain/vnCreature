@@ -6,14 +6,14 @@
 
     <RelativeLayout
         android:id="@+id/post_layout"
-        style="@style/Fill"
         android:layout_above="@+id/postText_layout"
         android:background="@drawable/disscusback"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        style="@style/Normal_Match">
 
         <ListView
             android:id="@+id/post_listView"
-            style="@style/Fill"
+            style="@style/Normal_Match"
             android:cacheColorHint="#00000000"
             android:clickable="false"
             android:divider="#19000000"
@@ -29,7 +29,8 @@
         android:id="@+id/postText_layout"
         style="@style/Normal_Match"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/message_bar" >
+        android:background="@drawable/message_bar"
+        android:visibility="gone" >
 
         <EditText
             android:id="@+id/post_editText"

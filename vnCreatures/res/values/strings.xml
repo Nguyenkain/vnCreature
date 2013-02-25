@@ -60,6 +60,9 @@
     
     <!-- Quick Action Item -->
     <string name="edit">Sửa</string>
+    <string name="comment">Bình luận</string>
+    <string name="action">Thao tác</string>
+    <string name="report">Báo cáo</string>
     <string name="delete">Xóa</string>
     <string name="share">Chia sẻ</string>
     

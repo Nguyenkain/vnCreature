@@ -12,6 +12,34 @@ public class Thread {
     private String post_id;
     private String post_content;
     private String post_created_time;
+    private String notification_id;
+    private String viewed_status;
+    
+    
+
+    public String getPost_created_time() {
+        return post_created_time;
+    }
+
+    public void setPost_created_time(String post_created_time) {
+        this.post_created_time = post_created_time;
+    }
+
+    public String getNotification_id() {
+        return notification_id;
+    }
+
+    public void setNotification_id(String notification_id) {
+        this.notification_id = notification_id;
+    }
+
+    public String getViewed_status() {
+        return viewed_status;
+    }
+
+    public void setViewed_status(String viewed_status) {
+        this.viewed_status = viewed_status;
+    }
 
     public String getCount_post() {
         return count_post;

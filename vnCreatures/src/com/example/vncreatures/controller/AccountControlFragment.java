@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
-import com.example.vncreatures.rest.ServiceUtils;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Response;
@@ -21,6 +21,7 @@ import com.facebook.widget.ProfilePictureView;
 public class AccountControlFragment extends Fragment {
 
     private ProfilePictureView mProfilePictureView;
+    private ListView mListView;
     AQuery aQuery;
 
     public AccountControlFragment() {

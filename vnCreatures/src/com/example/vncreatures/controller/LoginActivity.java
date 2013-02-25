@@ -34,6 +34,8 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
     private UiLifecycleHelper uiHelper;
     private boolean mHandleLogin = false;
+    private View mLoginView;
+    private View mProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,9 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
 
         mView = new LoginView(this, mModel);
-        mView.setVisibility(View.INVISIBLE);
         super.onCreate(savedInstanceState);
+        mLoginView = findViewById(R.id.login_layout);
+        mProgressView = findViewById(R.id.progress_layout);
         
 
         uiHelper = new UiLifecycleHelper(this, statusCallback);
@@ -76,9 +79,9 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
          */
 
         // Event
-        mModel.facebookLoginButton.setOnClickListener(this);
         mModel.loginButton.setOnClickListener(this);
         mView.setVisibility(View.VISIBLE);
+        mLoginView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -133,10 +136,6 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
         case R.id.facebookLogin_button:
             loginToFacebook();
             break;
-        case R.id.login_button:
-            Session session = Session.getActiveSession();
-            session.closeAndClearTokenInformation();
-            break;
 
         default:
             break;
@@ -163,7 +162,8 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
         @Override
         public void call(Session session, SessionState state,
                 Exception exception) {
-            mView.setVisibility(View.INVISIBLE);
+            mLoginView.setVisibility(View.GONE);
+            mProgressView.setVisibility(View.VISIBLE);
             String userid = pref.getString(
                     com.example.vncreatures.common.Common.USER_ID, null);
             if (state == SessionState.OPENING) {
@@ -184,7 +184,8 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                 }
             }
             else {
-                mView.setVisibility(View.VISIBLE);
+                mLoginView.setVisibility(View.VISIBLE);
+                mProgressView.setVisibility(View.GONE);
             }
         }
     }

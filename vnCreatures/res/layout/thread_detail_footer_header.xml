@@ -100,7 +100,7 @@
             android:weightSum="3" >
 
             <LinearLayout
-                android:id="@+id/edit_button"
+                android:id="@+id/comment_button"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -112,12 +112,12 @@
                     android:id="@+id/edit_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/content_edit" />
+                    android:src="@drawable/ic_compose_inverse" />
 
                 <TextView
                     style="@style/Wrap"
                     android:layout_marginLeft="5dp"
-                    android:text="@string/edit" />
+                    android:text="@string/comment" />
             </LinearLayout>
 
             <View
@@ -128,24 +128,47 @@
                 android:background="@color/lightBorder" />
 
             <LinearLayout
-                android:id="@+id/delete_button"
+                android:id="@+id/action_button"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal" 
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/delete_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/content_discard" />
+                    android:src="@drawable/action_menu" />
 
                 <TextView
                     style="@style/Wrap"
                     android:layout_marginLeft="5dp"
-                    android:text="@string/delete" />
+                    android:text="@string/action" />
+            </LinearLayout>
+            
+            <LinearLayout
+                android:id="@+id/report_button"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal" 
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/report_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/rating_bad" />
+
+                <TextView
+                    style="@style/Wrap"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/report" />
             </LinearLayout>
 
             <View

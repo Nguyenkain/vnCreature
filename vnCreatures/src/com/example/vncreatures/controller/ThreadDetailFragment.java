@@ -1,5 +1,6 @@
 package com.example.vncreatures.controller;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -7,9 +8,13 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -18,7 +23,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -41,14 +48,18 @@ import com.mobsandgeeks.saripaar.Validator.ValidationListener;
 import com.mobsandgeeks.saripaar.annotation.Required;
 
 public class ThreadDetailFragment extends SherlockFragment implements
-        ValidationListener {
-    AQuery aQuery;
+        OnClickListener {
+    AQuery mAQuery;
     Validator validator;
     ActionMode mMode;
+    PostListAdapter adapter;
 
     private String mThreadId = null;
     private String mUserId = null;
     private ListView mListView = null;
+    private Thread mThread;
+    private View mView;
+    private View mLoadingView;
 
     SharedPreferences pref;
 
@@ -78,31 +89,39 @@ public class ThreadDetailFragment extends SherlockFragment implements
         mListView = (ListView) view.findViewById(R.id.post_listView);
         View threadDetail = inflater.inflate(
                 R.layout.thread_detail_footer_header, null);
+        mLoadingView = inflater.inflate(R.layout.post_item_loading, null);
         mListView.addHeaderView(threadDetail);
 
         // init UI
-        aQuery = new AQuery(threadDetail);
+        mAQuery = new AQuery(threadDetail);
         mPostContent = (EditText) view.findViewById(R.id.post_editText);
 
-        // init validator
-        validator = new Validator(this);
-        validator.setValidationListener(this);
+        // init event
+        mAQuery.id(R.id.comment_button).clicked(this);
+        mAQuery.id(R.id.action_button).clicked(this);
+        mAQuery.id(R.id.share_button).clicked(this);
+        mAQuery.id(R.id.report_button).clicked(this);
 
         // Event
         Button button = (Button) view.findViewById(R.id.post_button);
+        // init validator
+        validator = new Validator(this);
+        ValidateListener listener = new ValidateListener((View) button);
+        validator.setValidationListener(listener);
         button.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                v.setEnabled(false);
                 validator.validateAsync();
             }
         });
 
         initData();
-        
+
+        mView = view;
         return view;
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -115,17 +134,6 @@ public class ThreadDetailFragment extends SherlockFragment implements
             outState.putString(Common.THREAD_ID, mThreadId);
         }
     }
-    
-    private void scrollMyListViewToBottom(final ListView listView) {
-        final Adapter adapter = listView.getAdapter();
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                // Select the last row so it will scroll into view...
-                listView.setSelection(adapter.getCount() - 1);
-            }
-        });
-    }
 
     private void initData() {
         HrmService service = new HrmService();
@@ -134,179 +142,33 @@ public class ThreadDetailFragment extends SherlockFragment implements
             @Override
             public void onSuccess(ThreadModel threadModel) {
                 if (threadModel != null) {
-                    final Thread thread = threadModel.get(0);
-                    if (thread != null) {
-                        aQuery.id(R.id.username_textView)
-                                .text(thread.getName());
-                        aQuery.id(R.id.topic_title_TextView).text(
-                                thread.getThread_title());
-                        aQuery.id(R.id.time_textView).text(
-                                thread.getThread_created_time());
-                        aQuery.id(R.id.content_textView).text(
-                                thread.getThread_content());
-                        aQuery.id(R.id.thread_content_EditText).text(
-                                thread.getThread_content());
+                    mThread = threadModel.get(0);
+                    if (mThread != null) {
+                        mAQuery.id(R.id.username_textView).text(
+                                mThread.getName());
+                        mAQuery.id(R.id.topic_title_TextView).text(
+                                mThread.getThread_title());
+                        mAQuery.id(R.id.time_textView).text(
+                                mThread.getThread_created_time());
+                        mAQuery.id(R.id.content_textView).text(
+                                mThread.getThread_content());
+                        mAQuery.id(R.id.thread_content_EditText).text(
+                                mThread.getThread_content());
                         String url = "http://graph.facebook.com/"
-                                + thread.getUser_avatar()
+                                + mThread.getUser_avatar()
                                 + "/picture?type=small";
-                        aQuery.id(R.id.avatar_imageView).image(url, true, true,
-                                0, R.drawable.no_thumb, null,
+                        mAQuery.id(R.id.avatar_imageView).image(url, true,
+                                true, 0, R.drawable.no_thumb, null,
                                 AQuery.FADE_IN_NETWORK);
 
                         // init Thread edit
                         final DiscussionQuickAction quickAction = new DiscussionQuickAction(
                                 getSherlockActivity());
                         mUserId = mUserId.replace("\n", "").replace("\t", "");
-                        if (mUserId.equalsIgnoreCase(thread.getUser_id())) {
-                            final EditText contentEdit = aQuery.id(
-                                    R.id.thread_content_EditText).getEditText();
-                            final TextView content = aQuery.id(
-                                    R.id.content_textView).getTextView();
-                            aQuery.id(R.id.edit_imageButton).visible();
-                            aQuery.id(R.id.edit_imageButton).clicked(
-                                    new OnClickListener() {
-
-                                        @Override
-                                        public void onClick(View v) {
-
-                                            quickAction.onShowBar(v);
-                                            quickAction
-                                                    .setCallback(new DiscussionQuickAction.Callback() {
-
-                                                        @Override
-                                                        public void onQuickActionClicked(
-                                                                QuickActionWidget widget,
-                                                                int position) {
-                                                            switch (position) {
-                                                            case 0:
-                                                                content.setVisibility(View.GONE);
-                                                                contentEdit
-                                                                        .setVisibility(View.VISIBLE);
-                                                                contentEdit
-                                                                        .requestFocus();
-                                                                mMode = getSherlockActivity()
-                                                                        .startActionMode(
-                                                                                new AnActionModeOfEpicProportions(
-                                                                                        thread,
-                                                                                        contentEdit,
-                                                                                        content));
-                                                                int doneButtonId = Resources
-                                                                        .getSystem()
-                                                                        .getIdentifier(
-                                                                                "action_mode_close_button",
-                                                                                "id",
-                                                                                "android");
-                                                                View doneButton = null;
-                                                                if (doneButtonId != 0) {
-                                                                    doneButton = getSherlockActivity()
-                                                                            .findViewById(
-                                                                                    doneButtonId);
-                                                                } else {
-                                                                    doneButton = getSherlockActivity()
-                                                                            .findViewById(
-                                                                                    R.id.abs__action_mode_close_button);
-                                                                }
-                                                                doneButton
-                                                                        .setOnClickListener(new View.OnClickListener() {
-
-                                                                            @Override
-                                                                            public void onClick(
-                                                                                    View v) {
-                                                                                if (!contentEdit
-                                                                                        .getText()
-                                                                                        .toString()
-                                                                                        .equalsIgnoreCase(
-                                                                                                content.getText()
-                                                                                                        .toString())) {
-                                                                                    Thread newThread = new Thread();
-                                                                                    newThread
-                                                                                            .setThread_id(thread
-                                                                                                    .getThread_id());
-                                                                                    newThread
-                                                                                            .setThread_content(contentEdit
-                                                                                                    .getText()
-                                                                                                    .toString());
-                                                                                    HrmService service = new HrmService();
-                                                                                    service.setCallback(new PostTaskCallback() {
-
-                                                                                        @Override
-                                                                                        public void onSuccess(
-                                                                                                String result) {
-                                                                                            initData();
-                                                                                            scrollMyListViewToBottom(mListView);
-                                                                                            mMode.finish();
-                                                                                        }
-
-                                                                                        @Override
-                                                                                        public void onError() {
-                                                                                            // TODO
-                                                                                            // Auto-generated
-                                                                                            // method
-                                                                                            // stub
-
-                                                                                        }
-                                                                                    });
-                                                                                    service.requestAddThread(newThread);
-                                                                                } else {
-                                                                                    mMode.finish();
-                                                                                }
-
-                                                                            }
-                                                                        });
-                                                                break;
-                                                            case 1:
-                                                                new AlertDialog.Builder(
-                                                                        getSherlockActivity())
-                                                                        .setIcon(
-                                                                                android.R.drawable.ic_dialog_alert)
-                                                                        .setTitle(
-                                                                                R.string.delete)
-                                                                        .setMessage(
-                                                                                R.string.delete_message)
-                                                                        .setPositiveButton(
-                                                                                R.string.confirm,
-                                                                                new DialogInterface.OnClickListener() {
-
-                                                                                    @Override
-                                                                                    public void onClick(
-                                                                                            DialogInterface dialog,
-                                                                                            int which) {
-                                                                                        Thread newThread = new Thread();
-                                                                                        newThread
-                                                                                                .setThread_id(mThreadId);
-                                                                                        HrmService service = new HrmService();
-                                                                                        service.setCallback(new PostTaskCallback() {
-
-                                                                                            @Override
-                                                                                            public void onSuccess(
-                                                                                                    String result) {
-                                                                                                Fragment frag = new ThreadFragment();
-                                                                                                switchFragment(frag);
-                                                                                            }
-
-                                                                                            @Override
-                                                                                            public void onError() {
-
-                                                                                            }
-                                                                                        });
-                                                                                        service.requestAddThread(newThread);
-                                                                                    }
-                                                                                })
-                                                                        .setNegativeButton(
-                                                                                R.string.cancel,
-                                                                                null)
-                                                                        .show();
-                                                                break;
-
-                                                            default:
-                                                                break;
-                                                            }
-
-                                                        }
-                                                    });
-
-                                        }
-                                    });
+                        if (mUserId.equalsIgnoreCase(mThread.getUser_id())) {
+                            mAQuery.id(R.id.action_button).visible();
+                        } else {
+                            mAQuery.id(R.id.report_button).visible();
                         }
 
                     }
@@ -329,7 +191,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
     private void initCommentData() {
         HrmService service = new HrmService();
         ThreadModel model = new ThreadModel();
-        final PostListAdapter adapter = new PostListAdapter(getActivity(),
+        adapter = new PostListAdapter(getActivity(),
                 model);
         mListView.setAdapter(adapter);
         service.setCallback(new ThreadTaskCallback() {
@@ -363,13 +225,11 @@ public class ThreadDetailFragment extends SherlockFragment implements
                         "action_mode_close_button", "id", "android");
                 View doneButton = null;
                 if (doneButtonId != 0) {
-                    doneButton = getSherlockActivity()
-                            .findViewById(
-                                    doneButtonId);
+                    doneButton = getSherlockActivity().findViewById(
+                            doneButtonId);
                 } else {
-                    doneButton = getSherlockActivity()
-                            .findViewById(
-                                    R.id.abs__action_mode_close_button);
+                    doneButton = getSherlockActivity().findViewById(
+                            R.id.abs__action_mode_close_button);
                 }
                 doneButton.setOnClickListener(new View.OnClickListener() {
 
@@ -438,7 +298,11 @@ public class ThreadDetailFragment extends SherlockFragment implements
         });
     }
 
-    private void postNewComment() {
+    private void postNewComment(final View v) {
+        getSherlockActivity()
+        .setSupportProgressBarIndeterminateVisibility(true);
+        mListView.addFooterView(mLoadingView);
+        mListView.setSelection(mListView.getCount() - 1);
         String content = mPostContent.getText().toString();
         String userid = pref.getString(Common.USER_ID, null);
         Thread thread = new Thread();
@@ -448,24 +312,45 @@ public class ThreadDetailFragment extends SherlockFragment implements
         if (userid != null) {
             HrmService service = new HrmService();
             service.requestAddPost(thread);
-            service.setCallback(new PostTaskCallback() {
+            /*service.setCallback(new PostTaskCallback() {
 
                 @Override
                 public void onSuccess(String result) {
+                    mListView.removeFooterView(mLoadingView);
                     mPostContent.setText("");
                     getSherlockActivity()
                             .setSupportProgressBarIndeterminateVisibility(true);
                     initCommentData();
+                    v.setEnabled(true);
                 }
 
                 @Override
                 public void onError() {
 
                 }
+            });*/
+            service.setCallback(new ThreadTaskCallback() {
+                
+                @Override
+                public void onSuccess(ThreadModel threadModel) {
+                    mListView.removeFooterView(mLoadingView);
+                    mPostContent.setText("");
+                    getSherlockActivity()
+                            .setSupportProgressBarIndeterminateVisibility(false);
+                    adapter.setModel(threadModel);
+                    adapter.notifyDataSetChanged();
+                    mListView.setSelection(mListView.getCount() - 1);
+                    v.setEnabled(true);
+                }
+                
+                @Override
+                public void onError() {
+                    
+                }
             });
         }
     }
-
+    
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -505,29 +390,44 @@ public class ThreadDetailFragment extends SherlockFragment implements
         }
     }
 
-    @Override
-    public void preValidation() {
-    }
+    private final class ValidateListener implements ValidationListener {
 
-    @Override
-    public void onSuccess() {
-        postNewComment();
-    }
+        private View mView;
 
-    @Override
-    public void onFailure(View failedView, Rule<?> failedRule) {
-        String message = failedRule.getFailureMessage();
-
-        if (failedView instanceof EditText) {
-            failedView.requestFocus();
-            ((EditText) failedView).setError(message);
-        } else {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        public ValidateListener(View v) {
+            this.mView = v;
         }
-    }
 
-    @Override
-    public void onValidationCancelled() {
+        @Override
+        public void preValidation() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onSuccess() {
+            postNewComment(mView);
+        }
+
+        @Override
+        public void onFailure(View failedView, Rule<?> failedRule) {
+            String message = failedRule.getFailureMessage();
+            mView.setEnabled(true);
+
+            if (failedView instanceof EditText) {
+                failedView.requestFocus();
+                ((EditText) failedView).setError(message);
+            } else {
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+
+        @Override
+        public void onValidationCancelled() {
+            // TODO Auto-generated method stub
+
+        }
 
     }
 
@@ -575,6 +475,139 @@ public class ThreadDetailFragment extends SherlockFragment implements
         public void onDestroyActionMode(ActionMode mode) {
             mContent.setVisibility(View.VISIBLE);
             mContentEdit.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        AQuery aQuery = new AQuery(mView);
+        DiscussionQuickAction quickAction = new DiscussionQuickAction(
+                getSherlockActivity());
+        final EditText contentEdit = aQuery.id(R.id.thread_content_EditText)
+                .getEditText();
+        final TextView content = aQuery.id(R.id.content_textView).getTextView();
+        switch (v.getId()) {
+        case R.id.comment_button:
+            aQuery.id(R.id.postText_layout).visible();
+            break;
+        case R.id.action_button:
+            quickAction.onShowBar(v);
+            quickAction.setCallback(new DiscussionQuickAction.Callback() {
+
+                @Override
+                public void onQuickActionClicked(QuickActionWidget widget,
+                        int position) {
+                    switch (position) {
+                    case 0:
+                        content.setVisibility(View.GONE);
+                        contentEdit.setVisibility(View.VISIBLE);
+                        contentEdit.requestFocus();
+                        mMode = getSherlockActivity().startActionMode(
+                                new AnActionModeOfEpicProportions(mThread,
+                                        contentEdit, content));
+                        int doneButtonId = Resources.getSystem().getIdentifier(
+                                "action_mode_close_button", "id", "android");
+                        View doneButton = null;
+                        if (doneButtonId != 0) {
+                            doneButton = getSherlockActivity().findViewById(
+                                    doneButtonId);
+                        } else {
+                            doneButton = getSherlockActivity().findViewById(
+                                    R.id.abs__action_mode_close_button);
+                        }
+                        doneButton
+                                .setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (!contentEdit
+                                                .getText()
+                                                .toString()
+                                                .equalsIgnoreCase(
+                                                        content.getText()
+                                                                .toString())) {
+                                            Thread newThread = new Thread();
+                                            newThread.setThread_id(mThread
+                                                    .getThread_id());
+                                            newThread
+                                                    .setThread_content(contentEdit
+                                                            .getText()
+                                                            .toString());
+                                            HrmService service = new HrmService();
+                                            service.setCallback(new PostTaskCallback() {
+
+                                                @Override
+                                                public void onSuccess(
+                                                        String result) {
+                                                    initData();
+                                                    mMode.finish();
+                                                }
+
+                                                @Override
+                                                public void onError() {
+                                                    // TODO
+                                                    // Auto-generated
+                                                    // method
+                                                    // stub
+
+                                                }
+                                            });
+                                            service.requestAddThread(newThread);
+                                        } else {
+                                            mMode.finish();
+                                        }
+
+                                    }
+                                });
+                        break;
+                    case 1:
+                        new AlertDialog.Builder(getSherlockActivity())
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle(R.string.delete)
+                                .setMessage(R.string.delete_message)
+                                .setPositiveButton(R.string.confirm,
+                                        new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int which) {
+                                                Thread newThread = new Thread();
+                                                newThread
+                                                        .setThread_id(mThreadId);
+                                                HrmService service = new HrmService();
+                                                service.setCallback(new PostTaskCallback() {
+
+                                                    @Override
+                                                    public void onSuccess(
+                                                            String result) {
+                                                        Fragment frag = new ThreadFragment();
+                                                        switchFragment(frag);
+                                                    }
+
+                                                    @Override
+                                                    public void onError() {
+
+                                                    }
+                                                });
+                                                service.requestAddThread(newThread);
+                                            }
+                                        })
+                                .setNegativeButton(R.string.cancel, null)
+                                .show();
+                        break;
+
+                    default:
+                        break;
+                    }
+
+                }
+            });
+
+            break;
+
+        default:
+            break;
         }
     }
 

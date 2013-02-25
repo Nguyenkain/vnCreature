@@ -515,6 +515,24 @@ public class ServiceUtils {
 
         return result;
     }
+    
+    public static String getNotification(String userId) {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_NOTIFICATION);
+        RestClient client = new RestClient(request);
+        client.addParam("id", userId);
+
+        try {
+            client.execute(RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
 
     // END GET FROM JSOn
 
