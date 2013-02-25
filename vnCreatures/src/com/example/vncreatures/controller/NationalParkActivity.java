@@ -124,28 +124,29 @@ public class NationalParkActivity extends AbstractActivity {
 					if (imgs != null) {
 						mListImages = new ArrayList<String>();
 						for (Element imgElement : imgs) {
-
 							String imgSrc = imgElement.attr("src");
-							String srcNew;
-							if (!imgSrc.contains("www.vncreatures.net"))
-								srcNew = "http://vncreatures.net/" + imgSrc;
-							else
-								srcNew = imgSrc;
-							imgElement.attr("src", srcNew);
-							imgElement
-									.attr("style", "width:300px; height:auto");
-							int position = imgs.indexOf(imgElement);
-							imgElement.attr("width", "");
-							imgElement.attr("height", "");
-							imgElement.attr("onclick",
-									"interface.changeIntoView(" + position
-											+ ")");
-							mListImages.add(srcNew);
+							if (!imgSrc.contains(".gif")) {
+								String srcNew;
+								if (!imgSrc.contains("www.vncreatures.net"))
+									srcNew = "http://vncreatures.net/" + imgSrc;
+								else
+									srcNew = imgSrc;
+								
+								imgElement.attr("src", srcNew);
+								imgElement.attr("style",
+										"width:300px; height:auto");
+								int position = imgs.indexOf(imgElement);
+								imgElement.attr("width", "");
+								imgElement.attr("height", "");
+								imgElement.attr("onclick",
+										"interface.changeIntoView(" + position
+												+ ")");
+								mListImages.add(srcNew);
+							}
 						}
 					}
 					Element element = jsDoc.select("td[colspan=3]").first();
 					element.html("");
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

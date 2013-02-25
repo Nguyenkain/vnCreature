@@ -19,7 +19,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/home" />
+            android:src="@drawable/tab_search" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -34,7 +34,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/note" />
+            android:src="@drawable/tab_news" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -49,7 +49,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/comment_bubble" />
+            android:src="@drawable/tab_discussion" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -64,7 +64,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/world_globe" />
+            android:src="@drawable/tab_national_park" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -78,7 +78,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/home" />
+            android:src="@drawable/tab_information" />
     </RelativeLayout>
 
 </LinearLayout>
