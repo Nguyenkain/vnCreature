@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_enabled="true"
+			android:state_pressed="true">
+        <shape android:padding="5dp" android:shape="rectangle">
+            <gradient android:startColor="@color/postDarkColor" android:endColor="@color/postMeduimColor" android:angle="90"/>
+            <stroke android:width="2dp" android:color="#3E4976" />
+            <corners android:bottomLeftRadius="10dp" android:bottomRightRadius="10dp" android:topLeftRadius="10dp" android:topRightRadius="10dp" />
+        </shape>
+    </item>
+    <item android:state_enabled="true" android:state_focused="true">
+        <shape android:padding="5dp" android:shape="rectangle">
+            <gradient android:startColor="@color/postDarkColor" android:endColor="@color/postMeduimColor" android:angle="90"/>
+            <corners android:bottomLeftRadius="10dp" android:bottomRightRadius="10dp" android:topLeftRadius="10dp" android:topRightRadius="10dp" />
+        </shape>
+    </item>
+    <item android:state_enabled="true">
+        <shape android:padding="5dp"
+            android:shape="rectangle">
+            <gradient android:startColor="@color/postMeduimColor" android:endColor="@color/postLightColor" android:angle="90"/>
+            <corners android:bottomLeftRadius="10dp" android:bottomRightRadius="10dp" android:topLeftRadius="10dp" android:topRightRadius="10dp" />
+		</shape>
+    </item>
+</selector>

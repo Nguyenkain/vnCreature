@@ -6,24 +6,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.androidquery.AQuery;
 import com.example.vncreatures.R;
-import com.example.vncreatures.model.LoginViewModel;
-import com.example.vncreatures.view.LoginView;
 import com.facebook.LoggingBehavior;
-import com.facebook.Request;
-import com.facebook.Request.GraphUserCallback;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
 import com.slidingmenu.lib.SlidingMenu;
 
 public class DiscussionActivity extends AbstractFragmentActivity implements
@@ -92,9 +88,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
                 startActivity(mainIntent);
             }
         }
-        
-        // updateView();
-        setupUI(findViewById(R.id.layout_parent));
+
     }
 
     @Override
@@ -134,7 +128,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-     
+
         default:
             break;
         }
@@ -174,13 +168,37 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     public void switchContent(final Fragment fragment) {
         mContent = fragment;
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment).commit();
+                .replace(R.id.content_frame, fragment).addToBackStack("tag")
+                .commit();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             public void run() {
                 getSlidingMenu().showContent();
             }
         }, 50);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        View view = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (view instanceof EditText) {
+            View w = getCurrentFocus();
+            int scrcoords[] = new int[2];
+            w.getLocationOnScreen(scrcoords);
+            float x = event.getRawX() + w.getLeft() - scrcoords[0];
+            float y = event.getRawY() + w.getTop() - scrcoords[1];
+
+            if (event.getAction() == MotionEvent.ACTION_UP
+                    && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w
+                            .getBottom())) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus()
+                        .getWindowToken(), 0);
+            }
+        }
+        return ret;
     }
 
 }

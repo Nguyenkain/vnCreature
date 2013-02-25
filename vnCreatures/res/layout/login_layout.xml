@@ -2,91 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff" >
+    android:background="@drawable/login_back" >
 
-    <!-- Header  Starts -->
+    <RelativeLayout
+        android:id="@+id/login_layout"
+        style="@style/Fill" >
+        
+        <LinearLayout style="@style/Wrap"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
 
-    <LinearLayout
-        android:id="@+id/header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/header_shape"
-        android:paddingBottom="5dip"
-        android:paddingTop="5dip" >
+        <ImageButton android:id="@+id/facebookLogin_button"
+            android:layout_width="300dp"
+            android:layout_height="65dp"
+            android:src="@drawable/facebook_button"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
+            android:background="@android:color/transparent"/>
+        
+        </LinearLayout>
+    </RelativeLayout>
 
-        <!-- Logo Start -->
-        <!-- Logo Ends -->
-    </LinearLayout>
-    <!-- Header Ends -->
-    <!-- Footer Start -->
+    <RelativeLayout
+        android:id="@+id/progress_layout"
+        style="@style/Fill"
+        android:visibility="gone" >
 
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="fill_parent"
-        android:layout_height="90dip"
-        android:layout_alignParentBottom="true" >
-    </LinearLayout>
-    <!-- Footer Ends -->
-
-
-    <!-- Login Form -->
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:padding="10dip" >
-
-        <!-- Username Label -->
-
-        <TextView
-            android:layout_width="fill_parent"
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/username"
-            android:textColor="#372c24" />
-
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
-            android:layout_marginTop="5dip"
-            android:inputType="text"
-            android:maxLines="1"
-            android:singleLine="true" />
-        <!-- Password Label -->
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/password"
-            android:textColor="#372c24" />
-
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:inputType="textPassword"
-            android:singleLine="true" />
-        <!-- Login button -->
-
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:text="@string/login" />
-
-        <Button
-            android:id="@+id/facebookLogin_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:text="@string/facebook_login" />
-        <!-- Link to Registration Screen -->
-
-    </LinearLayout>
-    <!-- Login Form Ends -->
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

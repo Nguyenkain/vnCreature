@@ -41,6 +41,8 @@ public class ServerConfig {
             + "/refactor/public/user/set-post";
 	public static final String GET_POST = ROOT
             + "/refactor/public/user/get-post";
+	public static final String GET_NOTIFICATION = ROOT
+            + "/refactor/public/user/get-notification";
 
 	public static final String NUM_PER_PAGE = "10";
 	public static final int TIMEOUT = 30000; // 30 seconds

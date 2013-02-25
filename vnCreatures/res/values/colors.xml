@@ -29,6 +29,14 @@
     <color name="sendLightColor">#8897BF</color>
 	<color name="sendMeduimColor">#5D6CA5</color>
 	<color name="sendDarkColor">#515F9F</color>
+	
+	<color name="cancelLightColor">#fff</color>
+	<color name="cancelMeduimColor">#ddd</color>
+	<color name="cancelDarkColor">#d8d8d8</color>
+	
+	<color name="postLightColor">#33bcef</color>
+	<color name="postMeduimColor">#019ad2</color>
+	<color name="postDarkColor">#0271bf</color>
 
 	<color name="barDarkColor">#CECECE</color>
 	<color name="barMeduimColor">#DFDEE0</color>

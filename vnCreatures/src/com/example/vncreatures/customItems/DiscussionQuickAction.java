@@ -42,7 +42,7 @@ public class DiscussionQuickAction {
         mBar.addQuickAction(new MyQuickAction(mContext,
                 R.drawable.content_discard, R.string.delete));
         mBar.addQuickAction(new MyQuickAction(mContext,
-                R.drawable.ic_title_share_default, R.string.share));
+                R.drawable.rating_bad, R.string.report));
 
         mBar.setOnQuickActionClickListener(mActionListener);
     }

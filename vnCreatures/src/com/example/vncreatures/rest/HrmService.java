@@ -173,6 +173,12 @@ public class HrmService {
         task.execute(threadId);
         return true;
     }
+    
+    public boolean requestGetNotification(String userId) {
+        GetNotificationTask task = new GetNotificationTask();
+        task.execute(userId);
+        return true;
+    }
 
     public boolean requestGetPictureProfile(Context context, ImageView imv,
             String profileId) {
@@ -188,13 +194,13 @@ public class HrmService {
         task.execute();
         return true;
     }
-    
+
     public boolean requestAddThread(Thread thread) {
         AddThreadTask task = new AddThreadTask(thread);
         task.execute();
         return true;
     }
-    
+
     public boolean requestAddPost(Thread thread) {
         AddPostTask task = new AddPostTask(thread);
         task.execute();
@@ -584,14 +590,46 @@ public class HrmService {
             }
         }
     }
+    
+    public class GetNotificationTask extends AsyncTask<String, Void, String> {
+
+        private volatile boolean running = true;
+
+        @Override
+        protected String doInBackground(String... params) {
+            while (running) {
+                String userId = params[0];
+                String result = ServiceUtils.getNotification(userId);
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mThreadTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mThreadTaskCallback.onError();
+                } else {
+                    ThreadModel threadModel = ServiceUtils
+                            .parseThreadModelFromJSON(result);
+                    mThreadTaskCallback.onSuccess(threadModel);
+                }
+            }
+        }
+    }
 
     public class GetUrlProfilePic extends AsyncTask<String, Void, String> {
 
         private volatile boolean running = true;
         private Context mContext = null;
         private ImageView mImageView = null;
-        
-        
 
         public GetUrlProfilePic(Context mContext, ImageView mImageView) {
             super();
@@ -655,7 +693,7 @@ public class HrmService {
             }
         }
     }
-    
+
     private class AddThreadTask extends AsyncTask<String, Void, String> {
 
         Thread mThread = null;
@@ -681,7 +719,7 @@ public class HrmService {
             }
         }
     }
-    
+
     private class AddPostTask extends AsyncTask<String, Void, String> {
 
         Thread mThread = null;
@@ -698,11 +736,22 @@ public class HrmService {
 
         @Override
         protected void onPostExecute(String result) {
-            if (mPostTaskCallback != null) {
-                if (result == "" || result == null) {
-                    mPostTaskCallback.onError();
-                } else {
-                    mPostTaskCallback.onSuccess(result);
+            if (mThread.getPost_id() != null) {
+                if (mPostTaskCallback != null) {
+                    if (result == "" || result == null) {
+                        mPostTaskCallback.onError();
+                    } else {
+                        mPostTaskCallback.onSuccess(result);
+                    }
+                }
+            }
+            else {
+                if (mThreadTaskCallback != null) {
+                    if (result == "" || result == null) {
+                        mThreadTaskCallback.onError();
+                    } else {
+                        mThreadTaskCallback.onSuccess(ServiceUtils.parseThreadModelFromJSON(result));
+                    }
                 }
             }
         }

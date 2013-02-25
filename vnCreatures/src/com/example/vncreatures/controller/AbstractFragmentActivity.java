@@ -163,35 +163,7 @@ public abstract class AbstractFragmentActivity extends SlidingFragmentActivity
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()
                 .getWindowToken(), 0);
     }
-
-    public void setupUI(View view) {
-
-        // Set up touch listener for non-text box views to hide keyboard.
-        if (!(view instanceof EditText)) {
-
-            view.setOnTouchListener(new OnTouchListener() {
-
-                public boolean onTouch(View v, MotionEvent event) {
-                    AbstractFragmentActivity
-                            .hideSoftKeyboard(AbstractFragmentActivity.this);
-                    return false;
-                }
-
-            });
-        }
-
-        // If a layout container, iterate over children and seed recursion.
-        if (view instanceof ViewGroup) {
-
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-
-                View innerView = ((ViewGroup) view).getChildAt(i);
-
-                setupUI(innerView);
-            }
-        }
-    }
-
+    
     protected Intent createShareIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("image/*");

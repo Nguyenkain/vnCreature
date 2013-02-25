@@ -5,17 +5,15 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alhneiti.QuickAction.QuickActionWidget;
-import com.alhneiti.QuickAction.QuickActionWidget.OnQuickActionClickListener;
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
@@ -38,6 +36,7 @@ public class PostListAdapter extends BaseAdapter {
     public interface Callback {
         public void onEditThread(Thread thread, EditText contentEdit,
                 TextView content);
+
         public void onDeleteThread(Thread thread);
     }
 
@@ -96,12 +95,11 @@ public class PostListAdapter extends BaseAdapter {
                     .findViewById(R.id.username_textView);
             holder.mContentEdit = (EditText) convertView
                     .findViewById(R.id.post_content_EditText);
-            holder.mEditButton = (ImageButton) convertView.findViewById(R.id.edit_imageButton);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        
+
         String userId = pref.getString(Common.USER_ID, null);
         String userName = pref.getString(Common.USER_NAME, null);
         String fbId = pref.getString(Common.FB_ID, null);
@@ -112,7 +110,6 @@ public class PostListAdapter extends BaseAdapter {
         }
 
         final AQuery aQuery = new AQuery(convertView);
-        final View view = convertView;
         Thread thread = mThreadModel.get(position);
         aQuery.id(holder.mContent).text(thread.getPost_content());
         aQuery.id(holder.mContentEdit).text(thread.getPost_content());
@@ -128,53 +125,59 @@ public class PostListAdapter extends BaseAdapter {
         final TextView textView = holder.mContent;
         final EditText editText = holder.mContentEdit;
         final Thread newThread = thread;
-        
-        if (holder.mEditButton != null) {
-            if (thread.getUser_id().equalsIgnoreCase(userId))
-                holder.mEditButton.setVisibility(View.VISIBLE);
-            holder.mEditButton.setOnClickListener(new OnClickListener() {
+        final String newUserId = userId;
 
-                @Override
-                public void onClick(View v) {
-                    quickAction.onShowBar(v);
-                    mThread = newThread;
-                    mContent = textView;
-                    mContentEdit = editText;
-                    
-                    quickAction.setCallback(new DiscussionQuickAction.Callback() {
-                        
-                        @Override
-                        public void onQuickActionClicked(QuickActionWidget widget, int position) {
-                            switch (position) {
-                            case 0:
-                                /*
-                                 * EditText contentEdit = mAQuery.id(R.id.post_content_EditText)
-                                 * .getEditText(); TextView content =
-                                 * mAQuery.id(R.id.post_content_TextView) .getTextView();
-                                 */
-                                mContent.setVisibility(View.GONE);
-                                mContentEdit.setVisibility(View.VISIBLE);
-                                mContentEdit.requestFocus();
-                                if (mCallback != null) {
-                                    mCallback.onEditThread(mThread, mContentEdit, mContent);
-                                }
-                                break;
-                            case 1:
-                                if (mCallback != null) {
-                                    Thread newThread = new Thread();
-                                    newThread.setPost_id(mThread.getPost_id());
-                                    mCallback.onDeleteThread(newThread);
-                                }
-                                break;
+        convertView.setOnLongClickListener(new OnLongClickListener() {
 
-                            default:
-                                break;
-                            }
-                        }
-                    });
+            @Override
+            public boolean onLongClick(View v) {
+                View view = v.findViewById(R.id.avatar_imageView);
+                if (newThread.getUser_id().equalsIgnoreCase(newUserId)) {
+                    quickAction.onShowBar(view);
                 }
-            });
-        }
+
+                mThread = newThread;
+                mContent = textView;
+                mContentEdit = editText;
+
+                quickAction.setCallback(new DiscussionQuickAction.Callback() {
+
+                    @Override
+                    public void onQuickActionClicked(QuickActionWidget widget,
+                            int position) {
+                        switch (position) {
+                        case 0:
+                            /*
+                             * EditText contentEdit = mAQuery.id(R.id
+                             * .post_content_EditText) .getEditText(); TextView
+                             * content = mAQuery .id(R.id.post_content_TextView)
+                             * .getTextView();
+                             */
+                            mContent.setVisibility(View.GONE);
+                            mContentEdit.setVisibility(View.VISIBLE);
+                            mContentEdit.requestFocus();
+                            if (mCallback != null) {
+                                mCallback.onEditThread(mThread, mContentEdit,
+                                        mContent);
+                            }
+                            break;
+                        case 1:
+                            if (mCallback != null) {
+                                Thread newThread = new Thread();
+                                newThread.setPost_id(mThread.getPost_id());
+                                mCallback.onDeleteThread(newThread);
+                            }
+                            break;
+
+                        default:
+                            break;
+                        }
+                    }
+                });
+                return false;
+            }
+
+        });
 
         return convertView;
     }
@@ -186,6 +189,5 @@ public class PostListAdapter extends BaseAdapter {
         TextView mTime;
         TextView mContent;
         EditText mContentEdit;
-        ImageButton mEditButton;
     }
 }
