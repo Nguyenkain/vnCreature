@@ -35,7 +35,8 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/button_discuss_post"
                 android:text="@string/post" 
-                android:textSize="14dp"/>
+                android:textSize="14dp"
+                android:textColor="@color/white"/>
         </RelativeLayout>
 
         <LinearLayout

@@ -29,11 +29,26 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:icon="@drawable/icon_app3"
         android:label="@string/title_activity_main"
         android:theme="@style/Theme.Styled.NoTitleBar.Fullscreen" >
+        <receiver android:name="com.commonsware.cwac.wakeful.AlarmReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.commonsware.cwac.wakeful"
+                android:resource="@xml/wakeful" />
+        </receiver>
+
+        <service android:name=".customItems.wakefulservice.AppService" >
+        </service>
+
         <uses-library android:name="com.google.android.maps" />
 
         <activity android:name=".controller.SplashScreen" >
@@ -83,7 +98,6 @@
             android:value="@string/app_id" />
 
         <activity android:name="com.facebook.LoginActivity" />
-        <activity android:name=".controller.LoginActivity"></activity>
     </application>
 
 </manifest>

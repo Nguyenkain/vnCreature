@@ -5,205 +5,216 @@
     android:background="@color/listViewBg"
     android:orientation="vertical" >
 
-    <LinearLayout
-        xmlns:facebook="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/thread_layout"
-        style="@style/MatchWidth"
-        android:background="@color/white"
-        android:orientation="vertical" >
+    <RelativeLayout style="@style/Normal_Match" >
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
         <LinearLayout
+            xmlns:facebook="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/thread_layout"
             style="@style/MatchWidth"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:background="@color/white"
+            android:orientation="vertical" >
 
-            <RelativeLayout
-                android:id="@+id/info_layout"
-                style="@style/Wrap" >
+            <LinearLayout
+                style="@style/MatchWidth"
+                android:orientation="vertical"
+                android:padding="10dp" >
 
-                <ImageView
-                    android:id="@+id/avatar_imageView"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:gravity="center_horizontal"
-                    android:src="@drawable/ic_launcher" />
+                <RelativeLayout
+                    android:id="@+id/info_layout"
+                    style="@style/Wrap" >
 
-                <LinearLayout
+                    <ImageView
+                        android:id="@+id/avatar_imageView"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:gravity="center_horizontal"
+                        android:src="@drawable/ic_launcher" />
+
+                    <LinearLayout
+                        style="@style/Normal_Match"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/space_between_item"
+                        android:layout_toRightOf="@+id/avatar_imageView"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/username_textView"
+                            style="@style/Wrap"
+                            android:text="@string/username"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/topic_title_TextView"
+                            style="@style/Wrap"
+                            android:text="@string/loading"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/time_textView"
+                            style="@style/Wrap"
+                            android:text="@string/title"
+                            android:textColor="@color/grey"
+                            android:textSize="9dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/content_layout"
                     style="@style/Normal_Match"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/space_between_item"
-                    android:layout_toRightOf="@+id/avatar_imageView"
-                    android:orientation="vertical" >
+                    android:layout_marginTop="@dimen/space_between_item" >
 
                     <TextView
-                        android:id="@+id/username_textView"
+                        android:id="@+id/content_textView"
                         style="@style/Wrap"
-                        android:text="@string/username"
-                        android:textStyle="bold" />
+                        android:layout_marginTop="@dimen/space_between_item"
+                        android:text="@string/loading" />
 
-                    <TextView
-                        android:id="@+id/topic_title_TextView"
-                        style="@style/Wrap"
-                        android:text="@string/loading"
-                        android:textSize="15dp" />
-
-                    <TextView
-                        android:id="@+id/time_textView"
-                        style="@style/Wrap"
-                        android:text="@string/title"
-                        android:textColor="@color/grey"
-                        android:textSize="9dp" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/content_layout"
-                style="@style/Normal_Match"
-                android:layout_marginTop="@dimen/space_between_item" >
+                    <EditText
+                        android:id="@+id/thread_content_EditText"
+                        style="@style/MatchWidth"
+                        android:inputType="textMultiLine"
+                        android:visibility="gone" />
+                </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/content_textView"
+                    android:id="@+id/thread_last_modified_time_textView"
                     style="@style/Wrap"
                     android:layout_marginTop="@dimen/space_between_item"
-                    android:text="@string/loading" />
-
-                <EditText
-                    android:id="@+id/thread_content_EditText"
-                    style="@style/MatchWidth"
-                    android:inputType="textMultiLine"
-                    android:visibility="gone" />
-            </RelativeLayout>
-
-            <ImageButton
-                android:id="@+id/edit_imageButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/content_edit"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/lightBorder" />
-
-        <LinearLayout
-            android:id="@+id/action_menu"
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:background="@color/lightLayout"
-            android:orientation="horizontal"
-            android:weightSum="3" >
-
-            <LinearLayout
-                android:id="@+id/comment_button"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal" >
-
-                <ImageView
-                    android:id="@+id/edit_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_compose_inverse" />
-
-                <TextView
-                    style="@style/Wrap"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/comment" />
+                    android:text="@string/last_modified"
+                    android:textColor="@color/grey"
+                    android:textSize="9dp" 
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <View
-                android:layout_width="1dp"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/lightBorder" />
 
             <LinearLayout
-                android:id="@+id/action_button"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal" 
-                android:visibility="gone">
+                android:id="@+id/action_menu"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:background="@color/lightLayout"
+                android:orientation="horizontal"
+                android:weightSum="3" >
 
-                <ImageView
-                    android:id="@+id/delete_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/action_menu" />
+                <LinearLayout
+                    android:id="@+id/comment_button"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
 
-                <TextView
-                    style="@style/Wrap"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/action" />
-            </LinearLayout>
-            
-            <LinearLayout
-                android:id="@+id/report_button"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal" 
-                android:visibility="gone">
+                    <ImageView
+                        android:id="@+id/edit_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_compose_inverse" />
 
-                <ImageView
-                    android:id="@+id/report_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/rating_bad" />
+                    <TextView
+                        style="@style/Wrap"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/comment" />
+                </LinearLayout>
 
-                <TextView
-                    style="@style/Wrap"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/report" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/lightBorder" />
+
+                <LinearLayout
+                    android:id="@+id/action_button"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <ImageView
+                        android:id="@+id/delete_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/action_menu" />
+
+                    <TextView
+                        style="@style/Wrap"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/action" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/report_button"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <ImageView
+                        android:id="@+id/report_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/rating_bad" />
+
+                    <TextView
+                        style="@style/Wrap"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/report" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/lightBorder" />
+
+                <LinearLayout
+                    android:id="@+id/share_button"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/share_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/social_share_reverse" />
+
+                    <TextView
+                        style="@style/Wrap"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/share" />
+                </LinearLayout>
             </LinearLayout>
 
             <View
-                android:layout_width="1dp"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
                 android:background="@color/lightBorder" />
-
-            <LinearLayout
-                android:id="@+id/share_button"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal" >
-
-                <ImageView
-                    android:id="@+id/share_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/social_share_reverse" />
-
-                <TextView
-                    style="@style/Wrap"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/share" />
-            </LinearLayout>
         </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@color/lightBorder" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

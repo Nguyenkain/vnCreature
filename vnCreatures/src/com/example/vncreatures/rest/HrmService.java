@@ -10,6 +10,8 @@ import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.model.NewsModel;
 import com.example.vncreatures.model.ProvinceModel;
 import com.example.vncreatures.model.discussion.FacebookUser;
+import com.example.vncreatures.model.discussion.ReportModel;
+import com.example.vncreatures.model.discussion.Report;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.model.discussion.ThreadModel;
 
@@ -20,6 +22,7 @@ public class HrmService {
     private ProvinceCallback mProvinceCallback = null;
     private PostTaskCallback mPostTaskCallback = null;
     private ThreadTaskCallback mThreadTaskCallback = null;
+    private ReportTypeCallback mReportTypeCallback = null;
 
     public interface Callback {
         public void onGetAllCreaturesDone(final CreatureModel creatureModel);
@@ -81,6 +84,16 @@ public class HrmService {
 
     public void setCallback(final NewsCallback callback) {
         mNewsCallback = callback;
+    }
+
+    public interface ReportTypeCallback {
+        public void onSuccess(final ReportModel reportModel);
+
+        public void onError();
+    }
+
+    public void setCallback(final ReportTypeCallback callback) {
+        mReportTypeCallback = callback;
     }
 
     public boolean requestAllCreature(String page, String kingdom) {
@@ -173,7 +186,7 @@ public class HrmService {
         task.execute(threadId);
         return true;
     }
-    
+
     public boolean requestGetNotification(String userId) {
         GetNotificationTask task = new GetNotificationTask();
         task.execute(userId);
@@ -184,6 +197,12 @@ public class HrmService {
             String profileId) {
         GetUrlProfilePic task = new GetUrlProfilePic(context, imv);
         task.execute(profileId);
+        return true;
+    }
+
+    public boolean requestGetReportType() {
+        GetReportTypeTask task = new GetReportTypeTask();
+        task.execute();
         return true;
     }
 
@@ -203,6 +222,18 @@ public class HrmService {
 
     public boolean requestAddPost(Thread thread) {
         AddPostTask task = new AddPostTask(thread);
+        task.execute();
+        return true;
+    }
+
+    public boolean requestUpdateNotification(Thread thread) {
+        UpdateNotificationTask task = new UpdateNotificationTask(thread);
+        task.execute();
+        return true;
+    }
+    
+    public boolean requestAddReport(Report reportType) {
+        AddReportTask task = new AddReportTask(reportType);
         task.execute();
         return true;
     }
@@ -590,7 +621,7 @@ public class HrmService {
             }
         }
     }
-    
+
     public class GetNotificationTask extends AsyncTask<String, Void, String> {
 
         private volatile boolean running = true;
@@ -662,6 +693,39 @@ public class HrmService {
                     ThreadModel threadModel = ServiceUtils
                             .parseThreadModelFromJSON(result);
                     mThreadTaskCallback.onSuccess(threadModel);
+                }
+            }
+        }
+    }
+
+    public class GetReportTypeTask extends AsyncTask<String, Void, String> {
+
+        private volatile boolean running = true;
+
+        @Override
+        protected String doInBackground(String... params) {
+            while (running) {
+                String result = ServiceUtils.getReportType();
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mReportTypeCallback != null) {
+                if (result == "" || result == null) {
+                    mReportTypeCallback.onError();
+                } else {
+                    ReportModel reportModel = ServiceUtils
+                            .parseReportModelFromJSON(result);
+                    mReportTypeCallback.onSuccess(reportModel);
                 }
             }
         }
@@ -744,14 +808,67 @@ public class HrmService {
                         mPostTaskCallback.onSuccess(result);
                     }
                 }
-            }
-            else {
+            } else {
                 if (mThreadTaskCallback != null) {
                     if (result == "" || result == null) {
                         mThreadTaskCallback.onError();
                     } else {
-                        mThreadTaskCallback.onSuccess(ServiceUtils.parseThreadModelFromJSON(result));
+                        mThreadTaskCallback.onSuccess(ServiceUtils
+                                .parseThreadModelFromJSON(result));
                     }
+                }
+            }
+        }
+    }
+
+    private class UpdateNotificationTask extends
+            AsyncTask<String, Void, String> {
+
+        Thread mThread = null;
+
+        public UpdateNotificationTask(final Thread thread) {
+            this.mThread = thread;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String result = ServiceUtils.updateNotification(mThread);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mPostTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mPostTaskCallback.onError();
+                } else {
+                    mPostTaskCallback.onSuccess(result);
+                }
+            }
+        }
+    }
+
+    private class AddReportTask extends AsyncTask<String, Void, String> {
+
+        Report mReportType = null;
+
+        public AddReportTask(final Report reportType) {
+            this.mReportType = reportType;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String result = ServiceUtils.addReport(mReportType);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mPostTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mPostTaskCallback.onError();
+                } else {
+                    mPostTaskCallback.onSuccess(result);
                 }
             }
         }

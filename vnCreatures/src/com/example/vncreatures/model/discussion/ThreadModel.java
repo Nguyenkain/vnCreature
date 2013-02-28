@@ -37,5 +37,14 @@ public class ThreadModel {
 		ArrayList<Thread> newList = model.getThreadList();
 		mThreadList.addAll(newList);
 	}
+	
+	public int countAllNotification() {
+	    int count = 0;
+	    for (Thread thread : mThreadList) {
+            if(thread.getViewed_status().equalsIgnoreCase("0"))
+                count ++;
+        }
+	    return count;
+	}
 
 }

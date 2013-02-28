@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/compose_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/button_shape"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <RelativeLayout
+            android:id="@+id/action_layout"
+            style="@style/Normal_Match" >
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/button_discuss"
+                android:text="@string/cancel"
+                android:textSize="14dp" >
+            </Button>
+
+            <Button
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/button_discuss_post"
+                android:text="@string/post"
+                android:textSize="14dp" 
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/content_layout"
+            style="@style/Fill"
+            android:layout_above="@+id/button_layout"
+            android:layout_below="@+id/action_layout"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/disscusback"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/info_layout"
+                style="@style/Normal_Match"
+                android:orientation="horizontal"
+                android:padding="8dp" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/report_type_textView"
+                        style="@style/Wrap"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/report_type"
+                        android:textStyle="bold"
+                        android:textSize="16dp" />
+
+                    <Spinner
+                        android:id="@+id/report_type_spinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:spinnerMode="dropdown" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightBorder" />
+
+            <LinearLayout
+                android:id="@+id/post_layout"
+                style="@style/Fill"
+                android:padding="8dp" >
+
+                <EditText
+                    android:id="@+id/report_content_EditText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="top"
+                    android:hint="@string/content"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

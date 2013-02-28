@@ -12,5 +12,10 @@
         android:icon="@drawable/ic_compose"
         android:showAsAction="always|collapseActionView"
         android:title="@string/advance"/>
+    
+    <item
+        android:id="@+id/menu_item_notification"
+        android:showAsAction="always"
+        android:title="@string/advance"/>
 
 </menu>

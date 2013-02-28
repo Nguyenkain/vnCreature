@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,13 +15,20 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.example.vncreatures.R;
+import com.example.vncreatures.customItems.NotificationActionProvider;
+import com.example.vncreatures.customItems.eventbus.BusProvider;
+import com.example.vncreatures.customItems.eventbus.NotificationUpdateEvent;
+import com.example.vncreatures.customItems.eventbus.ShowSlideMenuEvent;
+import com.example.vncreatures.customItems.wakefulservice.AppListener;
 import com.facebook.LoggingBehavior;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
 import com.slidingmenu.lib.SlidingMenu;
+import com.squareup.otto.Subscribe;
 
 public class DiscussionActivity extends AbstractFragmentActivity implements
         OnClickListener {
@@ -28,9 +36,13 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
     private UiLifecycleHelper uiHelper;
     private Fragment mContent;
+    private MenuItem notificationItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Service
+        WakefulIntentService.scheduleAlarms(new AppListener(), this, false);
 
         // Transition
         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
@@ -105,30 +117,53 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
         super.onResume();
         uiHelper.onResume();
+        BusProvider.getInstance().register(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+        //BusProvider.getInstance().unregister(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         uiHelper.onPause();
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         setTitle(R.string.discuss);
+        // Inflate menu
+        getSupportMenuInflater().inflate(R.menu.dicussion_menu, menu);
+        notificationItem = menu.findItem(R.id.menu_item_notification);
+        NotificationActionProvider notificationActionProvider = new NotificationActionProvider(
+                this);
+        notificationItem.setActionProvider(notificationActionProvider);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Subscribe
+    public void onNotificationUpdate(NotificationUpdateEvent event) {
+        NotificationActionProvider notificationActionProvider = new NotificationActionProvider(
+                this);
+        notificationItem.setActionProvider(notificationActionProvider);
+    }
+    
+    @Subscribe
+    public void onShowSlideMenu(ShowSlideMenuEvent event) {
+        getSlidingMenu().showMenu();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+        case R.id.menu_item_notification:
+            getSlidingMenu().showMenu();
+            break;
         default:
             break;
         }

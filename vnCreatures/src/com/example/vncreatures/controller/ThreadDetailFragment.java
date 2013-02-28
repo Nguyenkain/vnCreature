@@ -1,31 +1,34 @@
 package com.example.vncreatures.controller;
 
-import android.app.Activity;
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
-import android.widget.Adapter;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -34,13 +37,19 @@ import com.alhneiti.QuickAction.QuickActionWidget;
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
+import com.example.vncreatures.common.Utils;
 import com.example.vncreatures.customItems.DiscussionQuickAction;
 import com.example.vncreatures.customItems.PostListAdapter;
 import com.example.vncreatures.customItems.PostListAdapter.Callback;
+import com.example.vncreatures.customItems.eventbus.BusProvider;
+import com.example.vncreatures.customItems.eventbus.NotificationUpdateEvent;
+import com.example.vncreatures.model.discussion.ReportModel;
+import com.example.vncreatures.model.discussion.Report;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.PostTaskCallback;
+import com.example.vncreatures.rest.HrmService.ReportTypeCallback;
 import com.example.vncreatures.rest.HrmService.ThreadTaskCallback;
 import com.mobsandgeeks.saripaar.Rule;
 import com.mobsandgeeks.saripaar.Validator;
@@ -57,9 +66,12 @@ public class ThreadDetailFragment extends SherlockFragment implements
     private String mThreadId = null;
     private String mUserId = null;
     private ListView mListView = null;
+    private EditText mReportContent = null;
     private Thread mThread;
     private View mView;
     private View mLoadingView;
+    private Dialog mReportWindow;
+    private Report mReportType;
 
     SharedPreferences pref;
 
@@ -123,6 +135,27 @@ public class ThreadDetailFragment extends SherlockFragment implements
         return view;
     }
 
+    private void updateNotification() {
+        HrmService service = new HrmService();
+        Thread thread = new Thread();
+        thread.setThread_id(mThreadId);
+        thread.setUser_id(mUserId);
+
+        service.requestUpdateNotification(thread);
+        service.setCallback(new PostTaskCallback() {
+
+            @Override
+            public void onSuccess(String result) {
+                BusProvider.getInstance().post(new NotificationUpdateEvent());
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -136,6 +169,11 @@ public class ThreadDetailFragment extends SherlockFragment implements
     }
 
     private void initData() {
+        // Update notification
+        updateNotification();
+        mAQuery.id(R.id.progressBar1).visible();
+        mAQuery.id(R.id.thread_layout).gone();
+
         HrmService service = new HrmService();
         service.setCallback(new ThreadTaskCallback() {
 
@@ -154,12 +192,22 @@ public class ThreadDetailFragment extends SherlockFragment implements
                                 mThread.getThread_content());
                         mAQuery.id(R.id.thread_content_EditText).text(
                                 mThread.getThread_content());
+                        if (mThread.getLast_modified_time() != null) {
+                            mAQuery.id(R.id.thread_last_modified_time_textView)
+                                    .visible()
+                                    .text(String.format(
+                                            getString(R.string.last_modified),
+                                            mThread.getLast_modified_time()));
+                        }
                         String url = "http://graph.facebook.com/"
                                 + mThread.getUser_avatar()
                                 + "/picture?type=small";
                         mAQuery.id(R.id.avatar_imageView).image(url, true,
                                 true, 0, R.drawable.no_thumb, null,
                                 AQuery.FADE_IN_NETWORK);
+
+                        mAQuery.id(R.id.progressBar1).gone();
+                        mAQuery.id(R.id.thread_layout).visible();
 
                         // init Thread edit
                         final DiscussionQuickAction quickAction = new DiscussionQuickAction(
@@ -191,8 +239,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
     private void initCommentData() {
         HrmService service = new HrmService();
         ThreadModel model = new ThreadModel();
-        adapter = new PostListAdapter(getActivity(),
-                model);
+        adapter = new PostListAdapter(getActivity(), model);
         mListView.setAdapter(adapter);
         service.setCallback(new ThreadTaskCallback() {
 
@@ -300,7 +347,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
 
     private void postNewComment(final View v) {
         getSherlockActivity()
-        .setSupportProgressBarIndeterminateVisibility(true);
+                .setSupportProgressBarIndeterminateVisibility(true);
         mListView.addFooterView(mLoadingView);
         mListView.setSelection(mListView.getCount() - 1);
         String content = mPostContent.getText().toString();
@@ -312,25 +359,21 @@ public class ThreadDetailFragment extends SherlockFragment implements
         if (userid != null) {
             HrmService service = new HrmService();
             service.requestAddPost(thread);
-            /*service.setCallback(new PostTaskCallback() {
-
-                @Override
-                public void onSuccess(String result) {
-                    mListView.removeFooterView(mLoadingView);
-                    mPostContent.setText("");
-                    getSherlockActivity()
-                            .setSupportProgressBarIndeterminateVisibility(true);
-                    initCommentData();
-                    v.setEnabled(true);
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            });*/
+            /*
+             * service.setCallback(new PostTaskCallback() {
+             * 
+             * @Override public void onSuccess(String result) {
+             * mListView.removeFooterView(mLoadingView);
+             * mPostContent.setText(""); getSherlockActivity()
+             * .setSupportProgressBarIndeterminateVisibility(true);
+             * initCommentData(); v.setEnabled(true); }
+             * 
+             * @Override public void onError() {
+             * 
+             * } });
+             */
             service.setCallback(new ThreadTaskCallback() {
-                
+
                 @Override
                 public void onSuccess(ThreadModel threadModel) {
                     mListView.removeFooterView(mLoadingView);
@@ -342,33 +385,33 @@ public class ThreadDetailFragment extends SherlockFragment implements
                     mListView.setSelection(mListView.getCount() - 1);
                     v.setEnabled(true);
                 }
-                
+
                 @Override
                 public void onError() {
-                    
+
                 }
             });
         }
     }
-    
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // Inflate menu
-        getSherlockActivity().getSupportMenuInflater().inflate(
-                R.menu.detail_menu, menu);
-        menu.removeItem(R.id.menu_item_map);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment frag = null;
+        AQuery aQuery = new AQuery(mView);
         switch (item.getItemId()) {
         case R.id.menu_item_refresh:
             initData();
             break;
         case android.R.id.home:
             frag = new ThreadFragment();
+            break;
+        case R.id.menu_item_post:
+            Utils.toogleLayout(aQuery.id(R.id.postText_layout).getView());
             break;
         default:
             break;
@@ -490,6 +533,16 @@ public class ThreadDetailFragment extends SherlockFragment implements
         case R.id.comment_button:
             aQuery.id(R.id.postText_layout).visible();
             break;
+        case R.id.report_button:
+            initPopupWindow();
+            break;
+        case R.id.cancel_button:
+            mReportWindow.dismiss();
+            break;
+        case R.id.send_button:
+            v.setEnabled(false);
+            postNewReport(v);
+            break;
         case R.id.action_button:
             quickAction.onShowBar(v);
             quickAction.setCallback(new DiscussionQuickAction.Callback() {
@@ -596,6 +649,9 @@ public class ThreadDetailFragment extends SherlockFragment implements
                                 .setNegativeButton(R.string.cancel, null)
                                 .show();
                         break;
+                    case 2:
+                        initPopupWindow();
+                        break;
 
                     default:
                         break;
@@ -609,6 +665,123 @@ public class ThreadDetailFragment extends SherlockFragment implements
         default:
             break;
         }
+    }
+
+    private void initPopupWindow() {
+
+        try {
+            // We need to get the instance of the LayoutInflater, use the
+            // context of this activity
+            LayoutInflater inflater = (LayoutInflater) getActivity()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            // Inflate the view from a predefined XML layout
+            View layout = inflater.inflate(R.layout.report_layout, null);
+            mReportWindow = new Dialog(getActivity(),
+                    R.style.Theme_D1NoTitleDim);
+
+            // init UI
+            AQuery aQView = new AQuery(layout);
+            final Spinner reportTypeChoose = aQView
+                    .id(R.id.report_type_spinner).getSpinner();
+            Button sendButton = aQView.id(R.id.send_button).getButton();
+            mReportContent = aQView.id(R.id.report_content_EditText)
+                    .getEditText();
+
+            HrmService service = new HrmService();
+            service.setCallback(new ReportTypeCallback() {
+
+                @Override
+                public void onSuccess(ReportModel reportModel) {
+                    ArrayList<Report> listReport = reportModel
+                            .getReportTypeList();
+                    ArrayAdapter<Report> adapter = new ArrayAdapter<Report>(
+                            getActivity(),
+                            android.R.layout.simple_spinner_dropdown_item,
+                            listReport);
+                    reportTypeChoose.setAdapter(adapter);
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+            service.requestGetReportType();
+
+            reportTypeChoose
+                    .setOnItemSelectedListener(new OnItemSelectedListener() {
+
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapter,
+                                View view, int pos, long id) {
+                            mReportType = (Report) adapter
+                                    .getItemAtPosition(pos);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> arg0) {
+
+                        }
+                    });
+
+            // init Event
+            sendButton.setOnClickListener(this);
+            aQView.id(R.id.cancel_button).clicked(this);
+
+            /* blur background */
+            WindowManager.LayoutParams lp = mReportWindow.getWindow()
+                    .getAttributes();
+            lp.dimAmount = 0.0f;
+            lp.gravity = Gravity.CENTER;
+            mReportWindow.getWindow().setAttributes(lp);
+            mReportWindow.getWindow().addFlags(
+                    WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+            // set view
+            mReportWindow.setContentView(layout);
+            mReportWindow.setCanceledOnTouchOutside(true);
+            mReportWindow.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            mReportWindow.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void postNewReport(final View v) {
+        Report report = new Report();
+        report.setThread_id(mThreadId);
+        report.setUser_id(mUserId);
+        report.setReport_type_id(mReportType.getReport_type_id());
+        report.setComment(mReportContent.getText().toString());
+        HrmService service = new HrmService();
+        service.requestAddReport(report);
+        service.setCallback(new PostTaskCallback() {
+
+            @Override
+            public void onSuccess(String result) {
+                v.setEnabled(true);
+                result = result.replace("\n", "");
+                String message;
+                if (result.equalsIgnoreCase("ok")) {
+                    message = getString(R.string.report_done);
+                } else {
+                    message = getString(R.string.report_existed);
+                }
+                new AlertDialog.Builder(getSherlockActivity())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.report).setMessage(message)
+                        .setPositiveButton(R.string.confirm, null).show();
+                mReportWindow.dismiss();
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+
     }
 
 }

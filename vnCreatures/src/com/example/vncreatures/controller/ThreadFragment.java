@@ -23,8 +23,11 @@ import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
+import com.example.vncreatures.customItems.NotificationActionProvider;
 import com.example.vncreatures.customItems.ThreadListAdapter;
 import com.example.vncreatures.customItems.ThreadListAdapter.Callback;
+import com.example.vncreatures.customItems.eventbus.BusProvider;
+import com.example.vncreatures.customItems.eventbus.NotificationUpdateEvent;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.rest.HrmService;
@@ -70,16 +73,14 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
         initLayout();
         initList();
         setHasOptionsMenu(true);
+        
         return mView;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // Inflate menu
-        getSherlockActivity().getSupportMenuInflater().inflate(
-                R.menu.dicussion_menu, menu);
-
+       
     }
 
     @Override
@@ -186,6 +187,10 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
     }
 
     private void initList() {
+        
+        // Update notification
+        BusProvider.getInstance().post(new NotificationUpdateEvent());
+        
         HrmService service = new HrmService();
         service.setCallback(new ThreadTaskCallback() {
 

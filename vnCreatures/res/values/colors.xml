@@ -21,22 +21,26 @@
     <color name="grey">#9b9b9b</color>
     <color name="lightblack">#404040</color>
     <color name="darkorange">#F88017</color>
+    <color name="darkgreen">#2C9105</color>
+    <color name="lightgreen">#72FF5F</color>
     <color name="orange">#FF9900</color>
     <color name="lightBlue">#c4cde0</color>
     <color name="lightLayout">#eff2f5</color>
     <color name="lightBorder">#d6d8db</color>
     
-    <color name="sendLightColor">#8897BF</color>
-	<color name="sendMeduimColor">#5D6CA5</color>
-	<color name="sendDarkColor">#515F9F</color>
+    <color name="noti_back_color">#CDFFBA</color>
+    
+    <color name="sendLightColor">#00A707</color>
+	<color name="sendMeduimColor">#006D05</color>
+	<color name="sendDarkColor">#004203</color>
 	
 	<color name="cancelLightColor">#fff</color>
 	<color name="cancelMeduimColor">#ddd</color>
 	<color name="cancelDarkColor">#d8d8d8</color>
 	
-	<color name="postLightColor">#33bcef</color>
-	<color name="postMeduimColor">#019ad2</color>
-	<color name="postDarkColor">#0271bf</color>
+	<color name="postLightColor">#00A707</color>
+	<color name="postMeduimColor">#006D05</color>
+	<color name="postDarkColor">#004203</color>
 
 	<color name="barDarkColor">#CECECE</color>
 	<color name="barMeduimColor">#DFDEE0</color>
