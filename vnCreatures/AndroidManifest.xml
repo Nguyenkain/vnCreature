@@ -77,13 +77,13 @@
         </activity>
         <activity android:name=".controller.DiscussionActivity" >
         </activity>
-
+        <activity android:name=".controller.AndroidCustomGalleryActivity" >
+        </activity>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
         <activity android:name="com.facebook.LoginActivity" />
-        <activity android:name=".controller.LoginActivity"></activity>
     </application>
 
 </manifest>

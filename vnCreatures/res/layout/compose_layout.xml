@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/compose_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent" 
-    android:id="@+id/compose_layout">
+    android:background="@android:color/transparent" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:background="@drawable/button_shape"
         android:orientation="vertical"
-        android:padding="10dp" 
-        android:layout_centerVertical="true">
+        android:padding="10dp" >
 
         <RelativeLayout
             android:id="@+id/action_layout"
@@ -34,18 +34,18 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/button_discuss_post"
-                android:text="@string/post" 
-                android:textSize="14dp"/>
+                android:text="@string/post"
+                android:textSize="14dp" />
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/content_layout"
             style="@style/Fill"
+            android:layout_above="@+id/button_layout"
+            android:layout_below="@+id/action_layout"
             android:layout_marginTop="10dp"
             android:background="@drawable/disscusback"
-            android:orientation="vertical" 
-            android:layout_below="@+id/action_layout"
-            android:layout_above="@+id/button_layout"
-            android:id="@+id/content_layout">
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:id="@+id/info_layout"
@@ -59,27 +59,28 @@
                     android:layout_height="50dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/no_thumb" />
-                
-                <LinearLayout android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/username_textView"
-                    style="@style/Wrap"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/username"
-                    android:textStyle="bold" />
-                
-                <EditText android:id="@+id/title_editText"
+                <LinearLayout
                     android:layout_width="fill_parent"
-                    android:hint="@string/title"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:nextFocusForward="@+id/post_content_EditText"
-                    android:singleLine="true"/>
-                
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/username_textView"
+                        style="@style/Wrap"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/username"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/title_editText"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/title"
+                        android:inputType="text"
+                        android:nextFocusForward="@+id/post_content_EditText"
+                        android:singleLine="true" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -88,28 +89,42 @@
                 android:layout_height="1dp"
                 android:background="@color/lightBorder" />
 
-            <LinearLayout
-                android:id="@+id/post_layout"
+            <ScrollView
                 style="@style/Fill"
-                android:padding="8dp" >
+                android:fillViewport="true" >
 
-                <EditText
-                    android:id="@+id/post_content_EditText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="@android:color/transparent"
-                    android:hint="@string/content"
-                    android:inputType="textMultiLine"
-                    android:gravity="top"/>
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/post_layout"
+                    style="@style/Fill"
+                    android:orientation="vertical"
+                    android:padding="8dp" >
+
+                    <ImageView
+                        android:id="@+id/image_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:contentDescription="@string/app_name"
+                        android:maxHeight="50dp" />
+
+                    <EditText
+                        android:id="@+id/post_content_EditText"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@android:color/transparent"
+                        android:gravity="top"
+                        android:hint="@string/content"
+                        android:inputType="textMultiLine" />
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/button_layout"
             style="@style/Normal_Match"
-            android:orientation="horizontal" 
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="15dp"
-            android:layout_alignParentBottom="true">
+            android:orientation="horizontal" >
 
             <LinearLayout
                 android:id="@+id/camera_button"
@@ -124,13 +139,13 @@
                     android:layout_marginRight="10dp"
                     android:src="@drawable/camera" />
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/photo_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_discuss" 
-                android:layout_marginLeft="20dp">
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/button_discuss" >
 
                 <ImageView
                     android:layout_width="30dp"

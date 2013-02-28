@@ -1,11 +1,14 @@
 package com.example.vncreatures.model.discussion;
 
+import java.util.ArrayList;
+
 public class Thread {
     private String thread_id;
     private String user_id;
     private String thread_title;
     private String thread_content;
     private String thread_created_time;
+//    private ArrayList<String> thread_image = new ArrayList<String>();
     private String user_avatar;
     private String name;
     private String count_post;
@@ -15,8 +18,6 @@ public class Thread {
     private String notification_id;
     private String viewed_status;
     
-    
-
     public String getPost_created_time() {
         return post_created_time;
     }
@@ -136,5 +137,13 @@ public class Thread {
     public void setThread_created_time(String thread_created_time) {
         this.thread_created_time = thread_created_time;
     }
+//
+//	public void setThread_image(ArrayList<String> thread_image) {
+//		this.thread_image = thread_image;
+//	}
+//
+//	public ArrayList<String> getThread_image() {
+//		return thread_image;
+//	}
 
 }
