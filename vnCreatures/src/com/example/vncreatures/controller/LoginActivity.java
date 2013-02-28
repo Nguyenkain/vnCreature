@@ -204,7 +204,7 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                     pref.edit()
                             .putString(
                                     com.example.vncreatures.common.Common.USER_NAME,
-                                    fb.getUsername()).commit();
+                                    fb.getName()).commit();
                     pref.edit()
                             .putString(
                                     com.example.vncreatures.common.Common.FB_ID,
@@ -243,7 +243,7 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                             pref.edit()
                                     .putString(
                                             com.example.vncreatures.common.Common.USER_NAME,
-                                            fb.getUsername()).commit();
+                                            fb.getName()).commit();
                             pref.edit()
                                     .putString(
                                             com.example.vncreatures.common.Common.FB_ID,

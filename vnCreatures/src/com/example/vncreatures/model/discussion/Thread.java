@@ -17,7 +17,16 @@ public class Thread {
     private String post_created_time;
     private String notification_id;
     private String viewed_status;
-    
+    private String last_modified_time;
+
+    public String getLast_modified_time() {
+        return last_modified_time;
+    }
+
+    public void setLast_modified_time(String last_modified_time) {
+        this.last_modified_time = last_modified_time;
+    }
+
     public String getPost_created_time() {
         return post_created_time;
     }

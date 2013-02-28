@@ -41,10 +41,13 @@ import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
+import com.example.vncreatures.customItems.NotificationActionProvider;
 import com.example.vncreatures.customItems.Base64;
 import com.example.vncreatures.customItems.Base64.InputStream;
 import com.example.vncreatures.customItems.ThreadListAdapter;
 import com.example.vncreatures.customItems.ThreadListAdapter.Callback;
+import com.example.vncreatures.customItems.eventbus.BusProvider;
+import com.example.vncreatures.customItems.eventbus.NotificationUpdateEvent;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.rest.HrmService;
@@ -90,11 +93,21 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 		mContext = context;
 	}
 
+        initLayout();
+        initList();
+        setHasOptionsMenu(true);
+        
+        return mView;
+    }
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mView = inflater.inflate(R.layout.thread_layout, null);
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+       
 		// get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -194,6 +207,13 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 			mComposeWindow.getWindow().addFlags(
 					WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
 
+    private void initList() {
+        
+        // Update notification
+        BusProvider.getInstance().post(new NotificationUpdateEvent());
+        
+        HrmService service = new HrmService();
+        service.setCallback(new ThreadTaskCallback() {
 			// set view
 			mComposeWindow.setOnDismissListener(new OnDismissListener() {
 

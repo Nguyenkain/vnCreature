@@ -7,7 +7,8 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" 
-        android:scaleType="fitCenter"
-        android:src="@drawable/splashscreen"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/loading_screen"
+        android:background="@android:color/transparent"/>
 
 </LinearLayout>

@@ -42,6 +42,8 @@ public class NewsTabsPagerActivity extends AbstractFragmentActivity {
 
     @Override
     protected void onResume() {
+        // Transition
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
         super.onResume();
 
     }

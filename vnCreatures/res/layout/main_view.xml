@@ -84,7 +84,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:src="@drawable/close_icon" />
+                android:src="@drawable/navigation_cancel" />
         </RelativeLayout>
 
         <View
@@ -125,7 +125,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:src="@drawable/close_icon" />
+                android:src="@drawable/navigation_cancel" />
         </RelativeLayout>
 
         <View
@@ -166,7 +166,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:src="@drawable/close_icon" />
+                android:src="@drawable/navigation_cancel" />
         </RelativeLayout>
     </LinearLayout>
 

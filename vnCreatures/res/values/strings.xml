@@ -56,7 +56,17 @@
     <string name="post">Gửi</string>
     <string name="num_post">Có %s bài trả lời</string>
     <string name="content">Nội dung</string>
+    <string name="report_reason">Nội dung báo cáo</string>
     <string name="discuss">Thảo Luận</string>
+    <string name="report_type">Kiểu báo cáo</string>
+    <string name="notification_message">Có bài viết mới trong mục </string>
+    <string name="notification">Thông báo </string>
+    <string name="show">Hiện</string>
+    <string name="notification_overall">Có tổng cộng %d thông báo mới</string>
+    <string name="last_modified">Chỉnh sửa lần cuối vào %s</string>
+    
+    <string name="report_done">Báo cáo của bạn đã được gửi đi và sẽ được xử lý trong thời gian sớm nhất.</string>
+    <string name="report_existed">Thread này đã được bạn thông báo.</string>
     
     <!-- Quick Action Item -->
     <string name="edit">Sửa</string>

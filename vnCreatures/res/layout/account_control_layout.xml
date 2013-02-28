@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     xmlns:ExpandoLayout="http://schemas.android.com/apk/res/com.example.vncreatures"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp" >
 
     <LinearLayout
         android:id="@+id/profile_info_layout"
         style="@style/LinearLayoutRoundCorners"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
         android:orientation="vertical" >
 
         <com.facebook.widget.ProfilePictureView
@@ -37,31 +41,53 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name" />
-    </LinearLayout>
+    </LinearLayout>
     -->
 
     <Button
         android:id="@+id/logout_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_info_layout"
         android:text="@string/logout" />
 
-    <com.djpsoft.moreDroid.ExpandoLayout
-        android:id="@+id/notification_expandLayout"
+    <TextView
+        android:id="@+id/notification_overall"
+        style="@style/Wrap"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="@string/notification_overall"
+        android:textSize="20dp" />
+
+    <View
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        ExpandoLayout:expanded="true"
-        ExpandoLayout:text="@string/compact"
-        ExpandoLayout:titleRowPadding="5"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/logout_button" >
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/lightBorder" />
 
-        <ListView
-            android:id="@+id/notification_listView"
-            style="@style/Fill" >
-        </ListView>
-    </com.djpsoft.moreDroid.ExpandoLayout>
+    <RelativeLayout style="@style/Fill" >
 
-</RelativeLayout>
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/notification_expandLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:padding="5dp" >
+
+            <ListView
+                android:id="@+id/notification_listView"
+                style="@style/Fill" >
+            </ListView>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

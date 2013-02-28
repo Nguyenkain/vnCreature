@@ -4,6 +4,7 @@ import com.example.vncreatures.R;
 
 public class Common {
 	public static final int THEME = R.style.Theme_Styled_NoTitleBar_Fullscreen;
+	public static final int COMMON_ID = 1000;
 	
 	public static final String CREATURE_EXTRA = "creatureId";
 	public static final String ACTION_EXTRA = "view detail";

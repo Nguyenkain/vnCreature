@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?attr/actionButtonStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:addStatesFromChildren="true"
+    android:background="?attr/actionBarItemBackground"
+    android:focusable="true" >
+
+    <RelativeLayout
+        android:layout_width="32dip"
+        android:layout_height="32dip"
+        android:layout_gravity="center" >
+
+        <ImageButton
+            android:id="@+id/notification_button"
+            android:layout_width="32dip"
+            android:layout_height="32dip"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:background="@drawable/content_notification_reverse"
+            android:scaleType="fitCenter" />
+
+        <LinearLayout
+            style="@style/Wrap"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/notification_button"
+            android:padding="2dp" 
+            android:layout_marginRight="4dp"
+            android:id="@+id/notificationCount_layout">
+
+            <TextView
+                android:id="@+id/notification_count"
+                style="@style/Wrap"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

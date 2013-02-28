@@ -13,7 +13,7 @@ public class NewsListView extends RelativeLayout {
 	
 	public NewsListView(Context context) {
 		super(context);
-		LayoutInflater li = (LayoutInflater) context
+        LayoutInflater li = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		li.inflate(R.layout.news_layout, this);
 		mNewsListView = (PullToRefreshListView) findViewById(R.id.news_lisview);

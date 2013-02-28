@@ -2,6 +2,7 @@ package com.example.vncreatures.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class NewsContentActivity extends SherlockFragment {
             }
         });
     }
-    
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -85,9 +86,10 @@ public class NewsContentActivity extends SherlockFragment {
 
             @Override
             public void onGetNewsSuccess(NewsModel newsModel) {
+                getSherlockActivity()
+                        .setSupportProgressBarIndeterminateVisibility(false);
                 if (newsModel != null && newsModel.count() > 0) {
-                    getSherlockActivity()
-                            .setSupportProgressBarIndeterminateVisibility(false);
+
                     mNewsModel = newsModel;
                     dataListInit();
                     mView.mNewsListView.onRefreshComplete();
@@ -101,7 +103,7 @@ public class NewsContentActivity extends SherlockFragment {
 
             @Override
             public void onError() {
-
+                Log.d("Error", "Not found");
             }
         });
         service.requestGetNews(mCatId, "1");

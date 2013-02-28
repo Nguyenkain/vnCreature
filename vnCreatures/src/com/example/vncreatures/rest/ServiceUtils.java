@@ -15,6 +15,8 @@ import com.example.vncreatures.model.Province;
 import com.example.vncreatures.model.ProvinceModel;
 import com.example.vncreatures.model.discussion.FacebookUser;
 import com.example.vncreatures.model.discussion.FacebookUser.Location;
+import com.example.vncreatures.model.discussion.ReportModel;
+import com.example.vncreatures.model.discussion.Report;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.model.discussion.User;
@@ -223,6 +225,39 @@ public class ServiceUtils {
         }
 
         return threadModel;
+    }
+    
+ // Parse Thread Model
+    public static ReportModel parseReportModelFromJSON(String data) {
+        if (data == null || data == "")
+            return null;
+
+        ReportModel reportModel = new ReportModel();
+
+        if (data.indexOf('{') > -1)
+            data = data.substring(data.indexOf('{'));
+        if (data.lastIndexOf('}') > -1)
+            data = data.substring(0, data.lastIndexOf('}') + 1);
+
+        try {
+            JsonElement json = new JsonParser().parse(data);
+            JsonObject jsonObject = json.getAsJsonObject();
+            JsonArray array = jsonObject.getAsJsonArray("data");
+            if (array.isJsonNull())
+                return null;
+            Iterator<?> iterator = array.iterator();
+            while (iterator.hasNext()) {
+                JsonElement json2 = (JsonElement) iterator.next();
+                Gson gson = new Gson();
+                Report reportType = gson.fromJson(json2, Report.class);
+                reportModel.add(reportType);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return reportModel;
     }
 
     // END PARSE FROM JSON
@@ -533,6 +568,23 @@ public class ServiceUtils {
 
         return result;
     }
+    
+    public static String getReportType() {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_REPORT_TYPE);
+        RestClient client = new RestClient(request);
+
+        try {
+            client.execute(RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
 
     // END GET FROM JSOn
 
@@ -594,6 +646,48 @@ public class ServiceUtils {
         String json = gson.toJson(thread);
 
         String request = String.format(ServerConfig.ADD_POST);
+        RestClient client = new RestClient(request);
+        client.addParam("data", json);
+
+        try {
+            client.execute(RequestMethod.POST);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+    
+    public static String updateNotification(Thread thread) {
+        String result = "";
+
+        Gson gson = new Gson();
+        String json = gson.toJson(thread);
+
+        String request = String.format(ServerConfig.SET_NOTIFICATION);
+        RestClient client = new RestClient(request);
+        client.addParam("data", json);
+
+        try {
+            client.execute(RequestMethod.POST);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+    
+    public static String addReport(Report report) {
+        String result = "";
+
+        Gson gson = new Gson();
+        String json = gson.toJson(report);
+
+        String request = String.format(ServerConfig.ADD_REPORT);
         RestClient client = new RestClient(request);
         client.addParam("data", json);
 
