@@ -585,6 +585,24 @@ public class ServiceUtils {
 
         return result;
     }
+    
+    public static String getSuggestion(String title) {
+        String result = "";
+
+        String request = String.format(ServerConfig.GET_SUGGESTION);
+        RestClient client = new RestClient(request);
+        client.addParam("title", title);
+
+        try {
+            client.execute(RequestMethod.GET);
+            result = client.getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
 
     // END GET FROM JSOn
 

@@ -2,6 +2,7 @@ package com.example.vncreatures.controller;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Interpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -28,6 +30,7 @@ import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
 import com.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.SlidingMenu.CanvasTransformer;
 import com.squareup.otto.Subscribe;
 
 public class DiscussionActivity extends AbstractFragmentActivity implements
@@ -37,6 +40,13 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     private UiLifecycleHelper uiHelper;
     private Fragment mContent;
     private MenuItem notificationItem;
+    private static Interpolator interp = new Interpolator() {
+        @Override
+        public float getInterpolation(float t) {
+            t -= 1.0f;
+            return t * t * t + 1.0f;
+        }       
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,14 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
 
         super.onCreate(savedInstanceState);
+        
+        CanvasTransformer transformer = new CanvasTransformer() {
+            
+            @Override
+            public void transformCanvas(Canvas canvas, float percentOpen) {
+                canvas.translate(0, canvas.getHeight()*(1-interp.getInterpolation(percentOpen)));
+            }
+        };
 
         if (findViewById(R.id.menu_frame) == null) {
             setBehindContentView(R.layout.menu_frame);
@@ -85,6 +103,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         sm.setShadowDrawable(R.drawable.shadow);
         sm.setBehindScrollScale(0.25f);
         sm.setFadeDegree(0.25f);
+        sm.setBehindCanvasTransformer(transformer);
 
         // init session
         uiHelper = new UiLifecycleHelper(this, statusCallback);

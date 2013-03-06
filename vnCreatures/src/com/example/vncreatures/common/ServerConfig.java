@@ -47,6 +47,8 @@ public class ServerConfig {
             + "/refactor/public/user/set-notification";
 	public static final String GET_REPORT_TYPE = ROOT
             + "/refactor/public/user/get-report-type";
+	public static final String GET_SUGGESTION = ROOT
+            + "/refactor/public/user/suggest";
 	public static final String ADD_REPORT = ROOT
             + "/refactor/public/user/set-report";
 

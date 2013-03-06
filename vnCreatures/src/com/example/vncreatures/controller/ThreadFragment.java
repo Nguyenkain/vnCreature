@@ -2,6 +2,8 @@ package com.example.vncreatures.controller;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,8 +14,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -23,7 +28,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
-import com.example.vncreatures.customItems.NotificationActionProvider;
+import com.example.vncreatures.customItems.SuggestListAdapter;
 import com.example.vncreatures.customItems.ThreadListAdapter;
 import com.example.vncreatures.customItems.ThreadListAdapter.Callback;
 import com.example.vncreatures.customItems.eventbus.BusProvider;
@@ -46,11 +51,13 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
     private View mView;
     private ThreadListAdapter mAdapter;
     private Dialog mComposeWindow;
+    private Dialog mSuggestWindow;
     PullToRefreshListView mListView;
     SharedPreferences pref;
-    
-    //Post Thread Item
-    Validator validator;    
+    private boolean mState = true;
+
+    // Post Thread Item
+    Validator validator;
     @Required(order = 1, message = Common.TITLE_MESSAGE)
     @TextRule(order = 4, minLength = 8, message = Common.MINLENGTH_MESSAGE)
     private EditText mTitleEditText = null;
@@ -70,17 +77,23 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
         // get preference
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
+        // init suggest popup
+        String title = pref.getString(Common.SUGGEST_TITLE_PREF, null);
+        if (title != null) {
+            initSuggestPopupWindow(true);
+        }
+
         initLayout();
         initList();
         setHasOptionsMenu(true);
-        
+
         return mView;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-       
+
     }
 
     @Override
@@ -92,7 +105,8 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
             break;
         case R.id.menu_item_post:
             // frag = new PostThreadFragment();
-            initPopupWindow();
+            // initPopupWindow();
+            initSuggestPopupWindow(false);
             break;
         default:
             break;
@@ -104,8 +118,8 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
     }
 
     @SuppressWarnings("deprecation")
-    private void initPopupWindow() {
-       
+    private void initPopupWindow(String titleText) {
+
         try {
             // We need to get the instance of the LayoutInflater, use the
             // context of this activity
@@ -116,12 +130,17 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
             mComposeWindow = new Dialog(getActivity(),
                     R.style.Theme_D1NoTitleDim);
 
-            //init UI
+            // init UI
             AQuery aQView = new AQuery(layout);
             mTitleEditText = aQView.id(R.id.title_editText).getEditText();
-            mContentEditText = aQView.id(R.id.post_content_EditText).getEditText();
+            mContentEditText = aQView.id(R.id.post_content_EditText)
+                    .getEditText();
+            pref.edit().putString(Common.SUGGEST_TITLE_PREF, titleText)
+                    .commit();
+            String title = pref.getString(Common.SUGGEST_TITLE_PREF, "");
+            mTitleEditText.setText(title);
             Button sendButton = aQView.id(R.id.send_button).getButton();
-            
+
             String userName = pref.getString(Common.USER_NAME, null);
             String fbId = pref.getString(Common.FB_ID, null);
             if (userName != null && fbId != null) {
@@ -130,15 +149,17 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
             }
             String url = "http://graph.facebook.com/" + fbId
                     + "/picture?type=small";
-            aQView.id(R.id.avatar_imageView).image(url).image(url, true, true, 0, R.drawable.no_thumb, null,
-                    AQuery.FADE_IN_NETWORK);
+            aQView.id(R.id.avatar_imageView)
+                    .image(url)
+                    .image(url, true, true, 0, R.drawable.no_thumb, null,
+                            AQuery.FADE_IN_NETWORK);
             aQView.id(R.id.username_textView).text(userName);
-            
+
             // init validator
             validator = new Validator(this);
             ValidateListener listener = new ValidateListener((View) sendButton);
             validator.setValidationListener(listener);
-            
+
             // init Event
             sendButton.setOnClickListener(this);
             aQView.id(R.id.cancel_button).clicked(this);
@@ -155,8 +176,163 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
             // set view
             mComposeWindow.setContentView(layout);
             mComposeWindow.setCanceledOnTouchOutside(true);
-            mComposeWindow.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            mComposeWindow.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
             mComposeWindow.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initSuggestPopupWindow(boolean isOpenned) {
+
+        try {
+            // We need to get the instance of the LayoutInflater, use the
+            // context of this activity
+            LayoutInflater inflater = (LayoutInflater) getActivity()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            // Inflate the view from a predefined XML layout
+            View layout = inflater.inflate(R.layout.suggest_layout, null);
+            mSuggestWindow = new Dialog(getActivity(),
+                    R.style.Theme_D1NoTitleDim);
+
+            // init UI
+            final AQuery aQView = new AQuery(layout);
+            mTitleEditText = aQView.id(R.id.title_editText).getEditText();
+            String title = pref.getString(Common.SUGGEST_TITLE_PREF, "");
+            mTitleEditText.setText(title);
+            final ListView suggestListview = aQView.id(R.id.suggest_listview)
+                    .getListView();
+            Button sendButton = aQView.id(R.id.send_button).getButton();
+
+            String userName = pref.getString(Common.USER_NAME, null);
+            String fbId = pref.getString(Common.FB_ID, null);
+            if (userName != null && fbId != null) {
+                userName = userName.replace("\n", "").replace("\r", "").trim();
+                fbId = fbId.replace("\n", "").replace("\r", "").trim();
+            }
+            String url = "http://graph.facebook.com/" + fbId
+                    + "/picture?type=small";
+            aQView.id(R.id.avatar_imageView)
+                    .image(url)
+                    .image(url, true, true, 0, R.drawable.no_thumb, null,
+                            AQuery.FADE_IN_NETWORK);
+            aQView.id(R.id.username_textView).text(userName);
+
+            // init Event
+            aQView.id(R.id.cancel_button).clicked(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (aQView.id(R.id.suggest_layout).getView()
+                            .getVisibility() == View.GONE) {
+                        pref.edit().remove(Common.SUGGEST_TITLE_PREF).commit();
+                        mSuggestWindow.dismiss();
+                        mSuggestWindow = null;
+                    } else {
+                        Button bt = (Button) v;
+                        bt.setText(getString(R.string.cancel));
+                        aQView.id(R.id.suggest_layout).gone();
+                    }
+                }
+            });
+            aQView.id(R.id.send_button).clicked(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (aQView.id(R.id.suggest_layout).getView()
+                            .getVisibility() == View.GONE) {
+                        aQView.id(R.id.cancel_button).text(
+                                getString(R.string.delete));
+                        HrmService service = new HrmService();
+                        aQView.id(R.id.loading_layout).visible();
+                        aQView.id(R.id.suggest_layout).gone();
+                        service.requestGetSuggestion(mTitleEditText.getText()
+                                .toString());
+                        ThreadModel model = new ThreadModel();
+                        final SuggestListAdapter adapter = new SuggestListAdapter(
+                                getActivity(), model);
+                        suggestListview.setAdapter(adapter);
+                        service.setCallback(new ThreadTaskCallback() {
+
+                            @Override
+                            public void onSuccess(
+                                    final ThreadModel threadItemModel) {
+                                adapter.setModel(threadItemModel);
+                                adapter.notifyDataSetChanged();
+                                aQView.id(R.id.loading_layout).gone();
+                                aQView.id(R.id.suggest_layout).visible();
+                                pref.edit()
+                                        .putString(
+                                                Common.SUGGEST_TITLE_PREF,
+                                                mTitleEditText.getText()
+                                                        .toString()).commit();
+                                suggestListview
+                                        .setOnItemClickListener(new OnItemClickListener() {
+
+                                            @Override
+                                            public void onItemClick(
+                                                    AdapterView<?> arg0,
+                                                    View arg1, int arg2,
+                                                    long arg3) {
+                                                Thread threadItem = threadItemModel
+                                                        .get(arg2);
+                                                pref.edit().putString(
+                                                                Common.THREAD_ID,
+                                                                threadItem
+                                                                        .getThread_id())
+                                                        .commit();
+                                                mState = false;
+                                                mSuggestWindow.dismiss();
+                                                Fragment fragment = new ThreadDetailFragment();
+                                                switchFragment(fragment);
+                                            }
+                                        });
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+                    } else {
+                        mSuggestWindow.dismiss();
+                        mSuggestWindow = null;
+                        initPopupWindow(mTitleEditText.getText().toString());
+                    }
+                }
+            });
+
+            /* blur background */
+            WindowManager.LayoutParams lp = mSuggestWindow.getWindow()
+                    .getAttributes();
+            lp.dimAmount = 0.0f;
+            lp.gravity = Gravity.CENTER;
+            mSuggestWindow.getWindow().setAttributes(lp);
+            mSuggestWindow.getWindow().addFlags(
+                    WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+            // set view
+            mSuggestWindow.setContentView(layout);
+            mSuggestWindow.setCanceledOnTouchOutside(true);
+            mSuggestWindow.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            mSuggestWindow.show();
+
+            mSuggestWindow.setOnDismissListener(new OnDismissListener() {
+
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    if (mState) {
+                        pref.edit().remove(Common.SUGGEST_TITLE_PREF).commit();
+                    }
+                }
+            });
+
+            if (isOpenned) {
+                aQView.id(R.id.send_button).click();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,10 +363,10 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
     }
 
     private void initList() {
-        
+
         // Update notification
         BusProvider.getInstance().post(new NotificationUpdateEvent());
-        
+
         HrmService service = new HrmService();
         service.setCallback(new ThreadTaskCallback() {
 
@@ -225,7 +401,7 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
                 .setSupportProgressBarIndeterminateVisibility(true);
         service.requestGetAllThread();
     }
-    
+
     private final class ValidateListener implements ValidationListener {
 
         private View mView;
@@ -272,9 +448,11 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
         switch (v.getId()) {
         case R.id.send_button:
             v.setEnabled(false);
+            pref.edit().remove(Common.SUGGEST_TITLE_PREF).commit();
             validator.validateAsync();
             break;
         case R.id.cancel_button:
+            pref.edit().remove(Common.SUGGEST_TITLE_PREF).commit();
             mComposeWindow.dismiss();
             mComposeWindow = null;
             break;
@@ -282,7 +460,7 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
             break;
         }
     }
-    
+
     private void postNewThread(final View v) {
         String title = mTitleEditText.getText().toString();
         String content = mContentEditText.getText().toString();

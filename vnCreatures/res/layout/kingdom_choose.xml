@@ -4,41 +4,46 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        style="@style/MatchWidth"
+        style="@style/Fill"
         android:layout_centerInParent="true"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:weightSum="3"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
 
         <ImageButton
             android:id="@+id/animal_button"
-            android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/button_shape"
+            android:background="@drawable/button_animal"
             android:contentDescription="@string/animal"
-            android:scaleType="fitXY"
-            android:src="@drawable/animal" />
+            android:scaleType="fitXY" />
 
         <ImageButton
             android:id="@+id/plant_button"
-            android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:background="@drawable/button_shape"
+            android:background="@drawable/button_plant"
             android:contentDescription="@string/plant"
-            android:scaleType="fitXY"
-            android:src="@drawable/plant" />
+            android:scaleType="fitXY"/>
 
         <ImageButton
             android:id="@+id/insect_button"
-            android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:background="@drawable/button_shape"
+            android:background="@drawable/button_insect"
             android:contentDescription="@string/insect"
-            android:scaleType="fitXY"
-            android:src="@drawable/insect" />
+            android:scaleType="fitXY"/>
     </LinearLayout>
 
 </RelativeLayout>

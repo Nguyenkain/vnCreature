@@ -28,6 +28,7 @@ public class Common {
 	
 	public static final String KINGDOM_PREF = "KingdomPrefs";
 	public static final String TAB_PREF = "tabPrefs";
+	public static final String SUGGEST_TITLE_PREF = "titlePrefs";
 	
 	public static final String USER_ID = "userid";
 	public static final String USER_NAME = "username";

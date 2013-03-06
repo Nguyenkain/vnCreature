@@ -205,6 +205,12 @@ public class HrmService {
         task.execute();
         return true;
     }
+    
+    public boolean requestGetSuggestion(String title) {
+        GetSuggestionTask task = new GetSuggestionTask();
+        task.execute(title);
+        return true;
+    }
 
     // POST TO SERVER
 
@@ -597,6 +603,40 @@ public class HrmService {
             while (running) {
                 String id = params[0];
                 String result = ServiceUtils.getPostByThreadId(id);
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mThreadTaskCallback != null) {
+                if (result == "" || result == null) {
+                    mThreadTaskCallback.onError();
+                } else {
+                    ThreadModel threadModel = ServiceUtils
+                            .parseThreadModelFromJSON(result);
+                    mThreadTaskCallback.onSuccess(threadModel);
+                }
+            }
+        }
+    }
+    
+    public class GetSuggestionTask extends AsyncTask<String, Void, String> {
+
+        private volatile boolean running = true;
+
+        @Override
+        protected String doInBackground(String... params) {
+            while (running) {
+                String title = params[0];
+                String result = ServiceUtils.getSuggestion(title);
                 return result;
             }
             return null;

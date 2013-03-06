@@ -153,9 +153,9 @@ public class PostListAdapter extends BaseAdapter {
                              * content = mAQuery .id(R.id.post_content_TextView)
                              * .getTextView();
                              */
-                            mContent.setVisibility(View.GONE);
+                            /*mContent.setVisibility(View.GONE);
                             mContentEdit.setVisibility(View.VISIBLE);
-                            mContentEdit.requestFocus();
+                            mContentEdit.requestFocus();*/
                             if (mCallback != null) {
                                 mCallback.onEditThread(mThread, mContentEdit,
                                         mContent);

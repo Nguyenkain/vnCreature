@@ -1,6 +1,12 @@
 package com.example.vncreatures.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -43,18 +49,29 @@ import com.example.vncreatures.customItems.PostListAdapter;
 import com.example.vncreatures.customItems.PostListAdapter.Callback;
 import com.example.vncreatures.customItems.eventbus.BusProvider;
 import com.example.vncreatures.customItems.eventbus.NotificationUpdateEvent;
-import com.example.vncreatures.model.discussion.ReportModel;
 import com.example.vncreatures.model.discussion.Report;
+import com.example.vncreatures.model.discussion.ReportModel;
 import com.example.vncreatures.model.discussion.Thread;
 import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.PostTaskCallback;
 import com.example.vncreatures.rest.HrmService.ReportTypeCallback;
 import com.example.vncreatures.rest.HrmService.ThreadTaskCallback;
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
+import com.facebook.LoggingBehavior;
+import com.facebook.Request;
+import com.facebook.RequestAsyncTask;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.Settings;
+import com.facebook.UiLifecycleHelper;
 import com.mobsandgeeks.saripaar.Rule;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.Validator.ValidationListener;
 import com.mobsandgeeks.saripaar.annotation.Required;
+import com.mobsandgeeks.saripaar.annotation.TextRule;
 
 public class ThreadDetailFragment extends SherlockFragment implements
         OnClickListener {
@@ -71,11 +88,20 @@ public class ThreadDetailFragment extends SherlockFragment implements
     private View mView;
     private View mLoadingView;
     private Dialog mReportWindow;
+    private Dialog mEditWindow;
     private Report mReportType;
 
     SharedPreferences pref;
+    UiLifecycleHelper uiHelper;
+    private Session.StatusCallback statusCallback = new SessionStatusCallback();
+
+    private static final List<String> PERMISSIONS = Arrays
+            .asList("publish_actions");
+    private static final String PENDING_PUBLISH_KEY = "pendingPublishReauthorization";
+    private boolean pendingPublishReauthorization = false;
 
     @Required(order = 1, message = Common.CONTENT_MESSAGE)
+    @TextRule(order = 2, minLength = 8, message = Common.MINLENGTH_MESSAGE)
     private EditText mPostContent = null;
 
     @Override
@@ -88,6 +114,8 @@ public class ThreadDetailFragment extends SherlockFragment implements
         // get preference
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (savedInstanceState != null) {
+            pendingPublishReauthorization = savedInstanceState.getBoolean(
+                    PENDING_PUBLISH_KEY, false);
             mUserId = savedInstanceState.getString(Common.USER_ID, null);
             if (mUserId != null) {
                 pref.edit().putString(Common.USER_ID, mUserId).commit();
@@ -96,6 +124,10 @@ public class ThreadDetailFragment extends SherlockFragment implements
         }
         mThreadId = pref.getString(Common.THREAD_ID, null);
         mUserId = pref.getString(Common.USER_ID, null);
+
+        // init session
+        uiHelper = new UiLifecycleHelper(getActivity(), statusCallback);
+        Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
         // init ListView
         mListView = (ListView) view.findViewById(R.id.post_listView);
@@ -124,6 +156,8 @@ public class ThreadDetailFragment extends SherlockFragment implements
 
             @Override
             public void onClick(View v) {
+                mPostContent = (EditText) mView
+                        .findViewById(R.id.post_editText);
                 v.setEnabled(false);
                 validator.validateAsync();
             }
@@ -160,12 +194,14 @@ public class ThreadDetailFragment extends SherlockFragment implements
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         String userid = pref.getString(Common.USER_ID, null);
+        outState.putBoolean(PENDING_PUBLISH_KEY, pendingPublishReauthorization);
         if (userid != null) {
             outState.putString(Common.USER_ID, userid);
         }
         if (mThreadId != null) {
             outState.putString(Common.THREAD_ID, mThreadId);
         }
+        uiHelper.onSaveInstanceState(outState);
     }
 
     private void initData() {
@@ -192,6 +228,8 @@ public class ThreadDetailFragment extends SherlockFragment implements
                                 mThread.getThread_content());
                         mAQuery.id(R.id.thread_content_EditText).text(
                                 mThread.getThread_content());
+                        mAQuery.id(R.id.share_button).clicked(
+                                ThreadDetailFragment.this);
                         if (mThread.getLast_modified_time() != null) {
                             mAQuery.id(R.id.thread_last_modified_time_textView)
                                     .visible()
@@ -265,51 +303,40 @@ public class ThreadDetailFragment extends SherlockFragment implements
             @Override
             public void onEditThread(final Thread thread,
                     final EditText contentEdit, final TextView content) {
-                mMode = getSherlockActivity().startActionMode(
-                        new AnActionModeOfEpicProportions(thread, contentEdit,
-                                content));
-                int doneButtonId = Resources.getSystem().getIdentifier(
-                        "action_mode_close_button", "id", "android");
-                View doneButton = null;
-                if (doneButtonId != 0) {
-                    doneButton = getSherlockActivity().findViewById(
-                            doneButtonId);
-                } else {
-                    doneButton = getSherlockActivity().findViewById(
-                            R.id.abs__action_mode_close_button);
-                }
-                doneButton.setOnClickListener(new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        if (!contentEdit.getText().toString()
-                                .equalsIgnoreCase(content.getText().toString())) {
-                            final Thread newThread = new Thread();
-                            newThread.setPost_id(thread.getPost_id());
-                            newThread.setPost_content(contentEdit.getText()
-                                    .toString());
-                            HrmService service = new HrmService();
-                            service.setCallback(new PostTaskCallback() {
+                initEditWindow(thread, content.getText().toString());
 
-                                @Override
-                                public void onSuccess(String result) {
-                                    initCommentData();
-                                    mMode.finish();
-                                }
-
-                                @Override
-                                public void onError() {
-                                    // TODO Auto-generated method stub
-
-                                }
-                            });
-                            service.requestAddPost(newThread);
-                        } else {
-                            mMode.finish();
-                        }
-
-                    }
-                });
+                /*
+                 * mMode = getSherlockActivity().startActionMode( new
+                 * AnActionModeOfEpicProportions(thread, contentEdit, content));
+                 * int doneButtonId = Resources.getSystem().getIdentifier(
+                 * "action_mode_close_button", "id", "android"); View doneButton
+                 * = null; if (doneButtonId != 0) { doneButton =
+                 * getSherlockActivity().findViewById( doneButtonId); } else {
+                 * doneButton = getSherlockActivity().findViewById(
+                 * R.id.abs__action_mode_close_button); }
+                 * doneButton.setOnClickListener(new View.OnClickListener() {
+                 * 
+                 * @Override public void onClick(View v) { if
+                 * (!contentEdit.getText().toString()
+                 * .equalsIgnoreCase(content.getText().toString())) { final
+                 * Thread newThread = new Thread();
+                 * newThread.setPost_id(thread.getPost_id());
+                 * newThread.setPost_content(contentEdit.getText() .toString());
+                 * HrmService service = new HrmService();
+                 * service.setCallback(new PostTaskCallback() {
+                 * 
+                 * @Override public void onSuccess(String result) {
+                 * initCommentData(); mMode.finish(); }
+                 * 
+                 * @Override public void onError() { // TODO Auto-generated
+                 * method stub
+                 * 
+                 * } }); service.requestAddPost(newThread); } else {
+                 * mMode.finish(); }
+                 * 
+                 * } });
+                 */
             }
 
             @Override
@@ -474,6 +501,96 @@ public class ThreadDetailFragment extends SherlockFragment implements
 
     }
 
+    private final class ValidateEditListener implements ValidationListener {
+
+        private View mView;
+        private Thread mThread;
+        private String mContent;
+
+        public ValidateEditListener(View v, Thread thread, String content) {
+            this.mView = v;
+            this.mThread = thread;
+            this.mContent = content;
+        }
+
+        public void setContent(String content) {
+            this.mContent = content;
+        }
+
+        @Override
+        public void preValidation() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onSuccess() {
+            if (mThread.getPost_id() != null) {
+                final Thread newThread = new Thread();
+                newThread.setPost_id(this.mThread.getPost_id());
+                newThread.setPost_content(this.mContent);
+                HrmService service = new HrmService();
+                service.setCallback(new PostTaskCallback() {
+
+                    @Override
+                    public void onSuccess(String result) {
+                        initCommentData();
+                        mView.setEnabled(true);
+                        mEditWindow.dismiss();
+                        mEditWindow = null;
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
+                service.requestAddPost(newThread);
+            } else {
+                HrmService service = new HrmService();
+                service.setCallback(new PostTaskCallback() {
+
+                    @Override
+                    public void onSuccess(String result) {
+                        initData();
+                        mMode.finish();
+                    }
+
+                    @Override
+                    public void onError() {
+                        // TODO
+                        // Auto-generated
+                        // method
+                        // stub
+
+                    }
+                });
+                service.requestAddThread(mThread);
+            }
+        }
+
+        @Override
+        public void onFailure(View failedView, Rule<?> failedRule) {
+            String message = failedRule.getFailureMessage();
+            mView.setEnabled(true);
+
+            if (failedView instanceof EditText) {
+                failedView.requestFocus();
+                ((EditText) failedView).setError(message);
+            } else {
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+
+        @Override
+        public void onValidationCancelled() {
+            // TODO Auto-generated method stub
+
+        }
+
+    }
+
     private final class AnActionModeOfEpicProportions implements
             ActionMode.Callback {
         EditText mContentEdit;
@@ -526,11 +643,11 @@ public class ThreadDetailFragment extends SherlockFragment implements
         AQuery aQuery = new AQuery(mView);
         DiscussionQuickAction quickAction = new DiscussionQuickAction(
                 getSherlockActivity());
-        final EditText contentEdit = aQuery.id(R.id.thread_content_EditText)
-                .getEditText();
+
         final TextView content = aQuery.id(R.id.content_textView).getTextView();
         switch (v.getId()) {
         case R.id.comment_button:
+            mPostContent = (EditText) mView.findViewById(R.id.post_editText);
             aQuery.id(R.id.postText_layout).visible();
             break;
         case R.id.report_button:
@@ -543,7 +660,12 @@ public class ThreadDetailFragment extends SherlockFragment implements
             v.setEnabled(false);
             postNewReport(v);
             break;
+        case R.id.share_button:
+            sharePost(mThread);
+            break;
         case R.id.action_button:
+            mPostContent = aQuery.id(R.id.thread_content_EditText)
+                    .getEditText();
             quickAction.onShowBar(v);
             quickAction.setCallback(new DiscussionQuickAction.Callback() {
 
@@ -553,11 +675,11 @@ public class ThreadDetailFragment extends SherlockFragment implements
                     switch (position) {
                     case 0:
                         content.setVisibility(View.GONE);
-                        contentEdit.setVisibility(View.VISIBLE);
-                        contentEdit.requestFocus();
+                        mPostContent.setVisibility(View.VISIBLE);
+                        mPostContent.requestFocus();
                         mMode = getSherlockActivity().startActionMode(
                                 new AnActionModeOfEpicProportions(mThread,
-                                        contentEdit, content));
+                                        mPostContent, content));
                         int doneButtonId = Resources.getSystem().getIdentifier(
                                 "action_mode_close_button", "id", "android");
                         View doneButton = null;
@@ -573,7 +695,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
 
                                     @Override
                                     public void onClick(View v) {
-                                        if (!contentEdit
+                                        if (!mPostContent
                                                 .getText()
                                                 .toString()
                                                 .equalsIgnoreCase(
@@ -583,29 +705,18 @@ public class ThreadDetailFragment extends SherlockFragment implements
                                             newThread.setThread_id(mThread
                                                     .getThread_id());
                                             newThread
-                                                    .setThread_content(contentEdit
+                                                    .setThread_content(mPostContent
                                                             .getText()
                                                             .toString());
-                                            HrmService service = new HrmService();
-                                            service.setCallback(new PostTaskCallback() {
-
-                                                @Override
-                                                public void onSuccess(
-                                                        String result) {
-                                                    initData();
-                                                    mMode.finish();
-                                                }
-
-                                                @Override
-                                                public void onError() {
-                                                    // TODO
-                                                    // Auto-generated
-                                                    // method
-                                                    // stub
-
-                                                }
-                                            });
-                                            service.requestAddThread(newThread);
+                                            Validator validator = new Validator(
+                                                    ThreadDetailFragment.this);
+                                            ValidateEditListener listener = new ValidateEditListener(
+                                                    v, newThread, mPostContent
+                                                            .getText()
+                                                            .toString());
+                                            validator
+                                                    .setValidationListener(listener);
+                                            validator.validateAsync();
                                         } else {
                                             mMode.finish();
                                         }
@@ -782,6 +893,179 @@ public class ThreadDetailFragment extends SherlockFragment implements
             }
         });
 
+    }
+
+    @SuppressWarnings("deprecation")
+    private void initEditWindow(final Thread thread, final String content) {
+
+        try {
+            // We need to get the instance of the LayoutInflater, use the
+            // context of this activity
+            LayoutInflater inflater = (LayoutInflater) getActivity()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            // Inflate the view from a predefined XML layout
+            View layout = inflater.inflate(R.layout.compose_layout, null);
+            mEditWindow = new Dialog(getActivity(), R.style.Theme_D1NoTitleDim);
+
+            // init UI
+            AQuery aQView = new AQuery(layout);
+            aQView.id(R.id.title_editText).gone();
+            aQView.id(R.id.button_layout).gone();
+            mPostContent = aQView.id(R.id.post_content_EditText).getEditText();
+            mPostContent.setText(content);
+            Button sendButton = aQView.id(R.id.send_button).getButton();
+
+            String userName = pref.getString(Common.USER_NAME, null);
+            String fbId = pref.getString(Common.FB_ID, null);
+            if (userName != null && fbId != null) {
+                userName = userName.replace("\n", "").replace("\r", "").trim();
+                fbId = fbId.replace("\n", "").replace("\r", "").trim();
+            }
+            String url = "http://graph.facebook.com/" + fbId
+                    + "/picture?type=small";
+            aQView.id(R.id.avatar_imageView)
+                    .image(url)
+                    .image(url, true, true, 0, R.drawable.no_thumb, null,
+                            AQuery.FADE_IN_NETWORK);
+            aQView.id(R.id.username_textView).text(userName);
+
+            // init validator
+            final Validator editValidator = new Validator(this);
+            final ValidateEditListener listener = new ValidateEditListener(
+                    (View) sendButton, thread, content);
+            editValidator.setValidationListener(listener);
+
+            // init Event
+            sendButton.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    listener.setContent(mPostContent.getText().toString());
+                    v.setEnabled(false);
+                    editValidator.validateAsync();
+                }
+            });
+            aQView.id(R.id.cancel_button).clicked(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    mEditWindow.dismiss();
+                    mEditWindow = null;
+                }
+            });
+
+            /* blur background */
+            WindowManager.LayoutParams lp = mEditWindow.getWindow()
+                    .getAttributes();
+            lp.dimAmount = 0.0f;
+            lp.gravity = Gravity.CENTER;
+            mEditWindow.getWindow().setAttributes(lp);
+            mEditWindow.getWindow().addFlags(
+                    WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+            // set view
+            mEditWindow.setContentView(layout);
+            mEditWindow.setCanceledOnTouchOutside(true);
+            mEditWindow.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            mEditWindow.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sharePost(Thread thread) {
+        final Session session = Session.getActiveSession();
+
+        if (session != null) {
+
+            // Check for publish permissions
+            List<String> permissions = session.getPermissions();
+            if (!isSubsetOf(PERMISSIONS, permissions)) {
+                pendingPublishReauthorization = true;
+                Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(
+                        this, PERMISSIONS);
+                session.requestNewPublishPermissions(newPermissionsRequest);
+                return;
+            }
+
+            final Bundle postParams = new Bundle();
+            postParams.putString("name", getString(R.string.share_title));
+            postParams.putString("caption",
+                    getString(R.string.share_user, thread.getThread_title() ,thread.getName()));
+            postParams.putString("description", thread.getThread_content());
+            postParams.putString("link", getString(R.string.share_link));
+            postParams
+                    .putString("picture",
+                            "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+
+            final Request.Callback callback = new Request.Callback() {
+                public void onCompleted(Response response) {
+                    JSONObject graphResponse = response.getGraphObject()
+                            .getInnerJSONObject();
+                    String postId = null;
+                    try {
+                        postId = graphResponse.getString("id");
+                    } catch (JSONException e) {
+                        Log.i("Facebook", "JSON error " + e.getMessage());
+                    }
+                    FacebookRequestError error = response.getError();
+                    String share = getString(R.string.share_complete);
+                    if (error != null) {
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                error.getErrorMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                share, Toast.LENGTH_LONG).show();
+                    }
+                    getSherlockActivity()
+                            .setSupportProgressBarIndeterminateVisibility(false);
+                }
+            };
+
+            new AlertDialog.Builder(getSherlockActivity())
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(R.string.share)
+                    .setMessage(R.string.share_message)
+                    .setPositiveButton(R.string.confirm,
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                        int which) {
+                                    Request request = new Request(session,
+                                            "me/feed", postParams,
+                                            HttpMethod.POST, callback);
+                                    getSherlockActivity()
+                                            .setSupportProgressBarIndeterminateVisibility(
+                                                    true);
+
+                                    RequestAsyncTask task = new RequestAsyncTask(
+                                            request);
+                                    task.execute();
+                                }
+                            }).setNegativeButton(R.string.cancel, null).show();
+
+        }
+    }
+
+    private boolean isSubsetOf(Collection<String> subset,
+            Collection<String> superset) {
+        for (String string : subset) {
+            if (!superset.contains(string)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private class SessionStatusCallback implements Session.StatusCallback {
+        @Override
+        public void call(Session session, SessionState state,
+                Exception exception) {
+        }
     }
 
 }

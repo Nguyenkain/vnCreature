@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/compose_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/button_shape"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <RelativeLayout
+            android:id="@+id/action_layout"
+            style="@style/Normal_Match" >
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/button_discuss"
+                android:text="@string/cancel"
+                android:textSize="14dp" >
+            </Button>
+            
+            <TextView android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Ấn tiếp tục"
+                android:layout_toRightOf="@+id/cancel_button"
+                android:layout_toLeftOf="@+id/send_button"
+                android:layout_centerVertical="true"/>
+
+            <Button
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/button_discuss_post"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/content_layout"
+            style="@style/Fill"
+            android:layout_below="@+id/action_layout"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/disscusback"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/info_layout"
+                style="@style/Normal_Match"
+                android:orientation="horizontal"
+                android:padding="8dp" >
+
+                <ImageView
+                    android:id="@+id/avatar_imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/no_thumb" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/username_textView"
+                        style="@style/Wrap"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/username"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/title_editText"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/title"
+                        android:inputType="text"
+                        android:nextFocusForward="@+id/post_content_EditText"
+                        android:singleLine="true" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightBorder" />
+
+            <LinearLayout
+                android:id="@+id/post_layout"
+                style="@style/Fill"
+                android:orientation="vertical"
+                android:padding="8dp" >
+
+                <RelativeLayout
+                    android:id="@+id/loading_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone" >
+
+                    <ProgressBar
+                        android:id="@+id/progressBar1"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/suggest_layout"
+                    style="@style/Normal_Match" 
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/related_post" />
+
+                    <ListView
+                        android:id="@+id/suggest_listview"
+                        style="@style/Normal_Match"
+                        android:cacheColorHint="#00000000"
+                        android:clickable="false"
+                        android:divider="#19000000"
+                        android:dividerHeight="1dp"
+                        android:fadingEdge="none"
+                        android:fastScrollEnabled="false"
+                        android:footerDividersEnabled="false"
+                        android:headerDividersEnabled="false"
+                        android:smoothScrollbar="true" >
+                    </ListView>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
