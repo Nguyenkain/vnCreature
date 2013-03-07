@@ -1,14 +1,8 @@
 package com.example.vncreatures.controller;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -20,6 +14,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -32,6 +27,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -41,7 +38,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
-import com.example.vncreatures.customItems.NotificationActionProvider;
 import com.example.vncreatures.customItems.Base64;
 import com.example.vncreatures.customItems.Base64.InputStream;
 import com.example.vncreatures.customItems.ThreadListAdapter;
@@ -65,8 +61,8 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 	InputStream inputStream;
 	private final int IMAGE_MAX_SIZE = 450;
 
-	private ProgressDialog m_ProgressDialog = null;
-	private Runnable viewOrders;
+	private ProgressDialog mProgressDialog = null;
+	private Runnable mViewOrders;
 	private Context mContext;
 	private View mView;
 	private AQuery mAQueryComPoseView;
@@ -93,37 +89,23 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 		mContext = context;
 	}
 
-        initLayout();
-        initList();
-        setHasOptionsMenu(true);
-        
-        return mView;
-    }
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mView = inflater.inflate(R.layout.thread_layout, null);
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-       
 		// get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 		initLayout();
 		initList();
 		setHasOptionsMenu(true);
+
 		return mView;
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		// Inflate menu
-		getSherlockActivity().getSupportMenuInflater().inflate(
-				R.menu.dicussion_menu, menu);
-
 	}
 
 	@Override
@@ -165,11 +147,6 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 					.getEditText();
 			mContentEditText = mAQueryComPoseView
 					.id(R.id.post_content_EditText).getEditText();
-			if (!mQueueItems.isEmpty()) {
-				Bitmap bitmap = BitmapFactory
-						.decodeFile(mQueueItems.get(0).path);
-				mAQueryComPoseView.id(R.id.image_upload).image(bitmap);
-			}
 			Button sendButton = mAQueryComPoseView.id(R.id.send_button)
 					.getButton();
 
@@ -203,17 +180,6 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 					.getAttributes();
 			lp.dimAmount = 0.0f;
 			lp.gravity = Gravity.CENTER;
-			mComposeWindow.getWindow().setAttributes(lp);
-			mComposeWindow.getWindow().addFlags(
-					WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-
-    private void initList() {
-        
-        // Update notification
-        BusProvider.getInstance().post(new NotificationUpdateEvent());
-        
-        HrmService service = new HrmService();
-        service.setCallback(new ThreadTaskCallback() {
 			// set view
 			mComposeWindow.setOnDismissListener(new OnDismissListener() {
 
@@ -227,36 +193,19 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 			mComposeWindow.getWindow().setSoftInputMode(
 					WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 			mComposeWindow.show();
-
+			mComposeWindow.getWindow().setAttributes(lp);
+			mComposeWindow.getWindow().addFlags(
+					WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	// the meat of switching the above fragment
-	private void switchFragment(Fragment fragment) {
-		if (getActivity() == null)
-			return;
-
-		if (getActivity() instanceof DiscussionActivity) {
-			DiscussionActivity dca = (DiscussionActivity) getActivity();
-			dca.switchContent(fragment);
-		}
-	}
-
-	private void initLayout() {
-		mListView = (PullToRefreshListView) mView
-				.findViewById(R.id.thread_lisview);
-		mListView.setOnRefreshListener(new OnRefreshListener() {
-
-			@Override
-			public void onRefresh() {
-				initList();
-			}
-		});
-	}
-
 	private void initList() {
+
+		// Update notification
+		BusProvider.getInstance().post(new NotificationUpdateEvent());
+
 		HrmService service = new HrmService();
 		service.setCallback(new ThreadTaskCallback() {
 
@@ -290,6 +239,29 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 		getSherlockActivity()
 				.setSupportProgressBarIndeterminateVisibility(true);
 		service.requestGetAllThread();
+	}
+
+	// the meat of switching the above fragment
+	private void switchFragment(Fragment fragment) {
+		if (getActivity() == null)
+			return;
+
+		if (getActivity() instanceof DiscussionActivity) {
+			DiscussionActivity dca = (DiscussionActivity) getActivity();
+			dca.switchContent(fragment);
+		}
+	}
+
+	private void initLayout() {
+		mListView = (PullToRefreshListView) mView
+				.findViewById(R.id.thread_lisview);
+		mListView.setOnRefreshListener(new OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				initList();
+			}
+		});
 	}
 
 	private final class ValidateListener implements ValidationListener {
@@ -346,7 +318,7 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 			break;
 		case R.id.photo_button:
 			Intent intent = new Intent(getSherlockActivity(),
-					AndroidCustomGalleryActivity.class);
+					CustomGalleryActivity.class);
 			startActivityForResult(intent, Common.SELECT_PICTURE);
 			break;
 		default:
@@ -357,21 +329,48 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == android.app.Activity.RESULT_OK) {
 			if (requestCode == Common.SELECT_PICTURE) {
-				String newText = data.getStringExtra("selectImages");
-				initialize(newText);
-				Bitmap bitmap = decodeFilePath(mQueueItems.get(0).path);
-				mAQueryComPoseView.id(R.id.image_upload).image(bitmap);
-				viewOrders = new Runnable() {
-					@Override
-					public void run() {
-						upload();
-					}
-				};
-				java.lang.Thread thread = new java.lang.Thread(null,
-						viewOrders, "Background");
-				thread.start();
-				m_ProgressDialog = ProgressDialog.show(getSherlockActivity(),
-						"Please wait...", "Uploading image ...", true, true);
+				String selectedImage = data.getStringExtra("selectImages");
+				initialize(selectedImage);
+				LinearLayout linear = (LinearLayout) mAQueryComPoseView.id(
+						R.id.post_image_layout).getView();
+				linear.removeAllViewsInLayout();
+				for (QueueItem queue : mQueueItems) {
+					final String path = queue.path;
+					Bitmap bitmap = decodeFilePath(path);
+					ImageView img = new ImageView(getSherlockActivity());
+					img.setVisibility(View.VISIBLE);
+					img.setPadding(10, 10, 10, 10);
+					img.setAdjustViewBounds(true);
+					img.setMaxHeight(100);
+					img.setMaxWidth(100);
+					img.setImageBitmap(bitmap);
+					img.setClickable(true);
+					img.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent();
+							intent.setAction(Intent.ACTION_VIEW);
+							File file = new File(path);
+							intent.setDataAndType(Uri.fromFile(file), "image/*");
+							startActivityForResult(intent,
+									Common.SELECT_PICTURE);
+							startActivity(intent);
+						}
+					});
+					linear.addView(img);
+				}
+				// mViewOrders = new Runnable() {
+				// @Override
+				// public void run() {
+				// upload();
+				// }
+				// };
+				// java.lang.Thread thread1 = new java.lang.Thread(null,
+				// mViewOrders, "Background");
+				// thread1.start();
+				// mProgressDialog = ProgressDialog.show(getSherlockActivity(),
+				// "Please wait...", "Uploading image ...", true, true);
 			}
 		}
 	}
@@ -397,7 +396,6 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 				int dataColumnIndex = imagecursor
 						.getColumnIndex(MediaStore.Images.Media.DATA);
 				queueItem.path = imagecursor.getString(dataColumnIndex);
-				System.out.println("queueItem.path: " + queueItem.path);
 			}
 			imagecursor.close();
 
@@ -410,39 +408,39 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 		long media_id;
 	}
 
-	private void upload() {
-		for (QueueItem queue : mQueueItems) {
-			String selectedImagePath = queue.path;
-			Bitmap bitmap = decodeFilePath(selectedImagePath);
-
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-			byte[] byte_arr = stream.toByteArray();
-			String image_str = Base64.encodeBytes(byte_arr);
-			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("image", image_str));
-			nameValuePairs.add(new BasicNameValuePair("path", queue.media_id
-					+ ".jpg"));
-			try {
-				HttpClient httpclient = new DefaultHttpClient();
-				HttpPost httppost = new HttpPost(
-						"http://113.164.1.45/webservice/base.php");
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				httpclient.execute(httppost);
-			} catch (Exception e) {
-				System.out.println("Error in http connection " + e.toString());
-			}
-		}
-		getSherlockActivity().runOnUiThread(returnRes);
-	}
-
-	private Runnable returnRes = new Runnable() {
-
-		@Override
-		public void run() {
-			m_ProgressDialog.dismiss();
-		}
-	};
+	// private void upload() {
+	// for (QueueItem queue : mQueueItems) {
+	// String selectedImagePath = queue.path;
+	// Bitmap bitmap = decodeFilePath(selectedImagePath);
+	//
+	// ByteArrayOutputStream stream = new ByteArrayOutputStream();
+	// bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+	// byte[] byte_arr = stream.toByteArray();
+	// String image_str = Base64.encodeBytes(byte_arr);
+	// ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+	// nameValuePairs.add(new BasicNameValuePair("image", image_str));
+	// nameValuePairs.add(new BasicNameValuePair("path", queue.media_id
+	// + ".jpg"));
+	// try {
+	// HttpClient httpclient = new DefaultHttpClient();
+	// HttpPost httppost = new HttpPost(
+	// "http://113.164.1.45/webservice/base.php");
+	// httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	// httpclient.execute(httppost);
+	// } catch (Exception e) {
+	// System.out.println("Error in http connection " + e.toString());
+	// }
+	// }
+	// getSherlockActivity().runOnUiThread(returnRes);
+	// }
+	//
+	// private Runnable returnRes = new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// mProgressDialog.dismiss();
+	// }
+	// };
 
 	private Bitmap decodeFilePath(String path) {
 		Bitmap b = null;
@@ -480,6 +478,16 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 		thread.setThread_title(title);
 		thread.setThread_content(content);
 		thread.setUser_id(userid);
+		for (QueueItem queue : mQueueItems) {
+			String selectedImagePath = queue.path;
+			Bitmap bitmap = decodeFilePath(selectedImagePath);
+
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+			byte[] byte_arr = stream.toByteArray();
+			String image_str = Base64.encodeBytes(byte_arr);
+			thread.getThread_image().add(image_str);
+		}
 
 		if (userid != null) {
 			HrmService service = new HrmService();

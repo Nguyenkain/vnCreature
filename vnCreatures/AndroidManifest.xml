@@ -92,7 +92,7 @@
         </activity>
         <activity android:name=".controller.DiscussionActivity" >
         </activity>
-        <activity android:name=".controller.AndroidCustomGalleryActivity" >
+        <activity android:name=".controller.CustomGalleryActivity" >
         </activity>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

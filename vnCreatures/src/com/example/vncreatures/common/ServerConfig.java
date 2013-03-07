@@ -34,21 +34,23 @@ public class ServerConfig {
 			+ "/refactor/public/user/set-user";
 	public static final String PROFILE_PICTURE = "http://graph.facebook.com/%s/picture.";
 	public static final String GET_THREAD = ROOT
-            + "/refactor/public/user/get-thread";
+			+ "/refactor/public/user/get-thread";
 	public static final String ADD_THREAD = ROOT
-            + "/refactor/public/user/set-thread";
+			+ "/refactor/public/user/set-thread";
 	public static final String ADD_POST = ROOT
-            + "/refactor/public/user/set-post";
+			+ "/refactor/public/user/set-post";
 	public static final String GET_POST = ROOT
-            + "/refactor/public/user/get-post";
+			+ "/refactor/public/user/get-post";
 	public static final String GET_NOTIFICATION = ROOT
-            + "/refactor/public/user/get-notification";
+			+ "/refactor/public/user/get-notification";
 	public static final String SET_NOTIFICATION = ROOT
-            + "/refactor/public/user/set-notification";
+			+ "/refactor/public/user/set-notification";
 	public static final String GET_REPORT_TYPE = ROOT
-            + "/refactor/public/user/get-report-type";
+			+ "/refactor/public/user/get-report-type";
 	public static final String ADD_REPORT = ROOT
-            + "/refactor/public/user/set-report";
+			+ "/refactor/public/user/set-report";
+	public static final String GET_THREAD_IMAGE = ROOT
+			+ "/refactor/public/user/get-thread-image";
 
 	public static final String NUM_PER_PAGE = "10";
 	public static final int TIMEOUT = 30000; // 30 seconds

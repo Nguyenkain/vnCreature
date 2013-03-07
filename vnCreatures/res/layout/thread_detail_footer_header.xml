@@ -72,16 +72,29 @@
                     style="@style/Normal_Match"
                     android:layout_marginTop="@dimen/space_between_item" >
 
+                    <HorizontalScrollView 
+                        android:id="@+id/scroll_image"
+                        style="@style/Wrap" >
+                        <LinearLayout
+                            android:id="@+id/thread_image_layout"
+                            style="@style/Fill"
+                            android:orientation="horizontal"
+                            android:paddingBottom="2dp" >
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
                     <TextView
                         android:id="@+id/content_textView"
                         style="@style/Wrap"
                         android:layout_marginTop="@dimen/space_between_item"
+                        android:layout_below="@+id/scroll_image"
                         android:text="@string/loading" />
 
                     <EditText
                         android:id="@+id/thread_content_EditText"
                         style="@style/MatchWidth"
                         android:inputType="textMultiLine"
+                        android:layout_below="@+id/scroll_image"
                         android:visibility="gone" />
                 </RelativeLayout>
 
@@ -91,8 +104,8 @@
                     android:layout_marginTop="@dimen/space_between_item"
                     android:text="@string/last_modified"
                     android:textColor="@color/grey"
-                    android:textSize="9dp" 
-                    android:visibility="gone"/>
+                    android:textSize="9dp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <View
