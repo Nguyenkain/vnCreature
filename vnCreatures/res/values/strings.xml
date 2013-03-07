@@ -54,6 +54,7 @@
     <!-- Discussion -->
     <string name="logout">Đăng xuất</string>
     <string name="post">Gửi</string>
+    <string name="next">Tiếp tục</string>
     <string name="num_post">Có %s bài trả lời</string>
     <string name="content">Nội dung</string>
     <string name="report_reason">Nội dung báo cáo</string>
@@ -64,6 +65,13 @@
     <string name="show">Hiện</string>
     <string name="notification_overall">Có tổng cộng %d thông báo mới</string>
     <string name="last_modified">Chỉnh sửa lần cuối vào %s</string>
+    <string name="by">bởi %s</string>
+    <string name="related_post">Các bài viết liên quan</string>
+    <string name="share_user">Từ bài viết %1$s của %2$s trên VnCreatures</string>
+    <string name="share_title">VnCreatures cho Android</string>
+    <string name="share_link">http://vncreatures.net</string>
+    <string name="share_complete">Chia sẻ bài viết thành công</string>
+    <string name="next_to_continue">Ấn tiếp tục để đi tiếp</string>
     
     <string name="report_done">Báo cáo của bạn đã được gửi đi và sẽ được xử lý trong thời gian sớm nhất.</string>
     <string name="report_existed">Thread này đã được bạn thông báo.</string>
@@ -80,6 +88,7 @@
     
     <!-- Dialog -->
     <string name="delete_message">Bạn có chắc chắn muốn xóa ?</string>
+    <string name="share_message">Bạn có chắc chắn muốn chia sẻ thông tin này ?</string>
     <string name="confirm">Đồng ý</string>
     <string name="cancel">Hủy</string>
 </resources>

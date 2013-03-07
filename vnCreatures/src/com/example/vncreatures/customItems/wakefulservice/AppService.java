@@ -19,6 +19,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -27,7 +29,6 @@ import android.util.Log;
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
-import com.example.vncreatures.controller.DiscussionActivity;
 import com.example.vncreatures.controller.LoginActivity;
 import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.rest.HrmService;
@@ -57,6 +58,17 @@ public class AppService extends WakefulIntentService {
                 public void onSuccess(ThreadModel threadModel) {
                     int count = threadModel.countAllNotification();
                     if (count > 0) {
+                        Uri alarmSound = RingtoneManager
+                                .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        if (alarmSound == null) {
+                            alarmSound = RingtoneManager
+                                    .getDefaultUri(RingtoneManager.TYPE_ALARM);
+                            if (alarmSound == null) {
+                                alarmSound = RingtoneManager
+                                        .getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+                            }
+                        }
+
                         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                                 getApplicationContext())
                                 .setSmallIcon(R.drawable.icon_app3)
@@ -64,7 +76,8 @@ public class AppService extends WakefulIntentService {
                                 .setContentText(
                                         getString(
                                                 R.string.notification_overall,
-                                                count));
+                                                count)).setSound(alarmSound)
+                                .setAutoCancel(true);
                         // Creates an explicit intent for an Activity in your
                         // app
                         Intent resultIntent = new Intent(
