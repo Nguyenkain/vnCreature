@@ -22,6 +22,7 @@ public class Common {
 	public static final String KINGDOM = "kingdom";
 
 	public static final int CREATURE_ACTIVITY_REQUEST_CODE = 0;
+	public static final int SELECT_PICTURE = 1;
 	public static final String CREATURE_URL_IMAGES_EXTRA = "urlImages";
 	public static final String CREATURE_URL_IMAGES_LIST = "urlImagesList";
 	public static final String CREATURE_URL_IMAGES_POSITION = "urlImagesPosition";
@@ -36,9 +37,9 @@ public class Common {
 	public static final String THREAD_ID = "threadid";
 	
 	//Validation message
-	public static final String TITLE_MESSAGE = "Tiêu đề không được để trống";
-	public static final String CONTENT_MESSAGE = "Nội dung không được để trống";
-	public static final String MINLENGTH_MESSAGE = "Nội dung không được ít hơn 8 ký tự";
+	public static final String TITLE_MESSAGE = "TiĂªu Ä‘á»� khĂ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng";
+	public static final String CONTENT_MESSAGE = "Ná»™i dung khĂ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng";
+	public static final String MINLENGTH_MESSAGE = "Ná»™i dung khĂ´ng Ä‘Æ°á»£c Ă­t hÆ¡n 8 kĂ½ tá»±";
 
 	public enum CREATURE {
 		animal("1"), plant("2"), insect("3");

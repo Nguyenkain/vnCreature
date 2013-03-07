@@ -87,7 +87,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
             mContent = getSupportFragmentManager().getFragment(
                     savedInstanceState, "mContent");
         if (mContent == null)
-            mContent = new ThreadFragment();
+            mContent = new ThreadFragment(getApplicationContext());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, mContent).commit();
 

@@ -76,6 +76,8 @@
     
     <string name="report_done">Báo cáo của bạn đã được gửi đi và sẽ được xử lý trong thời gian sớm nhất.</string>
     <string name="report_existed">Thread này đã được bạn thông báo.</string>
+    <string name="Capture">Chụp ảnh</string>
+    <string name="Select">Chọn ảnh</string>
     
     <!-- Quick Action Item -->
     <string name="edit">Sửa</string>

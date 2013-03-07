@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -43,6 +46,7 @@ import com.alhneiti.QuickAction.QuickActionWidget;
 import com.androidquery.AQuery;
 import com.example.vncreatures.R;
 import com.example.vncreatures.common.Common;
+import com.example.vncreatures.common.ServerConfig;
 import com.example.vncreatures.common.Utils;
 import com.example.vncreatures.customItems.DiscussionQuickAction;
 import com.example.vncreatures.customItems.PostListAdapter;
@@ -56,6 +60,7 @@ import com.example.vncreatures.model.discussion.ThreadModel;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.PostTaskCallback;
 import com.example.vncreatures.rest.HrmService.ReportTypeCallback;
+import com.example.vncreatures.rest.HrmService.ThreadImageTaskCallback;
 import com.example.vncreatures.rest.HrmService.ThreadTaskCallback;
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
@@ -266,8 +271,64 @@ public class ThreadDetailFragment extends SherlockFragment implements
 
             }
         });
+        service.setCallback(new ThreadImageTaskCallback() {
+
+			@Override
+			public void onSuccess(ThreadModel threadModel) {
+				if (threadModel != null) {
+					LinearLayout linear = (LinearLayout) mAQuery.id(
+							R.id.thread_image_layout).getView();
+					linear.removeAllViewsInLayout();
+					final Thread thread = new Thread();
+					thread.setThread_image(new ArrayList<String>());
+					for (int i = 0; i < threadModel.count(); i++) {
+						thread.getThread_image().add(ServerConfig.ROOT + threadModel.get(i).getImage_link());
+					}
+					for (int i = 0; i < thread.getThread_image().size(); i++) {
+						final int position;
+						position = i;
+						ImageView img = new ImageView(getSherlockActivity());
+						img.setVisibility(View.VISIBLE);
+						img.setPadding(10, 10, 10, 10);
+						img.setAdjustViewBounds(true);
+						img.setMaxHeight(100);
+						img.setMaxWidth(100);
+						mAQuery.id(img)
+		                .progress(R.id.progressBar1)
+		                .image(thread.getThread_image().get(i), true, true, 0, AQuery.GONE, null,
+		                        AQuery.FADE_IN_NETWORK);
+						img.setClickable(true);
+						img.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								Intent intent = new Intent();
+								intent.setClass(getSherlockActivity(),
+										ImageViewFlipperActivity.class);
+								Bundle bundle = new Bundle();
+								bundle.putStringArrayList(
+										Common.CREATURE_URL_IMAGES_LIST,
+										thread.getThread_image());
+								bundle.putInt(
+										Common.CREATURE_URL_IMAGES_POSITION, position);
+								intent.putExtras(bundle);
+
+								startActivity(intent);
+							}
+						});
+						linear.addView(img);
+					}
+				}
+			}
+
+			@Override
+			public void onError() {
+
+			}
+		});
         if (mThreadId != null) {
             service.requestGetThreadById(mThreadId);
+            service.requestGetThreadImageById(mThreadId);
             getSherlockActivity().setSupportProgressBarIndeterminateVisibility(
                     true);
             initCommentData();

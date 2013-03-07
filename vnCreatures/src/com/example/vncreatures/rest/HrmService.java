@@ -29,6 +29,7 @@ public class HrmService {
     private PostTaskCallback mPostTaskCallback = null;
     private ThreadTaskCallback mThreadTaskCallback = null;
     private ReportTypeCallback mReportTypeCallback = null;
+    private ThreadImageTaskCallback mThreadImageTaskCallback = null;
     private CheckUrlCallback mCheckUrlCallback;
 
     public interface Callback {
@@ -55,6 +56,16 @@ public class HrmService {
 
     public void setCallback(final ThreadTaskCallback callback) {
         mThreadTaskCallback = callback;
+    }
+    
+    public interface ThreadImageTaskCallback {
+        public void onSuccess(final ThreadModel threadModel);
+
+        public void onError();
+    }
+
+    public void setCallback(final ThreadImageTaskCallback callback) {
+    	mThreadImageTaskCallback = callback;
     }
 
     public void setCallback(final Callback callback) {
@@ -196,6 +207,12 @@ public class HrmService {
 
     public boolean requestGetThreadById(String threadId) {
         GetThreadTask task = new GetThreadTask();
+        task.execute(threadId);
+        return true;
+    }
+    
+    public boolean requestGetThreadImageById(String threadId) {
+        GetThreadImageTask task = new GetThreadImageTask();
         task.execute(threadId);
         return true;
     }
@@ -620,6 +637,44 @@ public class HrmService {
                     ThreadModel threadModel = ServiceUtils
                             .parseThreadModelFromJSON(result);
                     mThreadTaskCallback.onSuccess(threadModel);
+                }
+            }
+        }
+    }
+    
+    public class GetThreadImageTask extends AsyncTask<String, Void, String> {
+
+        private volatile boolean running = true;
+
+        @Override
+        protected String doInBackground(String... params) {
+            while (running) {
+
+                String result = null;
+                if (!params[0].equalsIgnoreCase("")) {
+                    String id = params[0];
+                    result = ServiceUtils.getThreadImageById(id);
+                } 
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            running = false;
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mThreadImageTaskCallback != null) {
+                if (result == "" || result == null) {
+                	mThreadImageTaskCallback.onError();
+                } else {
+                    ThreadModel threadModel = ServiceUtils
+                            .parseThreadModelFromJSON(result);
+                    mThreadImageTaskCallback.onSuccess(threadModel);
                 }
             }
         }
