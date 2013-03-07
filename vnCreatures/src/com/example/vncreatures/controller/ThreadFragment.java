@@ -231,6 +231,7 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
                         mSuggestWindow.dismiss();
                         mSuggestWindow = null;
                     } else {
+                        aQView.id(R.id.hint_message).text(R.string.enter_title);
                         Button bt = (Button) v;
                         bt.setText(getString(R.string.cancel));
                         aQView.id(R.id.suggest_layout).gone();
@@ -243,6 +244,7 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
                 public void onClick(View v) {
                     if (aQView.id(R.id.suggest_layout).getView()
                             .getVisibility() == View.GONE) {
+                        aQView.id(R.id.hint_message).text(R.string.next_to_continue);
                         aQView.id(R.id.cancel_button).text(
                                 getString(R.string.delete));
                         HrmService service = new HrmService();

@@ -71,7 +71,8 @@
     <string name="share_title">VnCreatures cho Android</string>
     <string name="share_link">http://vncreatures.net</string>
     <string name="share_complete">Chia sẻ bài viết thành công</string>
-    <string name="next_to_continue">Ấn tiếp tục để đi tiếp</string>
+    <string name="next_to_continue">Chọn chủ đề liên quan hoặc tiếp tục</string>
+    <string name="enter_title">Nhập chủ đề</string>
     
     <string name="report_done">Báo cáo của bạn đã được gửi đi và sẽ được xử lý trong thời gian sớm nhất.</string>
     <string name="report_existed">Thread này đã được bạn thông báo.</string>
@@ -86,7 +87,7 @@
     
     <!-- Dialog -->
     <string name="delete_message">Bạn có chắc chắn muốn xóa ?</string>
-    <string name="share_message">Bạn có chắc chắn muốn chia sẻ thông tin này ?</string>
+    <string name="share_message">Bạn có chắc chắn muốn chia sẻ thông tin này trên facebook ?</string>
     <string name="confirm">Đồng ý</string>
     <string name="cancel">Hủy</string>
 </resources>

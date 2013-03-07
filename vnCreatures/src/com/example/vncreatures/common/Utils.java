@@ -15,14 +15,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
-import android.view.animation.TranslateAnimation;
 
 import com.example.vncreatures.R;
+import com.example.vncreatures.rest.HrmService;
+import com.example.vncreatures.rest.HrmService.CheckUrlCallback;
 
 public class Utils {
+
     public static boolean testUrl(String url) {
         final AndroidHttpClient client = AndroidHttpClient
                 .newInstance("Android");

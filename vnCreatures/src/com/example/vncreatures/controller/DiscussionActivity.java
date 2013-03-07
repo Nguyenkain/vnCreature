@@ -143,6 +143,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     protected void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+        Log.d("Pause", "On Destroy Called");
         //BusProvider.getInstance().unregister(this);
     }
 
@@ -150,7 +151,21 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     protected void onPause() {
         super.onPause();
         uiHelper.onPause();
+        Log.d("Pause", "On Pause Called");
         BusProvider.getInstance().unregister(this);
+    }
+    
+    @Override
+    protected void onStop() {
+        Log.d("Pause", "On Stop Called");
+        finish();
+        super.onStop();
+    }
+    
+    @Override
+    protected void onRestart() {
+        Log.d("Pause", "On Restart Called");
+        super.onRestart();
     }
 
     @Override
