@@ -8,7 +8,7 @@ public class Thread {
     private String thread_title;
     private String thread_content;
     private String thread_created_time;
-    private ArrayList<String> thread_image = new ArrayList<String>();
+    private ArrayList<String> thread_image = null;
     private String user_avatar;
     private String name;
     private String count_post;

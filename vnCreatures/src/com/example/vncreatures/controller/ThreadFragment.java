@@ -655,6 +655,7 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 		thread.setThread_title(title);
 		thread.setThread_content(content);
 		thread.setUser_id(userid);
+		thread.setThread_image(new ArrayList<String>());
 		for (QueueItem queue : mQueueItems) {
 			String selectedImagePath = queue.path;
 			Bitmap bitmap = decodeFilePath(selectedImagePath);

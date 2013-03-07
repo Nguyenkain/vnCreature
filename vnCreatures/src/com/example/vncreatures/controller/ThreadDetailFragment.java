@@ -280,7 +280,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
 							R.id.thread_image_layout).getView();
 					linear.removeAllViewsInLayout();
 					final Thread thread = new Thread();
-					thread.getThread_image().clear();
+					thread.setThread_image(new ArrayList<String>());
 					for (int i = 0; i < threadModel.count(); i++) {
 						thread.getThread_image().add(ServerConfig.ROOT + threadModel.get(i).getImage_link());
 					}
