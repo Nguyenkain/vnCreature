@@ -21,6 +21,7 @@ import com.example.vncreatures.model.CreatureDescriptionViewModel;
 import com.example.vncreatures.model.CreatureModel;
 import com.example.vncreatures.rest.HrmService;
 import com.example.vncreatures.rest.HrmService.Callback;
+import com.example.vncreatures.rest.HrmService.CheckUrlCallback;
 import com.example.vncreatures.view.CreatureDescriptionView;
 
 public class CreatureActivity extends AbstractActivity implements
@@ -41,10 +42,9 @@ public class CreatureActivity extends AbstractActivity implements
 
         try {
             Bundle extras = new Bundle();
-            if(savedInstanceState != null) {
+            if (savedInstanceState != null) {
                 extras = savedInstanceState;
-            }
-            else {
+            } else {
                 extras = getIntent().getExtras();
             }
             if (extras != null) {
@@ -55,7 +55,7 @@ public class CreatureActivity extends AbstractActivity implements
 
         getCreatureById();
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -75,31 +75,57 @@ public class CreatureActivity extends AbstractActivity implements
                 mCreature.getId() + "_2s"));
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
                 mCreature.getId() + "_3s"));
-        mCreature.setCreatureImages(listImage);
-        final GalleryImageAdapter adapter = new GalleryImageAdapter(this,
-                mCreature);
-        adapter.setListImages((ArrayList<String>) listImage.clone());
-        mCreatureDescriptionViewModel.galleryImage.setAdapter(adapter);
+        HrmService service = new HrmService();
+        service.setCallback(new CheckUrlCallback() {
 
-        mCreatureDescriptionViewModel.galleryImage
-                .setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onSuccess(boolean result) {
 
-                    @Override
-                    public void onItemClick(AdapterView<?> view, View v,
-                            int pos, long id) {
-                        Intent intent = new Intent();
-                        intent.setClass(CreatureActivity.this,
-                                ImageViewFlipperActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putStringArrayList(
-                                Common.CREATURE_URL_IMAGES_LIST,
-                                adapter.getListImages());
-                        bundle.putInt(Common.CREATURE_URL_IMAGES_POSITION, pos);
-                        intent.putExtras(bundle);
+            }
 
-                        startActivity(intent);
-                    }
-                });
+            @Override
+            public void onImagesVerify(ArrayList<String> listImages) {
+                mCreature.setCreatureImages(listImages);
+                final GalleryImageAdapter adapter = new GalleryImageAdapter(
+                        CreatureActivity.this, mCreature);
+                adapter.setListImages((ArrayList<String>) listImages.clone());
+                mCreatureDescriptionViewModel.galleryImage.setAdapter(adapter);
+                mCreatureDescriptionViewModel.galleryImage
+                        .setOnItemClickListener(new OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(AdapterView<?> view,
+                                    View v, int pos, long id) {
+                                Intent intent = new Intent();
+                                intent.setClass(CreatureActivity.this,
+                                        ImageViewFlipperActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putStringArrayList(
+                                        Common.CREATURE_URL_IMAGES_LIST,
+                                        adapter.getListImages());
+                                bundle.putInt(
+                                        Common.CREATURE_URL_IMAGES_POSITION,
+                                        pos);
+                                intent.putExtras(bundle);
+
+                                startActivity(intent);
+                            }
+                        });
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+        service.requestVerifyImages(listImage);
+        /*
+         * mCreature.setCreatureImages(listImage); final GalleryImageAdapter
+         * adapter = new GalleryImageAdapter(this, mCreature);
+         * adapter.setListImages((ArrayList<String>) listImage.clone());
+         * mCreatureDescriptionViewModel.galleryImage.setAdapter(adapter);
+         */
+
     }
 
     @Override
@@ -133,8 +159,8 @@ public class CreatureActivity extends AbstractActivity implements
         // overflowProvider.setShareIntent(createShareIntent());
 
         // Inflate menu
-		getSupportMenuInflater().inflate(R.menu.detail_menu, menu);
-        
+        getSupportMenuInflater().inflate(R.menu.detail_menu, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -148,9 +174,10 @@ public class CreatureActivity extends AbstractActivity implements
             getCreatureById();
             break;
         case R.id.menu_item_map:
-        	Intent intent = new Intent(CreatureActivity.this, MapCreatureActivity.class);
-			intent.putExtra(Common.CREATURE_EXTRA, mCreatureId);
-			startActivity(intent);
+            Intent intent = new Intent(CreatureActivity.this,
+                    MapCreatureActivity.class);
+            intent.putExtra(Common.CREATURE_EXTRA, mCreatureId);
+            startActivity(intent);
 
         default:
             break;

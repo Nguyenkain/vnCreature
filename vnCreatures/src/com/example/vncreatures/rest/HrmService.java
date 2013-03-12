@@ -1,5 +1,11 @@
 package com.example.vncreatures.rest;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ImageView;
@@ -24,6 +30,7 @@ public class HrmService {
     private ThreadTaskCallback mThreadTaskCallback = null;
     private ReportTypeCallback mReportTypeCallback = null;
     private ThreadImageTaskCallback mThreadImageTaskCallback = null;
+    private CheckUrlCallback mCheckUrlCallback;
 
     public interface Callback {
         public void onGetAllCreaturesDone(final CreatureModel creatureModel);
@@ -73,6 +80,18 @@ public class HrmService {
 
     public void setCallback(final GroupCallback callback) {
         mGroupCallback = callback;
+    }
+
+    public interface CheckUrlCallback {
+        public void onSuccess(final boolean result);
+
+        public void onImagesVerify(final ArrayList<String> listImages);
+
+        public void onError();
+    }
+
+    public void setCallback(final CheckUrlCallback callback) {
+        mCheckUrlCallback = callback;
     }
 
     public interface ProvinceCallback {
@@ -222,10 +241,22 @@ public class HrmService {
         task.execute();
         return true;
     }
-    
+
     public boolean requestGetSuggestion(String title) {
         GetSuggestionTask task = new GetSuggestionTask();
         task.execute(title);
+        return true;
+    }
+
+    public boolean requestCheckUrl(String url) {
+        CheckUrlAsyncTask task = new CheckUrlAsyncTask();
+        task.execute(url);
+        return true;
+    }
+    
+    public boolean requestVerifyImages(ArrayList<String> listImages) {
+        CheckUrlAsyncTask task = new CheckUrlAsyncTask(listImages);
+        task.execute();
         return true;
     }
 
@@ -254,7 +285,7 @@ public class HrmService {
         task.execute();
         return true;
     }
-    
+
     public boolean requestAddReport(Report reportType) {
         AddReportTask task = new AddReportTask(reportType);
         task.execute();
@@ -682,7 +713,7 @@ public class HrmService {
             }
         }
     }
-    
+
     public class GetSuggestionTask extends AsyncTask<String, Void, String> {
 
         private volatile boolean running = true;
@@ -824,6 +855,91 @@ public class HrmService {
                 }
             }
         }
+    }
+
+    private class CheckUrlAsyncTask extends AsyncTask<String, Void, Boolean> {
+
+        ArrayList<String> listImages;
+
+        public CheckUrlAsyncTask(ArrayList<String> images) {
+            this.listImages = images;
+        }
+
+        public CheckUrlAsyncTask() {
+            listImages = new ArrayList<String>();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            if (listImages.size() > 0) {
+                ArrayList<String> temp = (ArrayList<String>) listImages.clone();
+                for (String image : listImages) {
+                    try {
+                        URL url = new URL(image);
+                        URLConnection urlConnection = url.openConnection();
+
+                        HttpURLConnection.setFollowRedirects(false);
+                        HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+                        httpURLConnection.setRequestMethod("HEAD");
+
+                        if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                            System.out.println("URL Exist");
+                        } else {
+
+                            System.out.println("URL not Exists");
+                            temp.remove(image);
+                        }
+                    } catch (UnknownHostException unknownHostException) {
+                        System.out.println("UnkownHost");
+                        System.out.println(unknownHostException);
+                        temp.remove(image);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        temp.remove(image);
+                    }
+                }
+                listImages = temp;
+                return true;
+            } else {
+                String urlName = params[0];
+                try {
+                    URL url = new URL(urlName);
+                    URLConnection urlConnection = url.openConnection();
+
+                    HttpURLConnection.setFollowRedirects(false);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+                    httpURLConnection.setRequestMethod("HEAD");
+
+                    if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        System.out.println("URL Exist");
+                        return true;
+                    } else {
+
+                        System.out.println("URL not Exists");
+                        return false;
+                    }
+                } catch (UnknownHostException unknownHostException) {
+                    System.out.println("UnkownHost");
+                    System.out.println(unknownHostException);
+                    return false;
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return false;
+                }
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (mCheckUrlCallback != null) {
+                if (listImages.size() > 0) {
+                    mCheckUrlCallback.onImagesVerify(listImages);
+                } else {
+                    mCheckUrlCallback.onSuccess(result);
+                }
+            }
+        }
+
     }
 
     // POST TO SERVER TASK

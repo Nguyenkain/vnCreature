@@ -32,10 +32,11 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="Ấn tiếp tục"
+                android:text="@string/enter_title"
                 android:layout_toRightOf="@+id/cancel_button"
                 android:layout_toLeftOf="@+id/send_button"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:id="@+id/hint_message"/>
 
             <Button
                 android:id="@+id/send_button"
