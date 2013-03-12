@@ -158,7 +158,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     @Override
     protected void onStop() {
         Log.d("Pause", "On Stop Called");
-        finish();
+        //finish();
         super.onStop();
     }
     

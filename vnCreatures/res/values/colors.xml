@@ -17,6 +17,7 @@
     <color name="black">#000000</color>
     <color name="blue">#0000FF</color>
     <color name="red">#FF0000</color>
+    <color name="green_line">#91d386</color>
     <color name="darkgrey">#303030</color>
     <color name="grey">#9b9b9b</color>
     <color name="lightblack">#404040</color>

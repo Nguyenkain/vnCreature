@@ -33,7 +33,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:icon="@drawable/icon_app3"
+        android:icon="@drawable/vnc_icon"
         android:label="@string/title_activity_main"
         android:theme="@style/Theme.Styled.NoTitleBar.Fullscreen" >
         <receiver android:name="com.commonsware.cwac.wakeful.AlarmReceiver" >

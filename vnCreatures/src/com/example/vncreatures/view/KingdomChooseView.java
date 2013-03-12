@@ -29,6 +29,10 @@ public class KingdomChooseView extends AbstractView {
 		mModel.animalButton = (ImageButton) findViewById(R.id.animal_button);
 		mModel.insectButton = (ImageButton) findViewById(R.id.insect_button);
 		mModel.plantButton = (ImageButton) findViewById(R.id.plant_button);
+		mModel.newsButton = (ImageButton) findViewById(R.id.news_button);
+		mModel.discussButton = (ImageButton) findViewById(R.id.discuss_button);
+		mModel.parkButton = (ImageButton) findViewById(R.id.park_button);
+		mModel.aboutButton = (ImageButton) findViewById(R.id.about_button);
 	}
 
 }

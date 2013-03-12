@@ -25,6 +25,8 @@ public class KingdomChooseActivity extends AbstractActivity implements
         mView = new KingdomChooseView(this, mModel);
 
         super.onCreate(savedInstanceState);
+        
+        showTabbar(false);
 
         initControl();
 
@@ -40,6 +42,10 @@ public class KingdomChooseActivity extends AbstractActivity implements
         mModel.animalButton.setOnClickListener(this);
         mModel.plantButton.setOnClickListener(this);
         mModel.insectButton.setOnClickListener(this);
+        mModel.discussButton.setOnClickListener(this);
+        mModel.newsButton.setOnClickListener(this);
+        mModel.aboutButton.setOnClickListener(this);
+        mModel.parkButton.setOnClickListener(this);
     }
 
     @Override
@@ -49,27 +55,39 @@ public class KingdomChooseActivity extends AbstractActivity implements
                 MainActivity.class);
         switch (v.getId()) {
         case R.id.animal_button:
-            mModel.plantButton.setEnabled(false);
-            mModel.insectButton.setEnabled(false);
             pref.edit()
                     .putString(Common.KINGDOM,
                             Common.CREATURE.animal.toString()).commit();
             startActivity(mainIntent);
             break;
         case R.id.plant_button:
-            mModel.animalButton.setEnabled(false);
-            mModel.insectButton.setEnabled(false);
             pref.edit()
                     .putString(Common.KINGDOM, Common.CREATURE.plant.toString())
                     .commit();
             startActivity(mainIntent);
             break;
         case R.id.insect_button:
-            mModel.animalButton.setEnabled(false);
-            mModel.plantButton.setEnabled(false);
             pref.edit()
                     .putString(Common.KINGDOM,
                             Common.CREATURE.insect.toString()).commit();
+            startActivity(mainIntent);
+            break;
+        case R.id.about_button:
+            break;
+        case R.id.park_button:
+            mainIntent = new Intent(this, MapNationalParkActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(mainIntent);
+            break;
+        case R.id.news_button:
+            mainIntent = new Intent(this,
+                    NewsTabsPagerActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(mainIntent);
+            break;
+        case R.id.discuss_button:
+            mainIntent = new Intent(this, LoginActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(mainIntent);
             break;
 
