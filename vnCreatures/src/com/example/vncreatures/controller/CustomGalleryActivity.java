@@ -177,7 +177,7 @@ public class CustomGalleryActivity extends Activity {
 		final String[] imageColumns = { MediaStore.Images.Media._ID,
 				MediaStore.Images.Media.DATA };
 		final String imageOrderBy = MediaStore.Images.Media._ID + " DESC";
-		Cursor imageCursor = managedQuery(
+		Cursor imageCursor = getApplicationContext().getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageColumns,
 				null, null, imageOrderBy);
 		if (imageCursor.moveToFirst()) {
@@ -202,7 +202,7 @@ public class CustomGalleryActivity extends Activity {
 			images.clear();
 			final String[] columns = { MediaStore.Images.Thumbnails._ID };
 			final String orderBy = MediaStore.Images.Media._ID;
-			Cursor imagecursor = managedQuery(
+			Cursor imagecursor = getApplicationContext().getContentResolver().query(
 					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
 					null, null, orderBy);
 			if (imagecursor != null) {
@@ -230,7 +230,7 @@ public class CustomGalleryActivity extends Activity {
 			// Here we'll only check for newer images
 			final String[] columns = { MediaStore.Images.Thumbnails._ID };
 			final String orderBy = MediaStore.Images.Media._ID;
-			Cursor imagecursor = managedQuery(
+			Cursor imagecursor = getApplicationContext().getContentResolver().query(
 					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
 					MediaStore.Images.Media._ID + " > " + mLastId, null,
 					orderBy);
@@ -308,7 +308,7 @@ public class CustomGalleryActivity extends Activity {
 					Intent intent = new Intent();
 					intent.setAction(Intent.ACTION_VIEW);
 					final String[] columns = { MediaStore.Images.Media.DATA };
-					Cursor imagecursor = managedQuery(
+					Cursor imagecursor = getApplicationContext().getContentResolver().query(
 							MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 							columns, MediaStore.Images.Media._ID + " = "
 									+ item.id, null,
