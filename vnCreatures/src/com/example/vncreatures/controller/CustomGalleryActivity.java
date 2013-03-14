@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -44,7 +43,7 @@ public class CustomGalleryActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.custom_gallery);
-
+		
 		imageAdapter = new ImageAdapter();
 		imageAdapter.initialize();
 		imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
@@ -69,14 +68,13 @@ public class CustomGalleryActivity extends Activity {
 							"Please select at least one image",
 							Toast.LENGTH_LONG).show();
 				} else {
-					selectImages = selectImages.substring(0,
-							selectImages.lastIndexOf(","));
+					selectImages = selectImages.substring(0,selectImages.lastIndexOf(","));
 					Intent intent = new Intent();
 					intent.putExtra("selectImages", selectImages);
 					setResult(Activity.RESULT_OK, intent);
 					finish();
 				}
-
+				
 			}
 		});
 		final Button captureBtn = (Button) findViewById(R.id.captureBtn);
@@ -104,39 +102,27 @@ public class CustomGalleryActivity extends Activity {
 		case TAKE_IMAGE:
 			try {
 				if (resultCode == RESULT_OK) {
-
-					// we need to update the gallery by starting MediaSanner
-					// service.
+					
+					// we need to update the gallery by starting MediaSanner service.
 					mScanner = new MediaScannerConnection(
 							CustomGalleryActivity.this,
 							new MediaScannerConnection.MediaScannerConnectionClient() {
 								public void onMediaScannerConnected() {
 									mScanner.scanFile(mImageUri.getPath(), null /* mimeType */);
 								}
-
+	
 								public void onScanCompleted(String path, Uri uri) {
-									// we can use the uri, to get the newly
-									// added image, but it will return path to
-									// full sized image
-									// e.g.
-									// content://media/external/images/media/7
-									// we can also update this path by replacing
-									// media by thumbnail to get the thumbnail
-									// because thumbnail path would be like
-									// content://media/external/images/thumbnail/7
-									// But the thumbnail is created after some
-									// delay by Android OS
-									// So you may not get the thumbnail. This is
-									// why I started new UI thread
-									// and it'll only run after the current
-									// thread completed.
+									//we can use the uri, to get the newly added image, but it will return path to full sized image
+									//e.g. content://media/external/images/media/7
+									//we can also update this path by replacing media by thumbnail to get the thumbnail
+									//because thumbnail path would be like content://media/external/images/thumbnail/7
+									//But the thumbnail is created after some delay by Android OS
+									//So you may not get the thumbnail. This is why I started new UI thread
+									//and it'll only run after the current thread completed.
 									if (path.equals(mImageUri.getPath())) {
 										mScanner.disconnect();
-										// we need to create new UI thread
-										// because, we can't update our mail
-										// thread from here
-										// Both the thread will run one by one,
-										// see documentation of android
+										//we need to create new UI thread because, we can't update our mail thread from here
+										//Both the thread will run one by one, see documentation of android  
 										CustomGalleryActivity.this
 												.runOnUiThread(new Runnable() {
 													public void run() {
@@ -147,22 +133,22 @@ public class CustomGalleryActivity extends Activity {
 								}
 							});
 					mScanner.connect();
-
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		case UPLOAD_IMAGES:
-			if (resultCode == RESULT_OK) {
-				// do some code where you integrate this project
+			if (resultCode == RESULT_OK){
+				//do some code where you integrate this project
 			}
 			break;
 		}
 	}
 
 	public void updateUI() {
-//		removeImage(getLastImageId());
+		removeImage(getLastImageId());
 		imageAdapter.checkForNewImages();
 	}
 
@@ -177,19 +163,19 @@ public class CustomGalleryActivity extends Activity {
 		final String[] imageColumns = { MediaStore.Images.Media._ID,
 				MediaStore.Images.Media.DATA };
 		final String imageOrderBy = MediaStore.Images.Media._ID + " DESC";
-		Cursor imageCursor = getApplicationContext().getContentResolver().query(
+		Cursor imageCursor = managedQuery(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageColumns,
 				null, null, imageOrderBy);
 		if (imageCursor.moveToFirst()) {
 			int id = imageCursor.getInt(imageCursor
 					.getColumnIndex(MediaStore.Images.Media._ID));
-			// imageCursor.close();
+			imageCursor.close();
 			return id;
 		} else {
 			return 0;
 		}
 	}
-
+	
 	public class ImageAdapter extends BaseAdapter {
 		private LayoutInflater mInflater;
 		public ArrayList<ImageItem> images = new ArrayList<ImageItem>();
@@ -202,10 +188,10 @@ public class CustomGalleryActivity extends Activity {
 			images.clear();
 			final String[] columns = { MediaStore.Images.Thumbnails._ID };
 			final String orderBy = MediaStore.Images.Media._ID;
-			Cursor imagecursor = getApplicationContext().getContentResolver().query(
+			Cursor imagecursor = managedQuery(
 					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
 					null, null, orderBy);
-			if (imagecursor != null) {
+			if(imagecursor != null){
 				int image_column_index = imagecursor
 						.getColumnIndex(MediaStore.Images.Media._ID);
 				int count = imagecursor.getCount();
@@ -215,25 +201,23 @@ public class CustomGalleryActivity extends Activity {
 					ImageItem imageItem = new ImageItem();
 					imageItem.id = id;
 					mLastId = id;
-					// imageItem.img =
-					// MediaStore.Images.Thumbnails.getThumbnail(
-					// getApplicationContext().getContentResolver(), id,
-					// MediaStore.Images.Thumbnails.MICRO_KIND, null);
-					images.add(0, imageItem);
+					imageItem.img = MediaStore.Images.Thumbnails.getThumbnail(
+							getApplicationContext().getContentResolver(), id,
+							MediaStore.Images.Thumbnails.MICRO_KIND, null);
+					images.add(0,imageItem);
 				}
-				// imagecursor.close();
+				imagecursor.close();
 			}
 			notifyDataSetChanged();
 		}
-
-		public void checkForNewImages() {
-			// Here we'll only check for newer images
+		
+		public void checkForNewImages(){
+			//Here we'll only check for newer images
 			final String[] columns = { MediaStore.Images.Thumbnails._ID };
 			final String orderBy = MediaStore.Images.Media._ID;
-			Cursor imagecursor = getApplicationContext().getContentResolver().query(
+			Cursor imagecursor = managedQuery(
 					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
-					MediaStore.Images.Media._ID + " > " + mLastId, null,
-					orderBy);
+					MediaStore.Images.Media._ID + " > " + mLastId , null, orderBy);
 			int image_column_index = imagecursor
 					.getColumnIndex(MediaStore.Images.Media._ID);
 			int count = imagecursor.getCount();
@@ -243,14 +227,13 @@ public class CustomGalleryActivity extends Activity {
 				ImageItem imageItem = new ImageItem();
 				imageItem.id = id;
 				mLastId = id;
-				// imageItem.img = MediaStore.Images.Thumbnails.getThumbnail(
-				// getApplicationContext().getContentResolver(), id,
-				// MediaStore.Images.Thumbnails.MICRO_KIND, null);
-				imageItem.selection = true; // newly added item will be selected
-											// by default
-				images.add(0, imageItem);
+				imageItem.img = MediaStore.Images.Thumbnails.getThumbnail(
+						getApplicationContext().getContentResolver(), id,
+						MediaStore.Images.Thumbnails.MICRO_KIND, null);
+				imageItem.selection = true; //newly added item will be selected by default
+				images.add(0,imageItem);
 			}
-			// imagecursor.close();
+			imagecursor.close();
 			notifyDataSetChanged();
 		}
 
@@ -270,8 +253,7 @@ public class CustomGalleryActivity extends Activity {
 			ViewHolder holder;
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = mInflater.inflate(R.layout.custom_gallery_item,
-						null);
+				convertView = mInflater.inflate(R.layout.custom_gallery_item, null);
 				holder.imageview = (ImageView) convertView
 						.findViewById(R.id.thumbImage);
 				holder.checkbox = (CheckBox) convertView
@@ -308,27 +290,22 @@ public class CustomGalleryActivity extends Activity {
 					Intent intent = new Intent();
 					intent.setAction(Intent.ACTION_VIEW);
 					final String[] columns = { MediaStore.Images.Media.DATA };
-					Cursor imagecursor = getApplicationContext().getContentResolver().query(
-							MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-							columns, MediaStore.Images.Media._ID + " = "
-									+ item.id, null,
-							MediaStore.Images.Media._ID);
-					if (imagecursor != null && imagecursor.getCount() > 0) {
+					Cursor imagecursor = managedQuery(
+							MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
+							MediaStore.Images.Media._ID + " = " + item.id, null, MediaStore.Images.Media._ID);
+					if (imagecursor != null && imagecursor.getCount() > 0){
 						imagecursor.moveToPosition(0);
-						String path = imagecursor.getString(imagecursor
-								.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
+						String path = imagecursor.getString(imagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
 						File file = new File(path);
-						// imagecursor.close();
-						intent.setDataAndType(Uri.fromFile(file), "image/*");
+						imagecursor.close();
+						intent.setDataAndType(
+								Uri.fromFile(file),
+								"image/*");
 						startActivityForResult(intent, VIEW_IMAGE);
 					}
 				}
 			});
-			Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(
-					getApplicationContext().getContentResolver(), item.id,
-					MediaStore.Images.Thumbnails.MICRO_KIND, null);
-			holder.imageview.setImageBitmap(bitmap);
-			// holder.imageview.setImageBitmap(item.img);
+			holder.imageview.setImageBitmap(item.img);
 			holder.checkbox.setChecked(item.selection);
 			return convertView;
 		}
