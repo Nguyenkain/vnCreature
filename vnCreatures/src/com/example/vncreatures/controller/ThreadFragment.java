@@ -401,8 +401,11 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 
     private void initList() {
 
-        // Update notification
-        BusProvider.getInstance().post(new NotificationUpdateEvent());
+        String userId = pref.getString(Common.USER_ID, null);
+        if (userId != null) {
+            // Update notification
+            BusProvider.getInstance().post(new NotificationUpdateEvent());
+        }
 
         HrmService service = new HrmService();
         service.setCallback(new ThreadTaskCallback() {

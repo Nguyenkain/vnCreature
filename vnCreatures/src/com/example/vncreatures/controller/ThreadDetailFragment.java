@@ -211,7 +211,9 @@ public class ThreadDetailFragment extends SherlockFragment implements
 
     private void initData() {
         // Update notification
-        updateNotification();
+        if (mUserId != null) {
+            updateNotification();
+        }
         mAQuery.id(R.id.progressBar1).visible();
         mAQuery.id(R.id.thread_layout).gone();
 
@@ -255,11 +257,16 @@ public class ThreadDetailFragment extends SherlockFragment implements
                         // init Thread edit
                         final DiscussionQuickAction quickAction = new DiscussionQuickAction(
                                 getSherlockActivity());
-                        mUserId = mUserId.replace("\n", "").replace("\t", "");
-                        if (mUserId.equalsIgnoreCase(mThread.getUser_id())) {
-                            mAQuery.id(R.id.action_button).visible();
+                        if (mUserId == null) {
+                            mAQuery.id(R.id.action_menu).gone();
                         } else {
-                            mAQuery.id(R.id.report_button).visible();
+                            mUserId = mUserId.replace("\n", "").replace("\t",
+                                    "");
+                            if (mUserId.equalsIgnoreCase(mThread.getUser_id())) {
+                                mAQuery.id(R.id.action_button).visible();
+                            } else {
+                                mAQuery.id(R.id.report_button).visible();
+                            }
                         }
 
                     }
@@ -273,59 +280,63 @@ public class ThreadDetailFragment extends SherlockFragment implements
         });
         service.setCallback(new ThreadImageTaskCallback() {
 
-			@Override
-			public void onSuccess(ThreadModel threadModel) {
-				if (threadModel != null) {
-					LinearLayout linear = (LinearLayout) mAQuery.id(
-							R.id.thread_image_layout).getView();
-					linear.removeAllViewsInLayout();
-					final Thread thread = new Thread();
-					thread.setThread_image(new ArrayList<String>());
-					for (int i = 0; i < threadModel.count(); i++) {
-						thread.getThread_image().add(ServerConfig.ROOT + threadModel.get(i).getImage_link());
-					}
-					for (int i = 0; i < thread.getThread_image().size(); i++) {
-						final int position;
-						position = i;
-						ImageView img = new ImageView(getSherlockActivity());
-						img.setVisibility(View.VISIBLE);
-						img.setPadding(10, 10, 10, 10);
-						img.setAdjustViewBounds(true);
-						img.setMaxHeight(100);
-						img.setMaxWidth(100);
-						mAQuery.id(img)
-		                .progress(R.id.progressBar1)
-		                .image(thread.getThread_image().get(i), true, true, 0, AQuery.GONE, null,
-		                        AQuery.FADE_IN_NETWORK);
-						img.setClickable(true);
-						img.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onSuccess(ThreadModel threadModel) {
+                if (threadModel != null) {
+                    LinearLayout linear = (LinearLayout) mAQuery.id(
+                            R.id.thread_image_layout).getView();
+                    linear.removeAllViewsInLayout();
+                    final Thread thread = new Thread();
+                    thread.setThread_image(new ArrayList<String>());
+                    for (int i = 0; i < threadModel.count(); i++) {
+                        thread.getThread_image().add(
+                                ServerConfig.ROOT
+                                        + threadModel.get(i).getImage_link());
+                    }
+                    for (int i = 0; i < thread.getThread_image().size(); i++) {
+                        final int position;
+                        position = i;
+                        ImageView img = new ImageView(getSherlockActivity());
+                        img.setVisibility(View.VISIBLE);
+                        img.setPadding(10, 10, 10, 10);
+                        img.setAdjustViewBounds(true);
+                        img.setMaxHeight(100);
+                        img.setMaxWidth(100);
+                        mAQuery.id(img)
+                                .progress(R.id.progressBar1)
+                                .image(thread.getThread_image().get(i), true,
+                                        true, 0, AQuery.GONE, null,
+                                        AQuery.FADE_IN_NETWORK);
+                        img.setClickable(true);
+                        img.setOnClickListener(new OnClickListener() {
 
-							@Override
-							public void onClick(View v) {
-								Intent intent = new Intent();
-								intent.setClass(getSherlockActivity(),
-										ImageViewFlipperActivity.class);
-								Bundle bundle = new Bundle();
-								bundle.putStringArrayList(
-										Common.CREATURE_URL_IMAGES_LIST,
-										thread.getThread_image());
-								bundle.putInt(
-										Common.CREATURE_URL_IMAGES_POSITION, position);
-								intent.putExtras(bundle);
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent();
+                                intent.setClass(getSherlockActivity(),
+                                        ImageViewFlipperActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putStringArrayList(
+                                        Common.CREATURE_URL_IMAGES_LIST,
+                                        thread.getThread_image());
+                                bundle.putInt(
+                                        Common.CREATURE_URL_IMAGES_POSITION,
+                                        position);
+                                intent.putExtras(bundle);
 
-								startActivity(intent);
-							}
-						});
-						linear.addView(img);
-					}
-				}
-			}
+                                startActivity(intent);
+                            }
+                        });
+                        linear.addView(img);
+                    }
+                }
+            }
 
-			@Override
-			public void onError() {
+            @Override
+            public void onError() {
 
-			}
-		});
+            }
+        });
         if (mThreadId != null) {
             service.requestGetThreadById(mThreadId);
             service.requestGetThreadImageById(mThreadId);
@@ -1053,8 +1064,10 @@ public class ThreadDetailFragment extends SherlockFragment implements
 
             final Bundle postParams = new Bundle();
             postParams.putString("name", getString(R.string.share_title));
-            postParams.putString("caption",
-                    getString(R.string.share_user, thread.getThread_title() ,thread.getName()));
+            postParams.putString(
+                    "caption",
+                    getString(R.string.share_user, thread.getThread_title(),
+                            thread.getName()));
             postParams.putString("description", thread.getThread_content());
             postParams.putString("link", getString(R.string.share_link));
             postParams
