@@ -80,6 +80,7 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
 
         // Event
         mModel.loginButton.setOnClickListener(this);
+        mModel.anonymousLoginButton.setOnClickListener(this);
         mView.setVisibility(View.VISIBLE);
         mLoginView.setVisibility(View.VISIBLE);
     }
@@ -136,7 +137,11 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
         case R.id.facebookLogin_button:
             loginToFacebook();
             break;
-
+        case R.id.normalLogin_button:
+            Intent mainIntent = new Intent(LoginActivity.this,
+                    DiscussionActivity.class);
+            startActivity(mainIntent);
+            break;
         default:
             break;
         }

@@ -68,6 +68,7 @@ public class AccountControlFragment extends Fragment {
                     Intent mainIntent = new Intent(getActivity(),
                             LoginActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    pref.edit().remove(Common.USER_ID).commit();
                     startActivity(mainIntent);
                 }
             }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.example.vncreatures.R;
+import com.example.vncreatures.common.Common;
 import com.example.vncreatures.customItems.NotificationActionProvider;
 import com.example.vncreatures.customItems.eventbus.BusProvider;
 import com.example.vncreatures.customItems.eventbus.NotificationUpdateEvent;
@@ -40,12 +42,13 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     private UiLifecycleHelper uiHelper;
     private Fragment mContent;
     private MenuItem notificationItem;
+    private String mUserId;
     private static Interpolator interp = new Interpolator() {
         @Override
         public float getInterpolation(float t) {
             t -= 1.0f;
             return t * t * t + 1.0f;
-        }       
+        }
     };
 
     @Override
@@ -57,30 +60,22 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         // Transition
         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
 
+        // get preference
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        mUserId = pref.getString(Common.USER_ID, null);
+
         super.onCreate(savedInstanceState);
-        
+
         CanvasTransformer transformer = new CanvasTransformer() {
-            
+
             @Override
             public void transformCanvas(Canvas canvas, float percentOpen) {
-                canvas.translate(0, canvas.getHeight()*(1-interp.getInterpolation(percentOpen)));
+                canvas.translate(
+                        0,
+                        canvas.getHeight()
+                                * (1 - interp.getInterpolation(percentOpen)));
             }
         };
-
-        if (findViewById(R.id.menu_frame) == null) {
-            setBehindContentView(R.layout.menu_frame);
-            getSlidingMenu().setSlidingEnabled(true);
-            getSlidingMenu()
-                    .setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-            // show home as up so we can toggle
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            // add a dummy view
-            View v = new View(this);
-            setBehindContentView(v);
-            getSlidingMenu().setSlidingEnabled(false);
-            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-        }
 
         // set the Above View Fragment
         if (savedInstanceState != null)
@@ -91,20 +86,39 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, mContent).commit();
 
-        // set the Behind View Fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.menu_frame, new AccountControlFragment())
-                .commit();
+        // show home as up so we can toggle
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (mUserId != null) {
 
-        // customize the SlidingMenu
-        SlidingMenu sm = getSlidingMenu();
-        sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-        sm.setShadowWidthRes(R.dimen.shadow_width);
-        sm.setShadowDrawable(R.drawable.shadow);
-        sm.setBehindScrollScale(0.25f);
-        sm.setFadeDegree(0.25f);
-        sm.setBehindCanvasTransformer(transformer);
+            if (findViewById(R.id.menu_frame) == null) {
+                setBehindContentView(R.layout.menu_frame);
+                getSlidingMenu().setSlidingEnabled(true);
+                getSlidingMenu().setTouchModeAbove(
+                        SlidingMenu.TOUCHMODE_FULLSCREEN);
 
+            } else {
+                // add a dummy view
+                View v = new View(this);
+                setBehindContentView(v);
+                getSlidingMenu().setSlidingEnabled(false);
+                getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            }
+
+            // set the Behind View Fragment
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.menu_frame, new AccountControlFragment())
+                    .commit();
+
+            // customize the SlidingMenu
+            SlidingMenu sm = getSlidingMenu();
+            sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+            sm.setShadowWidthRes(R.dimen.shadow_width);
+            sm.setShadowDrawable(R.drawable.shadow);
+            sm.setBehindScrollScale(0.25f);
+            sm.setFadeDegree(0.25f);
+            sm.setBehindCanvasTransformer(transformer);
+
+        }
         // init session
         uiHelper = new UiLifecycleHelper(this, statusCallback);
         Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
@@ -144,7 +158,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         super.onDestroy();
         uiHelper.onDestroy();
         Log.d("Pause", "On Destroy Called");
-        //BusProvider.getInstance().unregister(this);
+        // BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -154,14 +168,14 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         Log.d("Pause", "On Pause Called");
         BusProvider.getInstance().unregister(this);
     }
-    
+
     @Override
     protected void onStop() {
         Log.d("Pause", "On Stop Called");
-        //finish();
+        // finish();
         super.onStop();
     }
-    
+
     @Override
     protected void onRestart() {
         Log.d("Pause", "On Restart Called");
@@ -173,10 +187,16 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         setTitle(R.string.discuss);
         // Inflate menu
         getSupportMenuInflater().inflate(R.menu.dicussion_menu, menu);
-        notificationItem = menu.findItem(R.id.menu_item_notification);
-        NotificationActionProvider notificationActionProvider = new NotificationActionProvider(
-                this);
-        notificationItem.setActionProvider(notificationActionProvider);
+
+        if (mUserId == null) {
+            menu.removeItem(R.id.menu_item_notification);
+            menu.removeItem(R.id.menu_item_post);
+        } else {
+            notificationItem = menu.findItem(R.id.menu_item_notification);
+            NotificationActionProvider notificationActionProvider = new NotificationActionProvider(
+                    this);
+            notificationItem.setActionProvider(notificationActionProvider);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -186,7 +206,7 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
                 this);
         notificationItem.setActionProvider(notificationActionProvider);
     }
-    
+
     @Subscribe
     public void onShowSlideMenu(ShowSlideMenuEvent event) {
         getSlidingMenu().showMenu();

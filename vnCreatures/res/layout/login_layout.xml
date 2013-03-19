@@ -20,6 +20,13 @@
             android:scaleType="fitXY"
             android:background="@android:color/transparent"/>
         
+        <Button android:id="@+id/normalLogin_button"
+            android:layout_width="300dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/login"
+            android:layout_marginTop="20dp"/>
+        
         </LinearLayout>
     </RelativeLayout>
 

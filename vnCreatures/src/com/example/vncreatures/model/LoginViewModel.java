@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 
 public class LoginViewModel {
     public ImageButton loginButton;
+    public Button anonymousLoginButton;
     public EditText usernameEditText = null;
     public EditText passwordEditText = null;
 }
