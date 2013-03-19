@@ -46,7 +46,7 @@ public abstract class AbstractFragmentActivity extends SlidingFragmentActivity
 
         // Action bar
         setTheme(Common.THEME);
-        getSupportActionBar().setIcon(R.drawable.chikorita);
+        getSupportActionBar().setIcon(R.drawable.vnc_icon);
 
         // get preference
         pref = PreferenceManager
