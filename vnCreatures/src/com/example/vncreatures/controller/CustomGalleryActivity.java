@@ -21,9 +21,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -50,7 +50,7 @@ public class CustomGalleryActivity extends Activity {
 		imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
 		imagegrid.setAdapter(imageAdapter);
 
-		final Button selectBtn = (Button) findViewById(R.id.selectBtn);
+		final ImageButton selectBtn = (ImageButton) findViewById(R.id.selectBtn);
 		selectBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -79,7 +79,7 @@ public class CustomGalleryActivity extends Activity {
 
 			}
 		});
-		final Button captureBtn = (Button) findViewById(R.id.captureBtn);
+		final ImageButton captureBtn = (ImageButton) findViewById(R.id.captureBtn);
 		captureBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {

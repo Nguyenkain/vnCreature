@@ -2,29 +2,48 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@color/black" >
 
     <LinearLayout
         android:id="@+id/customGalleryFooter"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:orientation="horizontal" >
+        android:background="@color/darkgrey"
+        android:orientation="horizontal" 
+        android:baselineAligned="false">
 
-        <Button
-            android:id="@+id/captureBtn"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="100dip"
-            android:text="@string/Capture"/>
+            android:layout_weight="1"
+            android:gravity="center" >
 
-        <Button
-            android:id="@+id/selectBtn"
+            <ImageButton
+                android:id="@+id/captureBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_camera_capture"
+                android:contentDescription="@string/Capture"
+                android:gravity="center"
+                android:scaleType="fitXY" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="100dip"
-            android:text="@string/Select"/>
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageButton
+                android:id="@+id/selectBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_upload_picture"
+                android:contentDescription="@string/Select"
+                android:scaleType="fitXY" />
+        </LinearLayout>
     </LinearLayout>
 
     <GridView

@@ -66,15 +66,15 @@ public class CreatureActivity extends AbstractActivity implements
         ArrayList<String> listImage = new ArrayList<String>();
         String name = CREATURE.getEnumNameForValue(mCreature.getKingdom());
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
-                mCreature.getId()));
+                mCreature.getImageId()));
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
-                mCreature.getId() + "s"));
+                mCreature.getImageId() + "s"));
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
-                mCreature.getId() + "_1s"));
+                mCreature.getImageId() + "_1s"));
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
-                mCreature.getId() + "_2s"));
+                mCreature.getImageId() + "_2s"));
         listImage.add(String.format(ServerConfig.IMAGE_PATH, name,
-                mCreature.getId() + "_3s"));
+                mCreature.getImageId() + "_3s"));
         HrmService service = new HrmService();
         service.setCallback(new CheckUrlCallback() {
 
