@@ -25,7 +25,7 @@ public class LoginView extends AbstractView {
 
     private void initUI() {
         mModel.loginButton = (ImageButton) findViewById(R.id.facebookLogin_button);
-        mModel.anonymousLoginButton = (Button) findViewById(R.id.normalLogin_button);
+        mModel.anonymousLoginButton = (ImageButton) findViewById(R.id.normalLogin_button);
     }
 
 }

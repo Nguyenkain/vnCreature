@@ -165,6 +165,7 @@ public class PostListAdapter extends BaseAdapter {
                             if (mCallback != null) {
                                 Thread newThread = new Thread();
                                 newThread.setPost_id(mThread.getPost_id());
+                                newThread.setUser_id(newUserId);
                                 mCallback.onDeleteThread(newThread);
                             }
                             break;

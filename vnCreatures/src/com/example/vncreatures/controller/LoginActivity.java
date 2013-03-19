@@ -2,6 +2,8 @@ package com.example.vncreatures.controller;
 
 import java.util.Arrays;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -47,7 +49,6 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         mLoginView = findViewById(R.id.login_layout);
         mProgressView = findViewById(R.id.progress_layout);
-        
 
         uiHelper = new UiLifecycleHelper(this, statusCallback);
         uiHelper.onCreate(savedInstanceState);
@@ -184,11 +185,10 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                     if (userid == null) {
                         addUser(session);
                     } else {
-                        updateUser(session);
+                        addUser(session);
                     }
                 }
-            }
-            else {
+            } else {
                 mLoginView.setVisibility(View.VISIBLE);
                 mProgressView.setVisibility(View.GONE);
             }
@@ -241,24 +241,47 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
 
                         @Override
                         public void onSuccess(String result) {
-                            pref.edit()
-                                    .putString(
-                                            com.example.vncreatures.common.Common.USER_ID,
-                                            result).commit();
-                            pref.edit()
-                                    .putString(
-                                            com.example.vncreatures.common.Common.USER_NAME,
-                                            fb.getName()).commit();
-                            pref.edit()
-                                    .putString(
-                                            com.example.vncreatures.common.Common.FB_ID,
-                                            fb.getId()).commit();
-                            setSupportProgressBarIndeterminateVisibility(false);
-                            Intent mainIntent = new Intent(LoginActivity.this,
-                                    DiscussionActivity.class);
-                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(mainIntent);
-                            finish();
+                            result = result.replace("\n", "");
+                            if (result.equalsIgnoreCase("banned")) {
+                                new AlertDialog.Builder(LoginActivity.this)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle(R.string.login)
+                                .setMessage(R.string.ban_message)
+                                .setPositiveButton(R.string.confirm,
+                                        new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                                pref.edit().remove(com.example.vncreatures.common.Common.USER_ID).commit();
+                                                Intent mainIntent = new Intent(
+                                                        LoginActivity.this,
+                                                        DiscussionActivity.class);
+                                                startActivity(mainIntent);
+                                            }
+                                        }).show();
+                            } else {
+                                pref.edit()
+                                        .putString(
+                                                com.example.vncreatures.common.Common.USER_ID,
+                                                result).commit();
+                                pref.edit()
+                                        .putString(
+                                                com.example.vncreatures.common.Common.USER_NAME,
+                                                fb.getName()).commit();
+                                pref.edit()
+                                        .putString(
+                                                com.example.vncreatures.common.Common.FB_ID,
+                                                fb.getId()).commit();
+                                setSupportProgressBarIndeterminateVisibility(false);
+                                Intent mainIntent = new Intent(
+                                        LoginActivity.this,
+                                        DiscussionActivity.class);
+                                mainIntent
+                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(mainIntent);
+                                finish();
+                            }
                         }
 
                         @Override

@@ -95,6 +95,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
     private Dialog mReportWindow;
     private Dialog mEditWindow;
     private Report mReportType;
+    private boolean mCanDelete = true;
 
     SharedPreferences pref;
     UiLifecycleHelper uiHelper;
@@ -356,6 +357,9 @@ public class ThreadDetailFragment extends SherlockFragment implements
             @Override
             public void onSuccess(ThreadModel threadModel) {
                 if (threadModel != null) {
+                    if(threadModel.count() > 0) {
+                        mCanDelete = false;
+                    }
                     adapter.setModel(threadModel);
                     adapter.notifyDataSetChanged();
                     getSherlockActivity()
@@ -601,6 +605,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
                 final Thread newThread = new Thread();
                 newThread.setPost_id(this.mThread.getPost_id());
                 newThread.setPost_content(this.mContent);
+                newThread.setUser_id(mUserId);
                 HrmService service = new HrmService();
                 service.setCallback(new PostTaskCallback() {
 
@@ -774,6 +779,7 @@ public class ThreadDetailFragment extends SherlockFragment implements
                                                         content.getText()
                                                                 .toString())) {
                                             Thread newThread = new Thread();
+                                            newThread.setUser_id(mUserId);
                                             newThread.setThread_id(mThread
                                                     .getThread_id());
                                             newThread
@@ -811,14 +817,25 @@ public class ThreadDetailFragment extends SherlockFragment implements
                                                 Thread newThread = new Thread();
                                                 newThread
                                                         .setThread_id(mThreadId);
+                                                newThread.setUser_id(mUserId);
                                                 HrmService service = new HrmService();
                                                 service.setCallback(new PostTaskCallback() {
 
                                                     @Override
                                                     public void onSuccess(
                                                             String result) {
-                                                        Fragment frag = new ThreadFragment();
-                                                        switchFragment(frag);
+                                                        if(mCanDelete) {
+                                                            Fragment frag = new ThreadFragment();
+                                                            switchFragment(frag);
+                                                        }
+                                                        else {
+                                                            new AlertDialog.Builder(getSherlockActivity())
+                                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                                            .setTitle(R.string.delete)
+                                                            .setMessage(R.string.delete_message2)
+                                                            .setPositiveButton(R.string.confirm,
+                                                                    null).show();
+                                                        }
                                                     }
 
                                                     @Override

@@ -88,7 +88,9 @@
     <string name="share">Chia sẻ</string>
     
     <!-- Dialog -->
+    <string name="ban_message">Tài khoản này của bạn hiện đang bị khóa, hãy liên hệ với admin để biết thêm chi tiết. Bạn sẽ được tự động đăng nhập sử dụng tài khoản khách.</string>
     <string name="delete_message">Bạn có chắc chắn muốn xóa ?</string>
+    <string name="delete_message2">Chủ đề này hiện đang có bài viết, yêu cầu xóa của bạn sẽ được gửi đến admin và sẽ được xử lý trong thời gian sớm nhất.</string>
     <string name="share_message">Bạn có chắc chắn muốn chia sẻ thông tin này trên facebook ?</string>
     <string name="confirm">Đồng ý</string>
     <string name="cancel">Hủy</string>
