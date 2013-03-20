@@ -46,7 +46,7 @@ public abstract class AbstractActivity extends SherlockActivity implements
 
         // Action bar
         setTheme(Common.THEME);
-        getSupportActionBar().setIcon(R.drawable.chikorita);
+        getSupportActionBar().setIcon(R.drawable.vnc_icon);
 
         // init view
         setContentView(R.layout.parent_container);

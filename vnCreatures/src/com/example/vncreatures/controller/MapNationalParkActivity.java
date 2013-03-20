@@ -64,7 +64,7 @@ public class MapNationalParkActivity extends SherlockMapActivity implements
 
 		// Action bar
 		setTheme(Common.THEME);
-		getSupportActionBar().setIcon(R.drawable.chikorita);
+		getSupportActionBar().setIcon(R.drawable.vnc_icon);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		setTitle(getString(R.string.map_national_park));
 

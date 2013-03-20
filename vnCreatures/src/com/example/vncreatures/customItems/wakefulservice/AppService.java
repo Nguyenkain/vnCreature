@@ -71,7 +71,7 @@ public class AppService extends WakefulIntentService {
 
                         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                                 getApplicationContext())
-                                .setSmallIcon(R.drawable.icon_app3)
+                                .setSmallIcon(R.drawable.vnc_icon)
                                 .setContentTitle(getString(R.string.app_name))
                                 .setContentText(
                                         getString(
