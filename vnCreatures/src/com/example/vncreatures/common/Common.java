@@ -35,6 +35,7 @@ public class Common {
 	public static final String USER_NAME = "username";
 	public static final String FB_ID = "fbid";
 	public static final String THREAD_ID = "threadid";
+	public static final String CURRENT_TIME = "timestamp";
 	
 	//Validation message
 	public static final String TITLE_MESSAGE = "TiĂªu Ä‘á»� khĂ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng";

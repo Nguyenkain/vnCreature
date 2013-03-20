@@ -146,6 +146,14 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
 
     @Override
     protected void onResume() {
+        //Check timeout
+        long time = pref.getLong(Common.CURRENT_TIME, 0);
+        long currentTime = System.currentTimeMillis()/1000;
+        if( (currentTime - time >= 60) && time != 0) {
+            pref.edit().remove(Common.CURRENT_TIME).commit();
+            onCreate(null);
+        }
+        
         // Transition
         overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
         super.onResume();
@@ -156,6 +164,11 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //set current time
+        long currentTime = System.currentTimeMillis()/1000;
+        pref.edit().putLong(Common.CURRENT_TIME, currentTime);
+        
+        //Destroy session
         uiHelper.onDestroy();
         Log.d("Pause", "On Destroy Called");
         // BusProvider.getInstance().unregister(this);
