@@ -525,19 +525,19 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 					img.setMaxWidth(100);
 					img.setImageBitmap(bitmap);
 					img.setClickable(true);
-					img.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							Intent intent = new Intent();
-							intent.setAction(Intent.ACTION_VIEW);
-							File file = new File(path);
-							intent.setDataAndType(Uri.fromFile(file), "image/*");
-							startActivityForResult(intent,
-									Common.SELECT_PICTURE);
-							startActivity(intent);
-						}
-					});
+//					img.setOnClickListener(new OnClickListener() {
+//
+//						@Override
+//						public void onClick(View v) {
+//							Intent intent = new Intent();
+//							intent.setAction(Intent.ACTION_VIEW);
+//							File file = new File(path);
+//							intent.setDataAndType(Uri.fromFile(file), "image/*");
+//							startActivityForResult(intent,
+//									Common.SELECT_PICTURE);
+//							startActivity(intent);
+//						}
+//					});
 					linear.addView(img);
 				}
 			}
@@ -551,10 +551,9 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 		for (String item : arrIds) {
 			QueueItem queueItem = new QueueItem();
 			queueItem.media_id = Long.parseLong(item);
-
 			final String[] columns = { MediaStore.Images.Media.DATA };
 			final String orderBy = MediaStore.Images.Media._ID;
-			Cursor imagecursor = mContext.getContentResolver().query(
+			Cursor imagecursor = getActivity().getContentResolver().query(
 					MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 					columns,
 					MediaStore.Images.Media._ID + " = " + queueItem.media_id
@@ -627,12 +626,17 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 
 		if (userid != null) {
 			HrmService service = new HrmService();
+			mProgressDialog = new ProgressDialog(v.getContext());
+			mProgressDialog.setCancelable(false);
+			mProgressDialog.setMessage(getString(R.string.uploading_message));
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			mProgressDialog.show();
 			service.requestAddThread(thread);
 			service.setCallback(new PostTaskCallback() {
-
 				@Override
 				public void onSuccess(String result) {
 					v.setEnabled(true);
+					mProgressDialog.dismiss();
 					mComposeWindow.dismiss();
 					mComposeWindow = null;
 					initList();
