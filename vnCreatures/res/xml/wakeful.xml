@@ -1,3 +1,3 @@
 <WakefulIntentService
-  listener="com.example.vncreatures.customItems.wakefulservice.AppListener"
+  listener="com.vncreatures.customItems.wakefulservice.AppListener"
 />

@@ -3,7 +3,7 @@
     style="@style/Fill" >
 
     <LinearLayout
-        xmlns:ExpandoLayout="http://schemas.android.com/apk/res/com.example.vncreatures"
+        xmlns:ExpandoLayout="http://schemas.android.com/apk/res/com.vncreatures"
         android:id="@+id/parent_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

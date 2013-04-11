@@ -18,6 +18,7 @@
 	<string name="refresh">Làm mới</string>
 	<string name="search_title">Tra cứu</string>
 	<string name="detail">Chi tiết</string>
+	<string name="about_us">Giới thiệu</string>
 	<string name="map_search">Phân bố</string>
     <string name="map_national_park">Vườn Quốc Gia</string>
     <string name="national_park_information">Thông tin Vườn Quốc Gia</string>
@@ -48,6 +49,8 @@
     <string name="password">Mật khẩu</string>
     <string name="facebook_login">Đăng nhập bằng Facebook</string>
     
+    
+    <string name="exception_message">Có lỗi xảy ra với hành động của bạn</string>
     <!-- Facebook App -->
     <string name="app_id">427633550638036</string>
     

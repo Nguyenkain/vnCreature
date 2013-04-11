@@ -79,6 +79,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/tab_about_button"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
             android:layout_weight="1"

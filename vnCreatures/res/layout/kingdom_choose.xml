@@ -1,121 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/background" >
+    android:background="@drawable/kingdom_background"
+    android:orientation="vertical" >
 
-    <LinearLayout
-        style="@style/Normal_Match"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal"
-        android:paddingBottom="20dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="20dp"
-        android:weightSum="3" >
+    <RelativeLayout style="@style/Wrap" 
+        android:layout_centerVertical="true">
 
-        <ImageButton
-            android:id="@+id/animal_button"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_animal2"
-            android:contentDescription="@string/animal"
-            android:scaleType="fitXY" />
+        <LinearLayout
+            android:id="@+id/kingdom_choose"
+            style="@style/Normal_Match"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="20dp"
+            android:weightSum="3" >
 
-        <ImageButton
-            android:id="@+id/plant_button"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_plant2"
-            android:contentDescription="@string/plant"
-            android:scaleType="fitXY" />
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
 
-        <ImageButton
-            android:id="@+id/insect_button"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="@drawable/button_insect2"
-            android:contentDescription="@string/insect"
-            android:scaleType="fitXY" />
-    </LinearLayout>
+                <ImageButton
+                    android:id="@+id/animal_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/button_animal2"
+                    android:contentDescription="@string/animal"
+                    android:scaleType="fitXY" />
+            </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        
-        <View android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_centerInParent="true"
-            android:background="@color/green_line"
-            android:id="@+id/vertical_line"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"></View>
-        
-        <View android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_centerInParent="true"
-            android:background="@color/green_line"
-            android:id="@+id/horizontal_line"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"></View>
-        
-        <RelativeLayout style="@style/Fill"
-            android:layout_toLeftOf="@+id/vertical_line"
-            android:layout_above="@+id/horizontal_line">
-            
-            <ImageButton android:id="@+id/news_button"
-                style="@style/Wrap"
-                android:background="@drawable/button_news2"
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <ImageButton
+                    android:id="@+id/plant_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/button_plant2"
+                    android:contentDescription="@string/plant"
+                    android:scaleType="fitXY" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <ImageButton
+                    android:id="@+id/insect_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/button_insect2"
+                    android:contentDescription="@string/insect"
+                    android:scaleType="fitXY" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="280dp"
+            android:layout_below="@+id/kingdom_choose" >
+
+            <View
+                android:id="@+id/vertical_line"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
                 android:layout_centerInParent="true"
-                android:contentDescription="@string/news"/>
-            
-        </RelativeLayout>
-        
-        <RelativeLayout style="@style/Fill"
-            android:layout_toRightOf="@+id/vertical_line"
-            android:layout_above="@+id/horizontal_line">
-            
-            <ImageButton android:id="@+id/discuss_button"
-                style="@style/Wrap"
-                android:background="@drawable/button_discussion"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/discuss"/>
-            
-        </RelativeLayout>
-        
-        <RelativeLayout style="@style/Fill"
-            android:layout_toRightOf="@+id/vertical_line"
-            android:layout_below="@+id/horizontal_line">
-            
-            <ImageButton android:id="@+id/about_button"
-                style="@style/Wrap"
-                android:background="@drawable/button_about2"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/discuss"/>
-            
-        </RelativeLayout>
-        
-        <RelativeLayout style="@style/Fill"
-            android:layout_toLeftOf="@+id/vertical_line"
-            android:layout_below="@+id/horizontal_line">
-            
-            <ImageButton android:id="@+id/park_button"
-                style="@style/Wrap"
-                android:background="@drawable/button_park2"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/national_park_information"/>
-            
-        </RelativeLayout>
+                android:background="@color/green_line" >
+            </View>
 
+            <View
+                android:id="@+id/horizontal_line"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true"
+                android:background="@color/green_line" >
+            </View>
+
+            <RelativeLayout
+                style="@style/Fill"
+                android:layout_above="@+id/horizontal_line"
+                android:layout_toLeftOf="@+id/vertical_line" >
+
+                <ImageButton
+                    android:id="@+id/news_button"
+                    style="@style/Wrap"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/button_news2"
+                    android:contentDescription="@string/news" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                style="@style/Fill"
+                android:layout_above="@+id/horizontal_line"
+                android:layout_toRightOf="@+id/vertical_line" >
+
+                <ImageButton
+                    android:id="@+id/discuss_button"
+                    style="@style/Wrap"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/button_discussion"
+                    android:contentDescription="@string/discuss" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                style="@style/Fill"
+                android:layout_below="@+id/horizontal_line"
+                android:layout_toRightOf="@+id/vertical_line" >
+
+                <ImageButton
+                    android:id="@+id/about_button"
+                    style="@style/Wrap"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/button_about2"
+                    android:contentDescription="@string/discuss" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                style="@style/Fill"
+                android:layout_below="@+id/horizontal_line"
+                android:layout_toLeftOf="@+id/vertical_line" >
+
+                <ImageButton
+                    android:id="@+id/park_button"
+                    style="@style/Wrap"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/button_park2"
+                    android:contentDescription="@string/national_park_information" />
+            </RelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

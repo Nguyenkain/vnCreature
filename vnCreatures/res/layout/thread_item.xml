@@ -9,7 +9,7 @@
     android:paddingTop="5dp"
     android:paddingBottom="5dp" >
 
-    <com.example.vncreatures.customItems.RelativeLayoutCustom
+    <com.vncreatures.customItems.RelativeLayoutCustom
         style="@style/Fill"
         android:background="@drawable/disscusback"
         android:padding="10dp" >
@@ -74,6 +74,6 @@
                 android:textColor="@color/grey"
                 android:textSize="10dp" />
         </RelativeLayout>
-    </com.example.vncreatures.customItems.RelativeLayoutCustom>
+    </com.vncreatures.customItems.RelativeLayoutCustom>
 
 </RelativeLayout>
