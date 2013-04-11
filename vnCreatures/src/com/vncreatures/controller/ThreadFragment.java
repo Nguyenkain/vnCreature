@@ -525,19 +525,19 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 					img.setMaxWidth(100);
 					img.setImageBitmap(bitmap);
 					img.setClickable(true);
-//					img.setOnClickListener(new OnClickListener() {
-//
-//						@Override
-//						public void onClick(View v) {
-//							Intent intent = new Intent();
-//							intent.setAction(Intent.ACTION_VIEW);
-//							File file = new File(path);
-//							intent.setDataAndType(Uri.fromFile(file), "image/*");
-//							startActivityForResult(intent,
-//									Common.SELECT_PICTURE);
-//							startActivity(intent);
-//						}
-//					});
+					img.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent();
+							intent.setAction(Intent.ACTION_VIEW);
+							File file = new File(path);
+							intent.setDataAndType(Uri.fromFile(file), "image/*");
+							startActivityForResult(intent,
+									Common.SELECT_PICTURE);
+							startActivity(intent);
+						}
+					});
 					linear.addView(img);
 				}
 			}
