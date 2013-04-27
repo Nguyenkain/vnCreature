@@ -1,6 +1,5 @@
 package com.vncreatures.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
@@ -10,12 +9,10 @@ import org.jsoup.select.Elements;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebChromeClient;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.view.Menu;
@@ -23,9 +20,8 @@ import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.AQuery;
 import com.vncreatures.R;
 import com.vncreatures.common.Common;
-import com.vncreatures.common.ServerConfig;
-import com.vncreatures.common.Common.CREATURE;
 import com.vncreatures.customItems.GalleryImageAdapter;
+import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.model.CategoryModel;
 import com.vncreatures.model.NewsItem;
 import com.vncreatures.model.NewsModel;
@@ -48,6 +44,10 @@ public class NewsDetailActivity extends AbstractActivity implements
         this.mView = new NewsDetailView(this, mModel);
         this.mAQuery = mView.getaQueryView();
         super.onCreate(savedInstanceState);
+        
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+                NewsDetailActivity.class));
+        
         getFromExtras(savedInstanceState);
         initUI();
     }

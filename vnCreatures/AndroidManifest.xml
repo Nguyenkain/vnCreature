@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vncreatures"
     android:installLocation="auto"
-    android:versionCode="7"
-    android:versionName="1.5" >
+    android:versionCode="10"
+    android:versionName="1.8" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -32,7 +32,8 @@
     <application
         android:icon="@drawable/vnc_icon"
         android:label="@string/title_activity_main"
-        android:theme="@style/Theme.Styled.NoTitleBar.Fullscreen" >
+        android:theme="@style/Theme.Styled.NoTitleBar.Fullscreen" 
+        android:name="com.vncreatures.controller.MyApplication">
         <receiver android:name="com.commonsware.cwac.wakeful.AlarmReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

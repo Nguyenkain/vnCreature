@@ -1,0 +1,358 @@
+<class-diagram version="1.0.11" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.controller.ThreadDetailFragment.ValidateEditListener" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/controller/ThreadDetailFragment.java" binary="false">    
+    <position height="-1" width="-1" x="739" y="67"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.controller.ThreadDetailFragment.AnActionModeOfEpicProportions" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/controller/ThreadDetailFragment.java" binary="false">    
+    <position height="-1" width="-1" x="150" y="540"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.controller.ThreadDetailFragment.ValidateListener" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/controller/ThreadDetailFragment.java" binary="false">    
+    <position height="-1" width="-1" x="412" y="522"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.controller.ThreadDetailFragment.SessionStatusCallback" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/controller/ThreadDetailFragment.java" binary="false">    
+    <position height="-1" width="-1" x="629" y="445"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.controller.ThreadDetailFragment" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/controller/ThreadDetailFragment.java" binary="false">    
+    <position height="-1" width="-1" x="302" y="67"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.customItems.PostListAdapter" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/customItems/PostListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="-301" y="67"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.customItems.PostListAdapter.ViewHolder" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/customItems/PostListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="18" y="-185"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="8" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.customItems.PostListAdapter.Callback" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/customItems/PostListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="-656" y="164"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.customItems.DiscussionQuickAction.MyQuickAction" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/customItems/DiscussionQuickAction.java" binary="false">    
+    <position height="-1" width="-1" x="-492" y="677"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="10" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.customItems.DiscussionQuickAction.Callback" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/customItems/DiscussionQuickAction.java" binary="false">    
+    <position height="-1" width="-1" x="-231" y="658"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.customItems.DiscussionQuickAction" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/customItems/DiscussionQuickAction.java" binary="false">    
+    <position height="-1" width="-1" x="-303" y="419"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.controller.LoginActivity.SessionStatusCallback" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/controller/LoginActivity.java" binary="false">    
+    <position height="-1" width="-1" x="1155" y="284"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="13" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.controller.LoginActivity" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/controller/LoginActivity.java" binary="false">    
+    <position height="-1" width="-1" x="1152" y="-69"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="14" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.controller.AccountControlFragment" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/controller/AccountControlFragment.java" binary="false">    
+    <position height="-1" width="-1" x="1816" y="-144"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="15" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.customItems.NotificationListAdapter.ViewHolder" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/customItems/NotificationListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="1591" y="481"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="16" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.customItems.NotificationListAdapter" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/customItems/NotificationListAdapter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1832" y="236"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="17" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.customItems.NotificationListAdapter.Callback" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/customItems/NotificationListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="1807" y="475"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="18" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.controller.ThreadFragment.QueueItem" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/controller/ThreadFragment.java" binary="false">    
+    <position height="-1" width="-1" x="2127" y="184"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="19" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.controller.ThreadFragment" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/controller/ThreadFragment.java" binary="false">    
+    <position height="-1" width="-1" x="2436" y="16"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="20" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.controller.ThreadFragment.ValidateListener" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/controller/ThreadFragment.java" binary="false">    
+    <position height="-1" width="-1" x="2289" y="444"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="21" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.customItems.ThreadListAdapter.ViewHolder" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/customItems/ThreadListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="2386" y="734"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="22" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.customItems.ThreadListAdapter" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/customItems/ThreadListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="2546" y="489"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="23" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.customItems.ThreadListAdapter.Callback" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/customItems/ThreadListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="2589" y="692"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="24" corner="BOTTOM_RIGHT" language="java" name="com.vncreatures.controller.DiscussionActivity" 
+    project="vnCreatures" file="/vnCreatures/src/com/vncreatures/controller/DiscussionActivity.java" binary="false">    
+    <position height="-1" width="-1" x="2914" y="-18"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="25" corner="BOTTOM_RIGHT" language="java" 
+    name="com.vncreatures.controller.DiscussionActivity.SessionStatusCallback" project="vnCreatures" 
+    file="/vnCreatures/src/com/vncreatures/controller/DiscussionActivity.java" binary="false">    
+    <position height="-1" width="-1" x="2893" y="304"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association id="26">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="27" name="mCallback"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <nesting id="29">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="25"/>  
+  </nesting>  
+  <nesting id="30">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="15"/>  
+  </nesting>  
+  <nesting id="31">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="20"/>  
+  </nesting>  
+  <association id="32">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="33" name="quickAction"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="36" name="mAdapter"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <nesting id="38">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="9"/>  
+  </nesting>  
+  <nesting id="39">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="18"/>  
+  </nesting>  
+  <association id="40">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="41" name="mQueueItems"/>      
+      <multiplicity id="42" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <nesting id="43">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <nesting id="44">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="21"/>  
+  </nesting>  
+  <nesting id="45">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <nesting id="46">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="17"/>  
+  </nesting>  
+  <nesting id="47">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </nesting>  
+  <association id="48">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="49" name="adapter"/>      
+      <multiplicity id="50" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <nesting id="51">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </nesting>  
+  <nesting id="52">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
+  </nesting>  
+  <nesting id="53">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="12"/>  
+  </nesting>  
+  <association id="54">    
+    <bendpoint x="-460" y="162"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="55" name="mCallback"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <nesting id="57">    
+    <bendpoint x="-30" y="657"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="10"/>  
+  </nesting>  
+  <association id="58">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="59" name="mCallback"/>      
+      <multiplicity id="60" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <association id="61">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="62" name="adapter"/>      
+      <multiplicity id="63" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <nesting id="64">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </nesting>  
+  <association id="65">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="66" name="mCallback"/>      
+      <multiplicity id="67" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="false" multiplicity="true"/>  
+  </association>  
+  <nesting id="68">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="23"/>  
+  </nesting>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="false" multiplicity="true"/>
+</class-diagram>

@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.vncreatures.R;
 import com.vncreatures.common.Common;
+import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.customItems.TabsAdapter;
 import com.vncreatures.model.CategoryModel;
 import com.vncreatures.model.NewsModel;
@@ -27,6 +26,9 @@ public class NewsTabsPagerActivity extends AbstractFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+                NewsTabsPagerActivity.class));
 
         // setContentView(R.layout.news_tabs_layout);
 

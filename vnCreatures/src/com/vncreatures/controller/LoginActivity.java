@@ -201,7 +201,8 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                     }
                 }
             } else {
-                Toast.makeText(getApplicationContext(), state.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), state.toString(),
+                        Toast.LENGTH_LONG).show();
                 mLoginView.setVisibility(View.VISIBLE);
                 mProgressView.setVisibility(View.GONE);
             }
@@ -220,12 +221,10 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
                     final FacebookUser fb = gson.fromJson(json2,
                             FacebookUser.class);
                     pref.edit()
-                            .putString(
-                                    com.vncreatures.common.Common.USER_NAME,
+                            .putString(com.vncreatures.common.Common.USER_NAME,
                                     fb.getName()).commit();
                     pref.edit()
-                            .putString(
-                                    com.vncreatures.common.Common.FB_ID,
+                            .putString(com.vncreatures.common.Common.FB_ID,
                                     fb.getId()).commit();
                     Intent mainIntent = new Intent(LoginActivity.this,
                             DiscussionActivity.class);
@@ -240,73 +239,92 @@ public class LoginActivity extends AbstractActivity implements OnClickListener {
     private void addUser(Session session) {
         mView.setVisibility(View.GONE);
         setSupportProgressBarIndeterminateVisibility(true);
-        Request.executeMeRequestAsync(session, new GraphUserCallback() {
 
-            @Override
-            public void onCompleted(GraphUser user, Response response) {
-                if (user != null) {
-                    Gson gson = new Gson();
-                    String json2 = user.getInnerJSONObject().toString();
-                    final FacebookUser fb = gson.fromJson(json2,
-                            FacebookUser.class);
-                    HrmService service = new HrmService();
-                    service.setCallback(new PostTaskCallback() {
+        try {
+            Request.executeMeRequestAsync(session, new GraphUserCallback() {
 
-                        @Override
-                        public void onSuccess(String result) {
-                            result = result.replace("\n", "");
-                            if (result.equalsIgnoreCase("banned")) {
-                                new AlertDialog.Builder(LoginActivity.this)
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setTitle(R.string.login)
-                                .setMessage(R.string.ban_message)
-                                .setPositiveButton(R.string.confirm,
-                                        new DialogInterface.OnClickListener() {
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+                    if (user != null) {
+                        Gson gson = new Gson();
+                        String json2 = user.getInnerJSONObject().toString();
+                        final FacebookUser fb = gson.fromJson(json2,
+                                FacebookUser.class);
+                        HrmService service = new HrmService();
+                        service.setCallback(new PostTaskCallback() {
 
-                                            @Override
-                                            public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                                pref.edit().remove(com.vncreatures.common.Common.USER_ID).commit();
-                                                Intent mainIntent = new Intent(
-                                                        LoginActivity.this,
-                                                        DiscussionActivity.class);
-                                                startActivity(mainIntent);
-                                            }
-                                        }).show();
-                            } else {
-                                pref.edit()
-                                        .putString(
-                                                com.vncreatures.common.Common.USER_ID,
-                                                result).commit();
-                                pref.edit()
-                                        .putString(
-                                                com.vncreatures.common.Common.USER_NAME,
-                                                fb.getName()).commit();
-                                pref.edit()
-                                        .putString(
-                                                com.vncreatures.common.Common.FB_ID,
-                                                fb.getId()).commit();
-                                setSupportProgressBarIndeterminateVisibility(false);
-                                Intent mainIntent = new Intent(
-                                        LoginActivity.this,
-                                        DiscussionActivity.class);
-                                mainIntent
-                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(mainIntent);
-                                finish();
+                            @Override
+                            public void onSuccess(String result) {
+                                result = result.replace("\n", "");
+                                if (result.equalsIgnoreCase("banned")) {
+                                    new AlertDialog.Builder(LoginActivity.this)
+                                            .setIcon(
+                                                    android.R.drawable.ic_dialog_alert)
+                                            .setTitle(R.string.login)
+                                            .setMessage(R.string.ban_message)
+                                            .setPositiveButton(
+                                                    R.string.confirm,
+                                                    new DialogInterface.OnClickListener() {
+
+                                                        @Override
+                                                        public void onClick(
+                                                                DialogInterface dialog,
+                                                                int which) {
+                                                            pref.edit()
+                                                                    .remove(com.vncreatures.common.Common.USER_ID)
+                                                                    .commit();
+                                                            Intent mainIntent = new Intent(
+                                                                    LoginActivity.this,
+                                                                    DiscussionActivity.class);
+                                                            startActivity(mainIntent);
+                                                        }
+                                                    }).show();
+                                } else {
+                                    pref.edit()
+                                            .putString(
+                                                    com.vncreatures.common.Common.USER_ID,
+                                                    result).commit();
+                                    pref.edit()
+                                            .putString(
+                                                    com.vncreatures.common.Common.USER_NAME,
+                                                    fb.getName()).commit();
+                                    pref.edit()
+                                            .putString(
+                                                    com.vncreatures.common.Common.FB_ID,
+                                                    fb.getId()).commit();
+                                    setSupportProgressBarIndeterminateVisibility(false);
+                                    Intent mainIntent = new Intent(
+                                            LoginActivity.this,
+                                            DiscussionActivity.class);
+                                    mainIntent
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(mainIntent);
+                                    finish();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onError() {
+                            @Override
+                            public void onError() {
 
-                        }
-                    });
-                    service.requestAddUser(fb);
+                            }
+                        });
+                        service.requestAddUser(fb);
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), getString(R.string.exception_message),
+                    Toast.LENGTH_SHORT).show();
+            restartActivity();
+        }
 
+    }
+
+    void restartActivity() {
+        finish();
+        Intent mIntent = new Intent(LoginActivity.this, LoginActivity.class);
+        startActivity(mIntent);
     }
 
     @Override

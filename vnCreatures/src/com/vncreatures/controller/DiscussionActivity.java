@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.commonsware.cwac.wakeful.WakefulIntentService;
-import com.vncreatures.R;
 import com.facebook.LoggingBehavior;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -29,7 +28,9 @@ import com.facebook.UiLifecycleHelper;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.CanvasTransformer;
 import com.squareup.otto.Subscribe;
+import com.vncreatures.R;
 import com.vncreatures.common.Common;
+import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.customItems.NotificationActionProvider;
 import com.vncreatures.customItems.eventbus.BusProvider;
 import com.vncreatures.customItems.eventbus.NotificationUpdateEvent;
@@ -66,6 +67,9 @@ public class DiscussionActivity extends AbstractFragmentActivity implements
         mUserId = pref.getString(Common.USER_ID, null);
 
         super.onCreate(savedInstanceState);
+        
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+                DiscussionActivity.class));
 
         CanvasTransformer transformer = new CanvasTransformer() {
 

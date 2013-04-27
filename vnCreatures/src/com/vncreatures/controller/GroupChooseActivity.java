@@ -2,9 +2,7 @@ package com.vncreatures.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -15,6 +13,7 @@ import com.vncreatures.R;
 import com.vncreatures.common.Common;
 import com.vncreatures.customItems.CreaturesGroupsAdapter;
 import com.vncreatures.customItems.CreaturesGroupsAdapter.Callback;
+import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.model.CreatureGroup;
 import com.vncreatures.model.CreatureGroupListModel;
 import com.vncreatures.model.GroupChooseModel;
@@ -39,6 +38,9 @@ public class GroupChooseActivity extends AbstractActivity {
         mView = new GroupChooseView(this, mModel);
 
         super.onCreate(savedInstanceState);
+        
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+                GroupChooseActivity.class));
 
         // Get extras
         getFromExtras(savedInstanceState);

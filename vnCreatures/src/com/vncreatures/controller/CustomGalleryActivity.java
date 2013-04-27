@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.vncreatures.R;
+import com.vncreatures.customItems.MyExceptionHandler;
 
 public class CustomGalleryActivity extends Activity {
 	public ImageAdapter imageAdapter;
@@ -43,6 +44,10 @@ public class CustomGalleryActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+	            CustomGalleryActivity.class));
+		
 		setContentView(R.layout.custom_gallery);
 
 		imageAdapter = new ImageAdapter();

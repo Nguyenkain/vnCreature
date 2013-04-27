@@ -17,19 +17,15 @@ package com.vncreatures.controller;
 
 import java.util.ArrayList;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockMapActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -39,11 +35,12 @@ import com.cyrilmottier.polaris.MapViewUtils;
 import com.cyrilmottier.polaris.PolarisMapView;
 import com.cyrilmottier.polaris.PolarisMapView.OnAnnotationSelectionChangedListener;
 import com.cyrilmottier.polaris.PolarisMapView.OnRegionChangedListener;
-import com.vncreatures.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
+import com.vncreatures.R;
 import com.vncreatures.common.Common;
 import com.vncreatures.common.MapConfig;
+import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.model.CreatureMapViewModel;
 import com.vncreatures.model.Province;
 import com.vncreatures.model.ProvinceModel;
@@ -71,6 +68,9 @@ public class MapCreatureActivity extends SherlockMapActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+	            MapCreatureActivity.class));
 		
 		// get preference
         pref = PreferenceManager

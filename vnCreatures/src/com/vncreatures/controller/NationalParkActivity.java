@@ -20,6 +20,7 @@ import com.androidquery.AQuery;
 import com.vncreatures.R;
 import com.vncreatures.common.Common;
 import com.vncreatures.customItems.GalleryImageAdapter;
+import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.model.NewsViewModel;
 import com.vncreatures.model.Province;
 import com.vncreatures.model.ProvinceModel;
@@ -40,6 +41,10 @@ public class NationalParkActivity extends AbstractActivity {
 		this.mView = new NewsDetailView(this, mModel);
 		this.mAQuery = mView.getaQueryView();
 		super.onCreate(savedInstanceState);
+		
+		Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+	            NationalParkActivity.class));
+		
 		getFromExtras(savedInstanceState);
 		initUI();
 	}

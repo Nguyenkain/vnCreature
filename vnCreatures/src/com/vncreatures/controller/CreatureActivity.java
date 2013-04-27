@@ -13,9 +13,10 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.vncreatures.R;
 import com.vncreatures.common.Common;
-import com.vncreatures.common.ServerConfig;
 import com.vncreatures.common.Common.CREATURE;
+import com.vncreatures.common.ServerConfig;
 import com.vncreatures.customItems.GalleryImageAdapter;
+import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.model.Creature;
 import com.vncreatures.model.CreatureDescriptionViewModel;
 import com.vncreatures.model.CreatureModel;
@@ -39,6 +40,9 @@ public class CreatureActivity extends AbstractActivity implements
                 mCreatureDescriptionViewModel);
 
         super.onCreate(savedInstanceState);
+        
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+                CreatureActivity.class));
 
         try {
             Bundle extras = new Bundle();

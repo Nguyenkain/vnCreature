@@ -8,10 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.vncreatures.R;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
+import com.vncreatures.R;
 import com.vncreatures.common.Common;
 import com.vncreatures.customItems.EndlessScrollListener;
+import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.customItems.NewsListAdapter;
 import com.vncreatures.customItems.NewsListAdapter.Callback;
 import com.vncreatures.model.CategoryModel;
@@ -31,6 +32,7 @@ public class NewsContentActivity extends SherlockFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+               
         getSherlockActivity().getSupportActionBar().setTitle(R.string.news);
 
         // GET FROM EXTRAS
