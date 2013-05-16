@@ -1,86 +1,74 @@
-# Pull To Refresh for Android
+# Pull To Refresh Views for Android
 
-This project aims to provide a reusable pull to refresh widget for Android.
+![Screenshot](https://github.com/chrisbanes/Android-PullToRefresh/raw/master/header_graphic.png)
 
-![Screenshot](https://github.com/johannilsson/android-pulltorefresh/raw/master/android-pull-to-refresh.png)
+This project aims to provide a reusable Pull to Refresh widget for Android. It was originally based on Johan Nilsson's [library](https://github.com/johannilsson/android-pulltorefresh) (mainly for graphics, strings and animations), but these have been replaced since.
 
-Repository at <https://github.com/johannilsson/android-pulltorefresh>.
+## Features
+
+ * Supports both Pulling Down from the top, and Pulling Up from the bottom (or even both).
+ * Animated Scrolling for all devices.
+ * Over Scroll supports for devices on Android v2.3+.
+ * Currently works with:
+ 	* **ListView**
+ 	* **ExpandableListView**
+ 	* **GridView**
+ 	* **WebView**
+ 	* **ScrollView**
+ 	* **HorizontalScrollView**
+ 	* **ViewPager**
+ * Integrated End of List Listener for use of detecting when the user has scrolled to the bottom.
+ * Maven Support.
+ * Indicators to show the user when a Pull-to-Refresh is available.
+ * Support for **ListFragment**!
+ * Lots of [Customisation](https://github.com/chrisbanes/Android-PullToRefresh/wiki/Customisation) options!
+
+Repository at <https://github.com/chrisbanes/Android-PullToRefresh>.
+
+## Sample Application
+The sample application (the source is in the repository) has been published onto Google Play for easy access:
+
+[![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](http://play.google.com/store/apps/details?id=com.handmark.pulltorefresh.samples)
 
 ## Usage
+To begin using the library, please see the [Quick Start Guide](https://github.com/chrisbanes/Android-PullToRefresh/wiki/Quick-Start-Guide) page.
 
-### Layout
+### Customisation
+Please see the [Customisation](https://github.com/chrisbanes/Android-PullToRefresh/wiki/Customisation) page for more information on how to change the behaviour and look of the View.
 
-``` xml
-<!--
-  The PullToRefreshListView replaces a standard ListView widget.
--->
-<com.markupartist.android.widget.PullToRefreshListView
-    android:id="@+id/android:list"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
-    />
-```
+### Pull Up to Refresh
+By default this library is set to Pull Down to Refresh, but if you want to allow Pulling Up to Refresh then you can do so. You can even set the View to enable both Pulling Up and Pulling Down using the 'both' setting. See the [Customisation](https://github.com/chrisbanes/Android-PullToRefresh/wiki/Customisation) page for more information on how to set this.
 
-### Activity
+## Apps
+Want to see which Apps are already using Android-PullToRefresh? Have a look [here](https://github.com/chrisbanes/Android-PullToRefresh/wiki/Apps). If you have an App which is not on the list, [let me know](http://www.senab.co.uk/contact/).
 
-``` java
-// Set a listener to be invoked when the list should be refreshed.
-((PullToRefreshListView) getListView()).setOnRefreshListener(new OnRefreshListener() {
-    @Override
-    public void onRefresh() {
-        // Do work to refresh the list here.
-        new GetDataTask().execute();
-    }
-});
+## Changelog
+Please see the new [Changelog](https://github.com/chrisbanes/Android-PullToRefresh/wiki/Changelog) page to see what's recently changed.
 
-private class GetDataTask extends AsyncTask<Void, Void, String[]> {
-    ...
-    @Override
-    protected void onPostExecute(String[] result) {
-        mListItems.addFirst("Added after refresh...");
-        // Call onRefreshComplete when the list has been refreshed.
-        ((PullToRefreshListView) getListView()).onRefreshComplete();
-        super.onPostExecute(result);
-    }
-}
-```
+## Pull Requests
 
-### Last Updated
+I will gladly accept pull requests for fixes and feature enhancements but please do them in the dev branch. The master branch is for the latest stable code,  dev is where I try things out before releasing them as stable. Any pull requests that are against master from now on will be closed asking for you to do another pull against dev.
 
-It's possible to add a last updated time using the method `setLastUpdated`
-and `onRefreshComplete`. The text provided to these methods will be set below
-the Release to refresh text. Note that the time representation is not validated
-replaces the previous text, which means that it's possible and recommended to
-add a text similar to "Last Update: 15:23". This might be changed in future
-versions.
+## Acknowledgments
 
-## 1.5 Support
+* [Stefano Dacchille](https://github.com/stefanodacchille)
+* [Steve Lhomme](https://github.com/robUx4)
+* [Maxim Galkin](https://github.com/mgalkin)
+* [Scorcher](https://github.com/Scorcher)
 
-To use the widget on 1.5 the necessary drawables needs to be copied to that
-projects drawable folder. The drawables needed by the widget can be found in
-the drawable-hdpi folder in the library project.
-
-## Contributors
-
-* [Jason Knight](http://www.synthable.com/) - <https://github.com/synthable>
-* [Eddie Ringle](http://eddieringle.com/) - <https://github.com/eddieringle>
-* [Christof Dorner](http://chdorner.com) - <https://github.com/chdorner>
-* [Olof Brickarp](http://www.yay.se) - <https://github.com/coolof>
-* [James Smith](http://loopj.com/) - <https://github.com/loopj>
-* [Alex Volovoy](http://bytesharp.com/) - <https://github.com/avolovoy>
-* Bo Maryniuk
-* [kidfolk](https://github.com/kidfolk)
-* [Tim Mahoney](https://github.com/timahoney)
-* [Richard Guest](https://github.com/quiffman)
-
-## Are you using this widget?
-
-If you are using this widget please feel free to add your app to the
-[wiki](https://github.com/johannilsson/android-pulltorefresh/wiki/Apps).
 
 ## License
-Copyright (c) 2011 [Johan Nilsson](http://markupartist.com)
 
-Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
+    Copyright 2011, 2012 Chris Banes
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
