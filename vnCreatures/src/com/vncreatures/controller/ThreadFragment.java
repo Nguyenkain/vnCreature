@@ -39,14 +39,15 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.AQuery;
-import com.vncreatures.R;
-import com.markupartist.android.widget.PullToRefreshListView;
-import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.mobsandgeeks.saripaar.Rule;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.Validator.ValidationListener;
 import com.mobsandgeeks.saripaar.annotation.Required;
 import com.mobsandgeeks.saripaar.annotation.TextRule;
+import com.vncreatures.R;
 import com.vncreatures.common.Common;
 import com.vncreatures.customItems.Base64;
 import com.vncreatures.customItems.SuggestListAdapter;
@@ -390,13 +391,14 @@ public class ThreadFragment extends SherlockFragment implements OnClickListener 
 	private void initLayout() {
 		mListView = (PullToRefreshListView) mView
 				.findViewById(R.id.thread_lisview);
-		mListView.setOnRefreshListener(new OnRefreshListener() {
-
-			@Override
-			public void onRefresh() {
-				initList();
-			}
-		});
+		
+		mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		    @Override
+		    public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		        initList();
+		    }
+        });
+		
 	}
 
 	private void initList() {

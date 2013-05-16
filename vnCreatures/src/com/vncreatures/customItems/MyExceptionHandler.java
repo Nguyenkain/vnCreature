@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
 
+import com.vncreatures.controller.KingdomChooseActivity;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -23,7 +25,7 @@ public class MyExceptionHandler implements UncaughtExceptionHandler {
         StringWriter stackTrace = new StringWriter();
         ex.printStackTrace(new PrintWriter(stackTrace));
         System.err.println(stackTrace);// You can use LogCat too
-        Intent intent = new Intent(myContext, myActivityClass);
+        Intent intent = new Intent(myContext, KingdomChooseActivity.class);
         String s = stackTrace.toString();
         //you can use this String to know what caused the exception and in which Activity
         intent.putExtra("uncaughtException",

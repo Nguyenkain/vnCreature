@@ -6,13 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.vncreatures.R;
 import com.vncreatures.common.Common;
-import com.vncreatures.customItems.EndlessScrollListener;
-import com.vncreatures.customItems.MyExceptionHandler;
 import com.vncreatures.customItems.NewsListAdapter;
 import com.vncreatures.customItems.NewsListAdapter.Callback;
 import com.vncreatures.model.CategoryModel;
@@ -28,11 +30,12 @@ public class NewsContentActivity extends SherlockFragment {
     private NewsListAdapter mAdapter = null;
     private NewsListView mView = null;
     private NewsModel mNewsModel = null;
+    private int mCurPage = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-               
+
         getSherlockActivity().getSupportActionBar().setTitle(R.string.news);
 
         // GET FROM EXTRAS
@@ -46,13 +49,14 @@ public class NewsContentActivity extends SherlockFragment {
         mView = new NewsListView(getActivity());
         initNewsList();
 
-        mView.mNewsListView.setOnRefreshListener(new OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                initNewsList();
-            }
-        });
+        mView.mNewsListView
+                .setOnRefreshListener(new OnRefreshListener<ListView>() {
+                    @Override
+                    public void onRefresh(
+                            PullToRefreshBase<ListView> refreshView) {
+                        initNewsList();
+                    }
+                });
     }
 
     @Override
@@ -78,8 +82,47 @@ public class NewsContentActivity extends SherlockFragment {
         });
 
         mView.mNewsListView
-                .setOnScrollListener(new EndlessScrollListener.EndlessScrollNewsListener(
-                        mAdapter, mCatId));
+                .setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+                    @Override
+                    public void onLastItemVisible() {
+                        getSherlockActivity()
+                                .setSupportProgressBarIndeterminateVisibility(
+                                        true);
+                        mCurPage++;
+                        Toast.makeText(getSherlockActivity(),
+                                getText(R.string.next_page), Toast.LENGTH_SHORT)
+                                .show();
+                        HrmService service = new HrmService();
+                        service.setCallback(new NewsCallback() {
+
+                            @Override
+                            public void onGetNewsSuccess(NewsModel newsModel) {
+                                getSherlockActivity()
+                                        .setSupportProgressBarIndeterminateVisibility(
+                                                false);
+                                NewsModel nModel = mAdapter.getNewsModel();
+                                nModel.addAll(newsModel);
+                                mAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onGetCatSuccess(CategoryModel catModel) {
+
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+                        service.requestGetNews(mCatId, String.valueOf(mCurPage));
+                    }
+                });
+
+        /*
+         * mView.mNewsListView .setOnScrollListener(new
+         * EndlessScrollListener.EndlessScrollNewsListener( mAdapter, mCatId));
+         */
     }
 
     private void initNewsList() {

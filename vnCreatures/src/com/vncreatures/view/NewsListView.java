@@ -1,11 +1,11 @@
 package com.vncreatures.view;
 
-import com.vncreatures.R;
-import com.markupartist.android.widget.PullToRefreshListView;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
+
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.vncreatures.R;
 
 public class NewsListView extends RelativeLayout {
 	

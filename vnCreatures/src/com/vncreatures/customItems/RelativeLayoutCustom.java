@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 
-import com.markupartist.android.widget.PullToRefreshListView;
 
 public class RelativeLayoutCustom extends RelativeLayout {
 

@@ -8,18 +8,21 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.vncreatures.R;
-import com.markupartist.android.widget.PullToRefreshListView;
-import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 import com.vncreatures.common.Common;
 import com.vncreatures.common.Utils;
 import com.vncreatures.customItems.CreaturesListAdapter;
-import com.vncreatures.customItems.EndlessScrollListener;
 import com.vncreatures.model.Creature;
 import com.vncreatures.model.CreatureGroup;
 import com.vncreatures.model.CreatureGroupListModel;
@@ -42,6 +45,7 @@ public class MainActivity extends AbstractActivity implements OnClickListener {
 	private String mKingdomId = "";
 	private String mClassId = "";
 	private String mName = "";
+	private int mCurPage = 1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -192,14 +196,46 @@ public class MainActivity extends AbstractActivity implements OnClickListener {
 						Common.CREATURE_ACTIVITY_REQUEST_CODE);
 			}
 		});
-
-		creatureListView.setOnRefreshListener(new OnRefreshListener() {
-
-			@Override
-			public void onRefresh() {
-				searchByName(true);
-			}
-		});
+		
+		creatureListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		    @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                searchByName(true);
+                mCurPage = 1;
+            }
+        });
+		
+		creatureListView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+		    @Override
+		    public void onLastItemVisible() {
+		        setSupportProgressBarIndeterminateVisibility(true);
+		        mCurPage ++;
+		        Toast.makeText(getApplicationContext(), getText(R.string.next_page), Toast.LENGTH_SHORT).show();
+		        HrmService service = new HrmService();
+		        service.setCallback(new Callback() {
+                    
+                    @Override
+                    public void onGetAllCreaturesDone(CreatureModel creatureModel) {
+                        setSupportProgressBarIndeterminateVisibility(false);
+                        CreatureModel model = mCreatureAdapter.getCreatureModel();
+                        model.addAll(creatureModel);
+                        mCreatureAdapter.notifyDataSetChanged();
+                    }
+                    
+                    @Override
+                    public void onError() {
+                        
+                    }
+                });
+		        if(mName != null) {
+		            service.requestCreaturesByName(mName, mKingdomId, String.valueOf(mCurPage), mFamilyId,
+		                    mOrderId, mClassId);
+		        }
+		        else {
+		            service.requestAllCreature(String.valueOf(mCurPage), mKingdomId);
+		        }
+		    }
+        });
 	}
 
 	public void getAllCreatures() {
@@ -209,9 +245,9 @@ public class MainActivity extends AbstractActivity implements OnClickListener {
 			@Override
 			public void onGetAllCreaturesDone(CreatureModel creatureModel) {
 				initList(creatureModel);
-				mMainViewModel.creature_listview
+				/*mMainViewModel.creature_listview
 						.setOnScrollListener(new EndlessScrollListener(
-								mCreatureAdapter, mKingdomId));
+								mCreatureAdapter, mKingdomId));*/
 				setSupportProgressBarIndeterminateVisibility(false);
 			}
 
@@ -262,10 +298,10 @@ public class MainActivity extends AbstractActivity implements OnClickListener {
 			public void onGetAllCreaturesDone(CreatureModel creatureModel) {
 				initList(creatureModel);
 
-				mMainViewModel.creature_listview
+				/*mMainViewModel.creature_listview
 						.setOnScrollListener(new EndlessScrollListener(
 								mCreatureAdapter, mName, mKingdomId, mFamilyId,
-								mOrderId, mClassId));
+								mOrderId, mClassId));*/
 				// Set some status done
 				setSupportProgressBarIndeterminateVisibility(false);
 				if (pull)

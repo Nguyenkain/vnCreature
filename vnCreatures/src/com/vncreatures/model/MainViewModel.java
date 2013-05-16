@@ -5,7 +5,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.markupartist.android.widget.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 
 public class MainViewModel {
 //	public EditText searchBox_editText = null;

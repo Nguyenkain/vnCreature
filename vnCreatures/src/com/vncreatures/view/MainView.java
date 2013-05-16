@@ -7,8 +7,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.vncreatures.R;
-import com.markupartist.android.widget.PullToRefreshListView;
 import com.vncreatures.model.MainViewModel;
 
 public class MainView extends AbstractView {
@@ -19,7 +19,7 @@ public class MainView extends AbstractView {
 		super(context);
 		LayoutInflater li = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		li.inflate(R.layout.main_view, this);
+		li.inflate(R.layout.main_view2, this);
 		mMainViewModel = model;
 		initUI();
 	}
